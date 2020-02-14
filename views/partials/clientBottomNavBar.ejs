@@ -1,0 +1,138 @@
+<link rel="stylesheet" href="/css/styleGuidelines.css">
+
+<script>
+var pageUrl = (window.location.href).split("/");
+
+
+
+var dateNumberArray = ["01","02","03","04","05","06","07","08","09","10","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"];
+var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+  var todayDateNUmber = new Date().getDate();
+  var todayMonthName = new Date().getMonth();
+</script>
+
+
+<div id="bottomNavMainDiv" class="">
+  <div id="innerDiv1" onclick="location.href='/home' " class="innerDivs">
+    <img id="homeImgIcon" src="assets/icons/homeIcon.png" class="navIcons" alt="">
+    <!-- <p class="innerDivPBottomNavBar">Home</p> -->
+  </div>
+  <div id="innerDiv2" onclick="location.href='/agenda' " class="innerDivs">
+    <p id="monthAgendaIcon"><script>
+      document.write(monthName[todayMonthName]);
+    </script></p>
+
+    <p id="dateAgendaIcon"><script>
+      document.write(dateNumberArray[todayDateNUmber-1]);
+    </script></p>
+    <img id="agendaImgIcon" src="assets/icons/agendaIcon.png" class="navIcons" alt="">
+    <!-- <p class="innerDivPBottomNavBar">Agenda</p> -->
+  </div>
+  <div id="innerDiv3" onclick="location.href='/messages' " class="innerDivs">
+    <img id="messagesImgIcon" src="assets/icons/messagesIcon.png" class="navIcons" alt="">
+    <!-- <p class="innerDivPBottomNavBar">Messages</p> -->
+  </div>
+  <div id="innerDiv4" onclick="location.href='/profile' " class="innerDivs">
+    <img id="notificationsImgIcon" src="assets/icons/notificationIcon.png" class="navIcons" alt="">
+    <!-- <p class="innerDivPBottomNavBar">Notifications</p> -->
+  </div>
+</div>
+
+
+<style>
+@media screen and (min-width:768px){
+  #bottomNavMainDiv{
+    z-index:5;
+    width:80px;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    height:100%;
+    border-top:0.3px solid rgba(66, 66, 66, 0.76);
+    background-color:var(--color-page-background);
+  }
+}
+@media screen and (max-width:768px){
+  #bottomNavMainDiv{
+    z-index:5;
+    width:100%;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    height:65px;
+    border-top:0.3px solid rgba(66, 66, 66, 0.76);
+    background-color:var(--color-page-background);
+  }
+}
+
+
+  .innerDivs{
+    position:absolute;
+    width:25%;
+    height:100%;
+    top:0px;
+  }
+  #innerDiv1{
+    left:0px;
+  }
+  #innerDiv2{
+    left:25%;
+  }
+  #innerDiv3{
+    left:50%;
+  }
+  #innerDiv4{
+    left:75%;
+  }
+  .navIcons{
+    height:calc(100% - 22px);
+    position:absolute;
+    top:11px;
+    transform:translateX(-50%);
+    left:50%;
+  }
+  .innerDivPBottomNavBar{
+    line-height:22px;
+    text-align:center;
+    width:100%;
+    position:absolute;
+    bottom:0;
+    margin:0;
+  }
+  #monthAgendaIcon{
+    text-align:center;
+    width:100%;
+    position:absolute;
+    top:15px;
+    margin:0;
+    font-size:10px;
+    font-weight:900;
+    z-index:2;
+    letter-spacing:1;
+  }
+  #dateAgendaIcon{
+    text-align:center;
+    width:100%;
+    position:absolute;
+    top:29px;
+    margin:0;
+    font-size:16px;
+    font-weight:900;
+  }
+</style>
+
+
+<script>
+if(pageUrl.indexOf('home') != -1){
+    document.getElementById('homeImgIcon').src ="assets/icons/homeIconActive.png";
+  }else if(pageUrl.indexOf('agenda') != -1){
+  document.getElementById('agendaImgIcon').src ="assets/icons/agendaIconActive.png";
+  }else if(pageUrl.indexOf('notifications') != -1){
+    document.getElementById('notificationsImgIcon').src ="assets/icons/notificationsIconActive.png";
+  }else if(pageUrl.indexOf('messages') != -1){
+    document.getElementById('messagesImgIcon').src ="assets/icons/messagesIconActive.png";
+
+  }
+
+</script>

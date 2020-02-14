@@ -1,0 +1,618 @@
+<%- include partials/regularEmptyHead.ejs %>
+
+
+
+<body>
+  <div id="leftHalfDiv" class="">
+    <img id="mockupImg" src="assets\landingPageAssets\landingpageMockupPcCell.png" alt="">
+  </div>
+  <div id="rightHalfDiv">
+    <div id="textContainer">
+      <p id="comingSoonP"><script>document.write(translateWord("LAUNCHING MARCH 2020"));</script></p>
+      <p id="headlineP"><script>document.write(translateWord("Manage your business appointments more effectively than ever."));</script></p>
+      <!-- <p class="subHeadlineP">Simplifie la facon dont ton équipe organise, modifie et accéde aux rendez-vous de ton entreprise</p> -->
+
+        <div id="inputsContainer">
+        <% if(locals.countUsers){%>
+          <p class="subHeadlineP"><script>document.write(translateWord("Join the "));</script><span class="boldedSPan"><%=countUsers%></span><script>document.write(translateWord(" others on our vip list."));</script></p>
+        <% } %>
+        <input id="emailInput" type="email" name="" value="" placeholder="">
+        <script>document.getElementById("emailInput").placeholder = translateWord("Your email");</script>
+        <p id="errorTextUnderEmail"></p>
+        <button id="submitButton" type="button" name="button"><script>document.write(translateWord("Join the vip pre-launch list"));</script></button>
+        <p class="subHeadlineP"><script>document.write(translateWord("Sign up now to be notified when we launch and receive 3 MONTHS FOR FREE."));</script></p>
+      </div>
+    </div>
+  </div>
+
+  <% include partials/storeLandingPageHeaderPreRelease.ejs%>
+
+  <div id="benefitsDiv" class="">
+    <div class="" id="benefitsChildDiv">
+        <p class="secondContainerTitleP"><script>document.write(translateWord("Why you need Dailyworks"));</script></p>
+
+        <div class="valuesAddedParentContainer">
+          <div class="valuesAddedChildContainer">
+            <p class="valueAddedTextP"><script>document.write(translateWord("Your phone keeps ringing to book appointments"));</script></p>
+          </div>
+          <!-- <p class="valueAddedEmojiIcon">&#128224</p> -->
+        </div>
+
+        <div class="valuesAddedParentContainer">
+          <div class="valuesAddedChildContainer">
+            <p class="valueAddedTextP"><script>document.write(translateWord("Finding an available time slot requires hardcore university maths"));</script></p>
+          </div>
+          <!-- <p class="valueAddedEmojiIcon">&#129327</p> -->
+        </div>
+
+        <div class="valuesAddedParentContainer">
+          <div class="valuesAddedChildContainer">
+            <p class="valueAddedTextP"><script>document.write(translateWord("You can't book appointments when your business is closed"));</script></p>
+          </div>
+          <!-- <p class="valueAddedEmojiIcon">🌙</p> -->
+        </div>
+
+        <div class="valuesAddedParentContainer">
+          <div class="valuesAddedChildContainer">
+            <p class="valueAddedTextP"><script>document.write(translateWord("You spend too much time and money planning, and not enough time working"));</script></p>
+          </div>
+          <!-- <p class="valueAddedEmojiIcon">&#128295</p> -->
+      </div>
+    </div>
+    <div class="" id="siteFooter">
+      <script type="text/javascript">
+        if(!languageCookie){
+          document.write("<select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>");
+        }else{
+          if(languageCookie == "fr"){
+            document.write("<select id='langSelect'><option value='fr' selected>Francais</option><option value='en'>English</option></select>");
+          }else{
+            document.write("<select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>");
+          }
+        }
+      </script>
+
+      <p>Dailyworks <script>document.write(new Date().getFullYear());</script> 	• <script>document.write(translateWord("Made with ❤ in Montreal"));</script></p>
+    </div>
+  </div>
+
+
+</body>
+
+<script>
+
+</script>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+
+
+<style>
+.boldedSpan{
+  font-weight:900 !important;
+  font-size:22px;
+}
+#inputsContainer{
+  position:relative;
+  width:100%;
+  left:0;
+  top:0;
+  margin:0;
+  padding:0;
+}
+#emailInput{
+  background-color:#f9f9f9;
+}
+#emailInput:focus{
+  background-color:#fff;
+}
+
+@media screen and (min-width:1290px){
+  #benefitsChildDiv{
+    position:relative;
+    width:76%;
+    left:12%;
+    margin-bottom:300px;
+    height:auto;
+  }
+}
+@media screen and (min-width:780px) and (max-width:1290px){
+  #benefitsChildDiv{
+    position:relative;
+    width:90%;
+    left:5%;
+    margin-bottom:300px;
+    height:auto;
+  }
+}
+@media screen and (min-width:780px){
+
+  .valuesAddedParentContainer{
+    position: relative;
+    width: calc((100% - 12px) / 4);
+    left: 0;
+    margin: 0;
+    padding: 20px;
+    vertical-align:top;
+    background-color: transparent;
+    min-height: 10px;
+    display: inline-block;
+  }
+  .valueAddedTextP{
+    font-size: var(--mobile-font-size-regular);
+    font-weight: var(--mobile-font-weight-regular);
+    color: var(--font-color-black);
+    width: 100%;
+    position: relative;
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+    left: 0;
+    text-align: center;
+    padding: 20 10 20 10;
+    line-height:22px;
+  }
+  .valuesAddedChildContainer{
+    position:relative;
+    width:100%;
+    border:none;
+    box-shadow:var(--box-shadow-card);
+    height:145px;
+    margin:0;
+    border-radius:var(--official-border-radius);
+    background-color:#fff;
+  }
+
+  .secondContainerTitleP{
+    font-size:var(--mobile-font-size-page-title);
+    color:var(--font-color-black);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    margin:0 0 30 0;
+    width:100%;
+    padding:0px 20px 20px 40px;
+    left:0;
+    text-align:center;
+  }
+  #rightHalfDiv{
+    position:absolute;
+    right:0;
+    width:50%;
+    top:0;
+    height:100%;
+  }
+  #leftHalfDiv{
+    position:absolute;
+    left:0;
+    width:50%;
+    top:0;
+    height:100%;
+    background-color:#fff4ec;
+  }
+  #textContainer{
+    position:relative;
+    border:none;
+    width:90%;
+    left:0;
+    top:50%;
+    height:auto;
+    transform:translateY(-50%);
+  }
+  #topNavBar{
+    width:100%;
+    position:absolute;
+    top:0;
+    left:0;
+  }
+  #comingSoonP{
+      color:rgba(58, 122, 182, 1);
+      width: calc(100% - 40px);
+      position: relative;
+      margin: 0px 20px 20px 20px;
+      font-size: 20px;
+      font-weight: 400;
+  }
+  #headlineP{
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 20px 20px;
+    font-size:45px;
+    font-weight:900;
+  }
+  .subHeadlineP{
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 20px 20px;
+    font-size:20px;
+  }
+  #errorTextUnderEmail{
+    color:var(--font-color-red);
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 20px 20px;
+    font-size:20px;
+  }
+  #emailInput{
+  width:calc(100% - 100px);
+  left:20px;
+  height:50px;
+  position:relative;
+  display:block;
+  margin: 0px 0px 20px 0px;
+  border-radius:5px;
+  border:1px solid #c4c4c4;
+  padding:0 20px 0 20px;
+  font-size:20px;
+  }
+  #submitButton{
+    width:calc(100% - 100px);
+    left:20px;
+    height:70px;
+    position:relative;
+    display:block;
+    margin:0px 0px 20px 0px;
+    border:none;
+    color:#fff;
+    background-color:rgba(58, 122, 182, 1);
+    border-radius:5px;
+    font-size:20px;
+  }
+  #mockupImg{
+    position:absolute;
+    left:1%;
+    transform:translateY(-50%);
+    top:50%;
+    width:98%;
+  }
+  #benefitsDiv{
+    position:relative;
+    top:100%;
+    width:100%;
+    left:0;
+    min-height:200px;
+    background-color:#f9f9f9;
+    padding:120px 0 0px 0;
+  }
+  .topNavLink{
+    float: right;
+        margin: 32px 80px 0px 0px;
+        text-decoration: none;
+        position: relative;
+        color: #000;
+        font-size: 20px;
+        cursor: pointer;
+  }
+  #logoHrefTopNavbar{
+      height: 60px;
+      width:160px;
+      border:none;
+      margin: 30px 0 0 30px;
+      background-size: contain;
+      position: relative;
+      float: left;
+      background-repeat: no-repeat;
+      background-image: url(assets/logos/dwFullLogoBlack.png);
+  }
+  #siteFooter p{
+    padding:30px 20px 30px 20px;
+    text-align:center;
+    position:relative;
+    left:50%;
+    width:max-content;
+    transform:translateX(-50%);
+  }
+  #langSelect{
+    text-align:left;
+    left:20px;
+    bottom:20px;
+    position:absolute;
+  }
+}
+
+
+
+
+
+@media screen and (max-width:780px){
+  .valuesAddedParentContainer{
+    position:relative;
+    width:calc(100% - 40px);
+    left:20px;
+    margin:0 0 0 0;
+    padding:20px;
+    border:none;
+    background-color:transparent;
+    min-height:70px;
+  }
+  .valueAddedTextP{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-black);
+    width:100%;
+    position:relative;
+    top:0;
+    margin:0;
+    left:0;
+    padding:20 20 20 20;
+  }
+  .valuesAddedChildContainer{
+    position:relative;
+    width:100%;
+    border:none;
+    box-shadow:var(--box-shadow-card);
+    min-height:60px;
+    margin:0;
+    border-radius:var(--official-border-radius);
+    background-color:#fff;
+  }
+  #benefitsChildDiv{
+    width:100%;
+    margin-bottom:100px;
+  }
+  .secondContainerTitleP{
+    font-size:var(--mobile-font-size-page-title);
+    color:var(--font-color-black);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    margin:0 0 30 0;
+    width:100%;
+    padding:0px 20px 0px 40px;
+    left:0;
+    text-align:left;
+  }
+  #rightHalfDiv{
+    position:absolute;
+    left:0;
+    width:100%;
+    top:80px;
+    height:calc(100% - 80px);
+    overflow-y:scroll;
+    background-color:#fff4ec;
+  }
+  #leftHalfDiv{
+    position:absolute;
+    left:0;
+    width:100%;
+    top:100%;
+    height:350px;
+    overflow:hidden;
+  }
+  #textContainer{
+    position:relative;
+    border:none;
+    width:100%;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0;
+    height:auto;
+  }
+  #topNavBar{
+    width:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    height:80px;
+    background-color:#fff4ec;
+  }
+  #comingSoonP{
+      color:rgba(58, 122, 182, 1);
+      width: calc(100% - 40px);
+      position: relative;
+      margin: 0px 20px 20px 20px;
+      font-size: 15px;
+      font-weight: 400;
+  }
+  #headlineP{
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 30px 20px;
+    font-size:30px;
+    font-weight:900;
+  }
+  .subHeadlineP{
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 20px 20px;
+    font-size:15px;
+  }
+  #errorTextUnderEmail{
+    color:var(--font-color-red);
+    width:calc(100% - 40px);
+    position:relative;
+    margin:0px 20px 20px 20px;
+    font-size:15px;
+  }
+  #emailInput{
+  width:calc(100% - 40px);
+  left:20px;
+  height:50px;
+  position:relative;
+  display:block;
+  margin: 0px 0px 20px 0px;
+  border-radius:5px;
+  border:1px solid #c4c4c4;
+  padding:0 20px 0 20px;
+  font-size:20px;
+  }
+  #submitButton{
+    width:calc(100% - 40px);
+    left:20px;
+    height:70px;
+    position:relative;
+    display:block;
+    margin:0px 0px 20px 0px;
+    border:none;
+    color:#fff;
+    background-color:rgba(58, 122, 182, 1);
+    border-radius:5px;
+    font-size:20px;
+  }
+  #mockupImg{
+    position:absolute;
+    left:1%;
+    transform:translateY(-50%);
+    top:50%;
+    width:98%;
+  }
+  #benefitsDiv{
+    position:relative;
+    top:calc(100% + 350px);
+    width:100%;
+    left:0;
+    min-height:200px;
+    background-color:#f9f9f9;
+    padding:120px 0 0px 0;
+  }
+  .topNavLink{
+    float: right;
+        margin: 20px 15px 0px 20px;
+        text-decoration: none;
+        position: relative;
+        color: #000;
+        font-size: 20px;
+        cursor: pointer;
+  }
+  #logoHrefTopNavbar{
+      height: 50px;
+      margin: 20px 0 0 20px;
+      width: 140px;
+      border:none;
+      background-size: contain;
+      position: relative;
+      float: left;
+      background-repeat: no-repeat;
+      background-image: url(assets/logos/dwFullLogoBlack.png);
+  }
+  #siteFooter p{
+    width:100%;
+    padding:30px 20px 30px 20px;
+    text-align:center;
+    display:block;
+    position:relative;
+  }
+  #langSelect{
+    position:relative;
+    left:50%;
+    transform:translateX(-50%);
+  }
+}
+
+
+
+  *{
+    box-sizing:border-box;
+    font-family:"Roboto"
+  }
+
+#valuesAddedMainContainer{
+  background-color:#fff;
+  padding-bottom:60px;
+}
+.featureIconImg{
+  width:30px;
+  top:0;
+  left:0;
+  position:absolute;
+}
+.valueAddedEmojiIcon{
+  font-size:var(--mobile-font-size-page-title);
+  top:0;
+  margin:0;
+  padding:0;
+  left:0;
+  position:absolute;
+}
+
+#siteFooter{
+  position:relative;
+width:100%;
+left:0;
+height:auto;
+background-color:transparent;
+top:0;
+margin:0;
+}
+#langSelect{
+  background-color:#fff;
+}
+
+#gifSuccess{
+  position:relative;
+  top:0px;
+  width:60%;
+  left:20%;
+  margin-top:20px;
+  margin-bottom:30px;
+  border-radius:100%;
+}
+.fa {
+  margin-right: 10px;
+}
+</style>
+
+<script>
+
+
+document.getElementById('langSelect').onchange = function(){
+  console.log('lang changed');
+  $.ajax({
+        url: '/setlangCookie',
+        type: 'post',
+        data: {lang:this.value},
+        success: function( data, textStatus){
+          if(data=="ok"){
+            location.reload();
+          }else if(data=="error"){
+            alert("error");
+          }else{
+            alert("error");
+          }
+        },
+        error: function( textStatus, errorThrown ){
+            console.log( errorThrown );
+        }
+    });
+}
+
+
+
+  document.getElementById("submitButton").onclick = function(){
+    var buttonSubmit = document.getElementById('submitButton');
+    buttonSubmit.innerHTML = "<i class='fa fa-spinner fa-spin'></i>"+translateWord("Loading");
+    var b2bEmail = document.getElementById("emailInput").value;
+    if(b2bEmail != ""){
+      $.ajax({
+            url: '/registerPrelaunchB2bEmails',
+            type: 'post',
+            data: {email:b2bEmail},
+            success: function( data, textStatus){
+              if(data=="ok"){
+                document.getElementById("inputsContainer").innerHTML = "<img id='gifSuccess' src='assets/landingPageAssets/successEmail.gif'><p class='subHeadlineP'>"+translateWord('Thank you for joining the waitlist! You won\'t regret it.')+"</p>";
+              }else if(data=="error"){
+                buttonSubmit.innerText = translateWord("Join the vip pre-launch list");
+                document.getElementById("errorTextUnderEmail").innerText = translateWord("Looks like there's an error, please try again.");
+              }else if(data=="alreadyExist"){
+                buttonSubmit.innerText = translateWord("Join the vip pre-launch list");
+                document.getElementById("errorTextUnderEmail").innerText = translateWord("Looks like your email is already in our waitlist. Since you seem very interested we might release earlier for you.");
+              }else{
+                buttonSubmit.innerText = translateWord("Join the vip pre-launch list");
+                document.getElementById("errorTextUnderEmail").innerText = translateWord("Looks like there's an error, please try again.");
+              }
+            },
+            error: function( textStatus, errorThrown ){
+              document.getElementById("errorTextUnderEmail").innerText = translateWord("Looks like there's an error, please try again.");
+            }
+        });
+    }
+  }
+
+
+
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

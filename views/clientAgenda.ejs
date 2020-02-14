@@ -1,0 +1,1601 @@
+<%- include partials/regularEmptyHead.ejs %>
+<%- include partials/clientBottomNavBar.ejs %>
+
+<link rel="stylesheet" href="/css/styleGuidelines.css">
+<body>
+
+
+  <div id="mainScreenBody">
+    <!-- !eventsObj || eventsObj.length == 0 -->
+    <% if(2==3){ %>
+      <div id="noEventsMainDiv" class="">
+        <img src="assets/emptyStatePictures/polarBearParty.png" alt="">
+        <p>Looks like you have not scheduled any appointments yet.</p>
+        <a href="/discover">Discover stores and services now</a>
+      </div>
+
+      <% }else{ %>
+<script>
+  var weekViewBool = false;
+  var dateSelected = new Date();
+  var theDateToday = new Date();
+  var weekDayName = ["Sun","Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+
+  var monthsName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var fullMonthsName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+  var events = [
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":null,
+    "recurring":false,
+    "frequencyRecurring":null,
+    //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "fullDay":false,
+
+    "startDate":new Date(2019, 8, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 8, 17, 14, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":1, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 8, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 8, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":true,
+    "frequencyRecurring":1,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 8, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 9, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 9, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":true,
+    "frequencyRecurring":1,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 9, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 nov",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 10, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 10, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 dec",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 11, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 11, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":null,
+    "recurring":false,
+    "frequencyRecurring":null,
+    //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "fullDay":false,
+
+    "startDate":new Date(2019, 8, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 8, 17, 14, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":1, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 8, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 8, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 sept",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":true,
+    "frequencyRecurring":1,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 8, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 8, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 9, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 9, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 octo",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":true,
+    "frequencyRecurring":1,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 9, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 9, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 17 nov",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":false,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 10, 17, 13, 30,00,00),
+    "endDate":new Date(2019, 10, 17, 14, 00,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"},
+    {"name":'Nettoyage', "price":22,"durationHours":0, "durationDays":0,"durationMinutes":30, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+},
+{
+  "storeId":"3j38jam8",
+    "storeName":"Dentiste St-Constant 18 dec",
+    "clientId":"mwiwj8mau838",
+    "clientName":"Marc",
+    "employeeId":"93nami9s3m",
+    "employeeName":"Jennifer",
+    "recurring":false,
+    "frequencyRecurring":null,
+    "fullDay":true,
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+    "startDate":new Date(2019, 11, 18, 9, 30,00,00),
+    "endDate":new Date(2019, 11, 18, 12, 30,00,00),
+    "services":[
+    {"name":'Nettoyage', "price":22,"durationHours":3, "durationDays":0,"durationMinutes":0, "description":"snjnjsnjsjnsnj"}
+    ]
+    // "price":{type:mongoose.Schema.Types.Decimal128, required:true}
+}
+
+  ];
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div id="dayViewScheduleMainDiv" class="mainDivsAroundScheduleScreen">
+  <div id="" class="scheduleTopNavBar">
+    <p class="pageTitle">Agenda</p>
+      <div class="monthRangeContainer">
+      <div class="monthNameRangeDiv" id="monthNameDivDayView"></div>
+      <div id="rightArrowMonthDivDayView" class="arrowDiv">&#9660;</div>
+      </div>
+    <button type="button" name="button" id="todayButtonDayView" class='todayButtonDayView'>Today</button>
+    <!-- <button id="weekViewButton" class="changeViewButton">Week View</button> -->
+  </div>
+  <div id="dayScheduleInnerDiv" class="">
+
+  </div>
+
+
+</div>
+<!--
+
+
+
+<div id="weekViewScheduleMainDiv" class="mainDivsAroundScheduleScreen">
+  <div id="" class="scheduleTopNavBar">
+    <div id="weekRangeContainer">
+    <div id="leftArrowWeekDiv" class="arrowDiv">&#9668;</div>
+    <div class="wNameRangeDiv"></div>
+    <div id="rightArrowWeekDiv" class="arrowDiv">&#9658;</div>
+    </div>
+
+    <button id="dayViewButton" class="changeViewButton">day View</button>
+  </div>
+</div> -->
+
+
+
+    <% } %>
+  </div>
+
+
+
+
+
+</body>
+
+
+<style>
+  .monthRangeContainer{
+    width:auto;
+    position:absolute;
+height:auto;
+left:20;
+bottom:10;
+color:var(--font-color-event-small-card-storename);
+font-size:var(--font-size-event-more-info-title);
+font-weight:var(--font-weight-event-small-card-storename);
+  }
+  .arrowDiv{
+display:inline-block;
+position:relative;
+left:0px;
+margin:10;
+
+  }
+  .monthNameRangeDiv{
+    display:inline-block;
+    position:relative;
+    left:0px;
+    margin:0;
+  }
+  .pageTitle{
+    font-size:var(--font-size-page-title);
+    font-weight:var(--font-weight-page-title);
+    color:var(--font-color-page-title);
+    width:100%;
+    margin-top:20px;
+    padding-left:20;
+    padding-right:20;
+  }
+  #mainScreenBody{
+    left:0px;
+  position:fixed;
+  top:0px;
+  width:100%;
+  height:calc(100% - 65px);
+  background-color:#f9f9f9;
+
+  }
+  #noEventsMainDiv{
+    text-align:center;
+    width:100%;
+    position:absolute;
+    top:50%;
+    transform:translateY(-70%);
+    min-height:100px;
+    margin-top:30px;
+  }
+  #noEventsMainDiv p{
+    text-align:center;
+    width:100%;
+    position:relative;
+    left:0px;
+    top:0px;
+    margin-bottom:60px;
+    margin-top:0px;
+    padding-left:20px;
+    padding-right:20px;
+  }
+  #noEventsMainDiv a{
+    position:relative;
+    padding-left:20px;
+    padding-right:20px;
+  }
+  #noEventsMainDiv img{
+
+    height:200px;
+    position:relative;
+    margin-bottom:20px;
+  }
+  .mainDivsAroundScheduleScreen{
+
+    position:absolute;
+    top:0px;
+    width:100%;
+    left:0;
+    height:100%;
+    background-color:#fff;
+
+  }
+#weekViewScheduleMainDiv{
+  display:none;
+}
+#dayViewScheduleMainDiv{
+  display:block;
+}
+.scheduleTopNavBar{
+position:absolute;
+top:0px;
+width:100%;
+left:0;
+background-color:#f9f9f9;
+height:120px;
+border-bottom:var(--nav-bar-border);
+}
+.changeViewButton{
+border-radius:0px 10px 10px 0px;
+  position:absolute;top:0;
+  right:0;
+}
+#dayScheduleInnerDiv{
+  position:absolute;
+  top:120;
+  height:calc(100% - 120px);
+  width:100%;
+  left:0;
+}
+#dayScheduleTableDiv{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+overflow-y:auto;
+}
+.partDayEventsDiv{
+position:relative;
+top:0px;
+left:0;
+width:100%;
+height:auto;
+background-color:transparent;
+padding: 0 0 20 0;
+display:none;
+}
+.allDayEventsDiv{
+  position:relative;
+  top:0px;
+  left:0;
+  width:100%;
+  height:auto;
+  background-color:transparent;
+  padding: 0;
+  margin-bottom:30px;
+  display:none;
+}
+.eventDivDayView{
+position:relative;
+width:calc(100% - 40px);
+left:20px;
+background-color:#f9f9f9;
+border-radius:10px;
+margin-bottom:20px;
+height:auto;
+box-shadow:var(--box-shadow-card);
+}
+.storeNameP{
+color:var(--font-color-event-small-card-storename);
+font-size:var(--font-size-event-small-card-storename);
+font-weight:var(--font-weight-event-small-card-storename);
+margin:0;
+padding:20 20 0 20;
+text-align:left;
+position:relative;
+left:0;
+top:0;
+}
+.storeNameDiv{
+position:relative;
+left:0;
+top:0;
+}
+.dateTimeP{
+color:var(--font-color-event-small-card-datetime);
+font-size:var(--font-size-event-small-card-datetime);
+font-weight:var(--font-weight-event-small-card-datetime);
+margin:0;
+padding:20 20 0 20;
+text-align:left;
+position:relative;
+left:0;
+top:0;
+}
+.dateTimeDiv{
+position:relative;
+left:0;
+top:0;
+}
+.newDayMainDiv{
+  position:relative;
+  width:100%;
+  height:auto;
+  left:0;
+  margin-bottom:10px;
+  margin-top:10;
+  top:0;
+}
+.newDayP{
+  padding-left:20px;
+  padding-right:20px;
+  margin:0;
+}
+.storeNameDayViewP{
+  color:var(--font-color-event-small-card-storename);
+  font-size:var(--font-size-event-small-card-storename);
+  font-weight:var(--font-weight-event-small-card-storename);
+  margin:0;
+  width:100%;
+  padding-left:20;
+  padding-right:20;
+  padding-top:20;
+  margin-bottom:10px;
+}
+.eventHoursDayViewP{
+  color:var(--font-color-event-small-card-datetime);
+  font-size:var(--font-size-event-small-card-datetime);
+  font-weight:var(--font-weight-event-small-card-datetime);
+  margin:0;
+  width:100%;
+  padding-left:20;
+  padding-right:20;
+  padding-bottom:10;
+}
+.serviceScrollMainDiv{
+  overflow-x:auto;
+  white-space: nowrap;
+  position:relative;
+  left:10;
+  width:calc(100% - 20px);
+}
+.servicesAroundDiv{
+  display: inline-block;
+  text-align: center;
+  color:var(--font-color-event-small-card-servicebox);
+  font-size:var(--font-size-event-small-card-servicebox);
+  font-weight:var(--font-weight-event-small-card-serviceboxe);
+  border:none;
+  border-radius:10px;
+  margin-bottom:20;
+  margin-left:10px;
+  margin-right:10px;
+  padding:5px;
+  background-color:#e1e1e1;
+}
+.activeDayViewMainDiv{
+
+  display:block !important;
+}
+
+.eventMoreInfoMainDiv{
+
+  position:fixed;
+  height:calc(100% - 65px);
+  top:0;
+  width:100%;
+  left:0;
+  background-color:#fff;
+  z-index:10;
+}
+
+.moreInfoTitle{
+width:100%;
+left:0;
+position:relative;
+top:0;
+padding-left:20px;
+padding-right:20px;
+margin:0;
+margin-top:20px;
+color:var(--font-color-event-more-info-title);
+font-size:var(--font-size-event-more-info-title);
+font-weight:var(--font-weight-event-more-info-title);
+}
+.moreInfoSubText{
+  color:var(--font-color-event-more-info-subtext);
+  font-size:var(--font-size-event-more-info-subtext);
+  font-weight:var(--font-weight-event-more-info-subtext);
+  width:100%;
+  left:0;
+  position:relative;
+  top:0;
+  padding-left:20px;
+  padding-right:20px;
+  margin:0;
+  margin-top:10px;
+
+}
+.moreInfoRegularText{
+  color:var(--font-color-event-more-info-regulartext);
+  font-size:var(--font-size-event-more-info-regulartext);
+  font-weight:var(--font-weight-event-more-info-regulartext);
+  width:100%;
+  left:0;
+  position:relative;
+  top:0;
+  padding-left:20px;
+  padding-right:20px;
+  margin:0;
+  margin-top:20px;
+
+}
+#moreInfoTitleMoreMarginBottom{
+  width:100%;
+  left:0;
+  position:relative;
+  top:0;
+  padding-left:20px;
+  padding-right:20px;
+  margin:0;
+  margin-top:20px;
+  margin-bottom:10px;
+  color:var(--font-color-event-more-info-title);
+  font-size:var(--font-size-event-more-info-title);
+  font-weight:var(--font-weight-event-more-info-title);
+}
+.moreInfoDivTitle{
+  font-size:var(--font-size-page-title);
+  font-weight:var(--font-weight-page-title);
+  width:100%;
+  position:relative;
+  top:0;
+  padding-left:20;
+  padding-right:20;
+  margin:0;
+  padding-top:20;
+}
+.moreInfoCloseButton{
+  top:20px;
+  right:20px;
+  font-size:25;
+  position:absolute;
+  text-align:right;
+  font-weight:900;
+  margin:0;
+}
+.calendarPopupDatePicker{
+
+  width:calc(100% - 50px);
+  height:320;
+  top:calc(50% - 160px);
+  background-color:#fff;
+  position:fixed;
+  left:25;
+  border-radius:10px;
+  box-shadow:var(--box-shadow-card);
+}
+.transparentOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-color:transparent;
+z-index:1000;
+
+}
+
+.monthCalendarSelectorTable{
+position:absolute;
+bottom:0;
+left:20;
+width:calc(100% - 40px);
+height:calc(100% - 40px);
+margin:0;
+}
+.monthCalendarSelectorTable td{
+  width:calc(100% / 7);
+  text-align:center;
+}
+.monthCalendarPickerTopDiv{
+  height:40px;
+  top:0;
+  left:0;
+  width:calc(100% - 20px);
+}
+.monthCalendarPickerLeftArrow{
+position:absolute;
+text-align:left;
+left:20;
+top:10;
+margin:0;
+}
+.monthCalendarPickerRightArrow{
+  position:absolute;
+  text-align:right;
+  right:20;
+  top:10;
+  margin:0;
+}
+.monthCalendarPickerMonthName{
+  position:absolute;
+  text-align:center;
+  width:auto;
+  font-weight:900;
+  color:#000;
+  font-size:18;
+  left:50%;
+  transform:translateX(-50%);
+  top:10;
+  margin:0;
+}
+.calendarTextBlocked{
+  color:rgba(0,0,0,0.2);
+  font-weight:400;
+  font-size:15px;
+}
+.calendarTextAvailable{
+  color:rgba(0,0,0,1);
+  font-weight:400;
+  font-size:16px;
+}
+.todayButtonDayView{
+  position:absolute;
+  top:20;
+  right:20;
+  border-radius:10px;
+}
+.todayStringP::after{
+content:" today";
+color:rgba(255, 0, 0, 0.7);
+font-weight:900;
+}
+</style>
+
+
+
+
+
+<script>
+
+
+  // document.getElementById("weekViewButton").onclick = function(){
+  //   weekViewBool = true;
+  //   document.getElementById("weekViewScheduleMainDiv").style.display="block";
+  //   document.getElementById("dayViewScheduleMainDiv").style.display="none";
+  // // document.getElementById("monthRangeContainer").style.display="none";
+  // // document.getElementById("monthViewButton").style.display="block";
+  // // document.getElementById("weekDateRangeTable").style.display="table";
+  // // createWeekCalendar();
+  // };
+  // document.getElementById("dayViewButton").onclick = function(){
+  //   weekViewBool = false;
+  //   // createDayCalendar();
+  // document.getElementById("weekViewScheduleMainDiv").style.display="none";
+  // document.getElementById("dayViewScheduleMainDiv").style.display="block";
+  // // document.getElementById("weekRangeContainer").style.display="none";
+  // // document.getElementById("monthRangeContainer").style.display="block";
+  // // document.getElementById("weekDateRangeTable").style.display="none";
+  // };
+
+
+
+document.getElementById('todayButtonDayView').onclick= function(){
+  document.getElementById('dayScheduleTableDiv').scrollTop = 0;
+}
+
+
+
+
+document.getElementById('rightArrowMonthDivDayView').onclick = function(){
+  this.innerHTML = "&#9650;";
+var calendarPickerDate = dateSelected;
+
+
+var calendarMainDivSelectorDate = document.createElement('div');
+calendarMainDivSelectorDate.classList.add("calendarPopupDatePicker");
+
+
+
+var topPickerDiv = document.createElement('div');
+topPickerDiv.classList.add('monthCalendarPickerTopDiv');
+
+var leftArrow  = document.createElement('p');
+leftArrow.classList.add('monthCalendarPickerLeftArrow');
+leftArrow.innerHTML = "&#9668;";
+var rightArrow  = document.createElement('p');
+rightArrow.classList.add('monthCalendarPickerRightArrow');
+rightArrow.innerHTML = "&#9658;";
+
+var monthName  = document.createElement('p');
+monthName.classList.add('monthCalendarPickerMonthName');
+monthName.innerText = fullMonthsName[calendarPickerDate.getMonth()]+" "+calendarPickerDate.getFullYear();
+
+topPickerDiv.appendChild(leftArrow);
+topPickerDiv.appendChild(rightArrow);
+topPickerDiv.appendChild(monthName);
+calendarMainDivSelectorDate.appendChild(topPickerDiv);
+
+
+var divAroundTable = document.createElement('div');
+createTable(calendarPickerDate);
+
+
+
+
+
+leftArrow.onclick = function(){
+changeMonth(-1);
+}
+rightArrow.onclick = function(){
+changeMonth(1);
+}
+
+
+function changeMonth(plusOrMinus){
+
+            var lastDayOfCurrentMonth = new Date(calendarPickerDate.getFullYear(), calendarPickerDate.getMonth()+1, 0).getDate();
+            var lastDayOfNextMonth = new Date(calendarPickerDate.getFullYear(), calendarPickerDate.getMonth()+2, 0).getDate();
+            var lastDayOfPastMonth = new Date(calendarPickerDate.getFullYear(), calendarPickerDate.getMonth(), 0).getDate();
+            if(plusOrMinus == 1){
+            //next Month
+              if(lastDayOfNextMonth<lastDayOfCurrentMonth){
+              calendarPickerDate.setDate(lastDayOfNextMonth);
+              calendarPickerDate.setMonth(calendarPickerDate.getMonth()+1);
+              }else{
+              calendarPickerDate.setMonth(calendarPickerDate.getMonth()+1);
+              }
+            }else{
+            //past month == -1
+              if(lastDayOfPastMonth<lastDayOfCurrentMonth){
+              calendarPickerDate.setDate(lastDayOfPastMonth);
+              calendarPickerDate.setMonth(calendarPickerDate.getMonth()-1);
+              }else{
+              calendarPickerDate.setMonth(calendarPickerDate.getMonth()-1);
+
+              }
+            }
+
+                createTable(calendarPickerDate);
+
+                monthName.innerText = fullMonthsName[calendarPickerDate.getMonth()]+" "+calendarPickerDate.getFullYear();
+}
+
+
+
+
+ function createTable(theDate){
+divAroundTable.innerHTML = "";
+           var monthNumber = theDate.getMonth();
+           var yearNumber = theDate.getFullYear();
+
+           var daysInMonth = new Date(yearNumber, monthNumber+1, 0).getDate();
+
+           var startDayOfMonth = new Date(yearNumber, monthNumber, 1).getDay();
+           var endDayOfMonth = new Date(yearNumber, monthNumber, daysInMonth).getDay();
+
+           // Determine the number of blank squares before start of month
+               var squares = [];
+               if (startDayOfMonth != 0) {
+                 for (var i=0; i<startDayOfMonth; i++) {
+                   squares.push("b");
+                 }
+               }
+
+               // Populate the days of the month
+               for (var i=1; i<=daysInMonth; i++) {
+                 squares.push(i);
+               }
+
+               // Determine the number of blank squares after end of month
+               if (endDayOfMonth != 6) {
+                 var blanks = endDayOfMonth==0 ? 6 : 6-endDayOfMonth;
+                 for (var i=0; i<blanks; i++) {
+                   squares.push("b");
+                 }
+               }
+
+
+           var monthTable = document.createElement("table");
+           monthTable.classList.add("monthCalendarSelectorTable");
+
+           // First row - Days
+               var monthNameRow = document.createElement("tr");
+               var calendarCell = null;
+               for (var i=0;i<weekDayName.length;i++) {
+                 calendarCell = document.createElement("td");
+                 calendarCell.innerHTML = weekDayName[i];
+                 monthNameRow.appendChild(calendarCell);
+               }
+               monthNameRow.classList.add("monthNameRow");
+               monthTable.appendChild(monthNameRow);
+
+
+
+
+               // Days in Month
+               var totalDays = squares.length;
+               var calendarRow = document.createElement("tr");
+               var monthDateCell = null;
+
+               for (var i=0; i<totalDays; i++) {
+                 monthDateCell = document.createElement("td");
+                 if (squares[i]=="b") {
+                   monthDateCell.classList.add("blankDate");
+                 } else {
+
+                   var wrapperInsideTd = document.createElement("div");
+                   wrapperInsideTd.innerHTML = "<div class='monthDateCell'>"+squares[i]+"</div>";
+                   wrapperInsideTd.classList.add("wrapperInsideMonthCell");
+                   monthDateCell.appendChild(wrapperInsideTd);
+                   var newMonthNumber = monthNumber;
+                   monthDateCell.setAttribute("date", yearNumber+"/"+(newMonthNumber)+"/"+squares[i]);
+
+
+
+                   if(theDateToday.getDate() > squares[i] && theDateToday.getMonth() == newMonthNumber && theDateToday.getFullYear() == yearNumber){
+
+                   wrapperInsideTd.classList.add('calendarTextBlocked');
+                 }else if(theDateToday.getMonth() >newMonthNumber && theDateToday.getFullYear() == yearNumber){
+                   //later month but same year
+                     wrapperInsideTd.classList.add('calendarTextBlocked');
+                   }else if(theDateToday.getFullYear() > yearNumber){
+                 //later year
+                 wrapperInsideTd.classList.add('calendarTextBlocked');
+               }else{
+                wrapperInsideTd.classList.add('calendarTextAvailable');
+                 monthDateCell.addEventListener("click", function(){
+                   scrollToRightDateDayView(this.getAttribute("date"));
+                 });
+               }
+
+
+                 }
+                 calendarRow.appendChild(monthDateCell);
+                 if (i!=0 && (i+1)%7==0) {
+                   monthTable.appendChild(calendarRow);
+                   calendarRow = document.createElement("tr");
+                 }
+               }
+
+
+           divAroundTable.appendChild(monthTable);
+ }
+calendarMainDivSelectorDate.appendChild(divAroundTable);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var transparentOverlay = document.createElement('div');
+transparentOverlay.classList.add('transparentOverlay');
+transparentOverlay.appendChild(calendarMainDivSelectorDate);
+
+transparentOverlay.onclick = function(e){
+  if(e.target != this){
+
+  }else{
+    transparentOverlay.remove();
+    document.getElementById('rightArrowMonthDivDayView').innerHTML = "&#9660;";
+  }
+}
+document.body.appendChild(transparentOverlay);
+};
+
+
+
+
+
+
+
+  function timeToDecimal(dateX) {
+    var t = dateX.getHours() +":"+dateX.getMinutes();
+      var arr = t.split(':');
+      var dec = parseInt((arr[1]/6)*10, 10);
+
+      return parseFloat(parseInt(arr[0], 10) + '.' + (dec<10?'0':'') + dec);
+  }
+
+
+
+
+  function createMoreInfoEventDiv(appointmentMoreInfo){
+
+    var dateTimeString = "";
+    var employeeName = "";
+    var recurringString = "";
+    if(appointmentMoreInfo.employeeName == null){
+      employeeName = "Attended by a random employee";
+    }else{
+
+      employeeName = "Attended by "+appointmentMoreInfo.employeeName;
+    }
+
+
+    if(appointmentMoreInfo.recurring ==true){
+      //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
+      if(appointmentMoreInfo.frequencyRecurring == 0){
+        recurringString = "<p class='moreInfoRegularText'>Occurs every day</p>";
+      }else if(appointmentMoreInfo.frequencyRecurring == 1){
+        recurringString = "<p class='moreInfoRegularText'>Occurs every week</p>";
+      }else if(appointmentMoreInfo.frequencyRecurring == 2){
+        recurringString = "<p class='moreInfoRegularText'>Occurs every month</p>";
+      }else if(appointmentMoreInfo.frequencyRecurring == 3){
+        recurringString = "<p class='moreInfoRegularText'>Occurs every year</p>";
+      }
+
+    }
+
+
+    if(appointmentMoreInfo.fullDay == true){
+      //all day
+      dateTimeString = weekDayName[appointmentMoreInfo.startDate.getDay()]+", "+monthsName[appointmentMoreInfo.startDate.getMonth()]+" "+appointmentMoreInfo.startDate.getDate()+" &#9679; "+appointmentMoreInfo.startDate.getHours()+":"+appointmentMoreInfo.startDate.getMinutes()+" - all day";
+
+    }else if(appointmentMoreInfo.endDate == null){
+      dateTimeString = weekDayName[appointmentMoreInfo.startDate.getDay()]+", "+monthsName[appointmentMoreInfo.startDate.getMonth()]+" "+appointmentMoreInfo.startDate.getDate()+" &#9679; "+appointmentMoreInfo.startDate.getHours()+":"+appointmentMoreInfo.startDate.getMinutes()+" - TBD";
+
+
+    }else if(sameDate(appointmentMoreInfo.endDate, appointmentMoreInfo.startDate)){
+      var dateTimeString = weekDayName[appointmentMoreInfo.startDate.getDay()]+", "+monthsName[appointmentMoreInfo.startDate.getMonth()]+" "+appointmentMoreInfo.startDate.getDate()+" &#9679; "+appointmentMoreInfo.startDate.getHours()+":"+appointmentMoreInfo.startDate.getMinutes()+" - "+appointmentMoreInfo.endDate.getHours()+":"+appointmentMoreInfo.endDate.getMinutes();
+    }else if(!sameDate(appointmentMoreInfo.endDate, appointmentMoreInfo.startDate)){
+      var dateTimeString = weekDayName[appointmentMoreInfo.startDate.getDay()]+", "+monthsName[appointmentMoreInfo.startDate.getMonth()]+" "+appointmentMoreInfo.startDate.getDate()+" &#9679; "+appointmentMoreInfo.startDate.getHours()+":"+appointmentMoreInfo.startDate.getMinutes()+" - "+weekDayName[appointmentMoreInfo.startDate.getDay()]+", "+monthsName[appointmentMoreInfo.endDate.getMonth()]+" "+appointmentMoreInfo.endDate.getDate()+" &#9679; "+appointmentMoreInfo.endDate.getHours()+":"+appointmentMoreInfo.endDate.getMinutes();
+    }
+
+
+
+    var eventMoreInfoMainDiv = document.createElement('div');
+    eventMoreInfoMainDiv.classList.add("eventMoreInfoMainDiv");
+
+    var cardContentString = "<p class='moreInfoDivTitle'>Your appointment</p><p class='moreInfoTitle'>"+appointmentMoreInfo.storeName+"</p><p class='moreInfoSubText'>"+"876 JL Lapierre"+"</p><p class='moreInfoSubText'>"+employeeName+"</p><p class='moreInfoRegularText'>"+dateTimeString+"</p>"+recurringString+"<p id='moreInfoTitleMoreMarginBottom'>Services</p><div class='serviceScrollMainDiv'>";
+
+      var closeButtonP = document.createElement('p');
+      closeButtonP.classList.add("moreInfoCloseButton");
+      closeButtonP.innerText="x";
+
+
+
+
+      for(var t=0;t<appointmentMoreInfo.services.length;t++){
+          cardContentString+="<div class='servicesAroundDiv'>"+appointmentMoreInfo.services[t].name+"</div>";
+        }
+      cardContentString+="</div>";
+
+    eventMoreInfoMainDiv.innerHTML = cardContentString;
+    eventMoreInfoMainDiv.appendChild(closeButtonP);
+    document.body.appendChild(eventMoreInfoMainDiv);
+
+    closeButtonP.onclick = function(){
+        eventMoreInfoMainDiv.remove();
+    }
+  }
+
+
+
+
+
+
+
+
+function sameDate(date1, date2){
+if(date1.getDate() == date2.getDate() && date2.getMonth() == date1.getMonth() && date1.getFullYear() == date2.getFullYear()){
+
+return true;
+}else{
+  return false;
+}
+
+
+
+
+}
+
+function sameDateOrLater(date1, date2){
+
+  if(date1.getDate() >= date2.getDate() && date1.getMonth() == date2.getMonth() && date1.getFullYear() == date2.getFullYear()){
+//later day but same month and same year
+
+  return true;
+}else if(date1.getMonth() > date2.getMonth() && date1.getFullYear() == date2.getFullYear()){
+  //later month but same year
+    return true;
+  }else if(date1.getFullYear() > date2.getFullYear()){
+//later year
+return true;
+}else{
+  return false;
+}
+}
+
+
+
+
+
+
+  function createDayCalendar(){
+
+
+    var mainDivOfMonth = document.getElementById("dayScheduleInnerDiv");
+    mainDivOfMonth.innerHTML="";
+
+    var monthNumber = dateSelected.getMonth();
+    var yearNumber = dateSelected.getFullYear();
+
+
+  document.getElementById("monthNameDivDayView").innerText = fullMonthsName[monthNumber] + " "+yearNumber;
+
+
+
+  //createtheDaySchedule
+  var dayScheduleDiv = document.createElement("div");
+  dayScheduleDiv.id = "dayScheduleTableDiv";
+
+  $(dayScheduleDiv).scroll(function() {
+
+    for(var y=0;y<document.getElementsByClassName('newDayMainDiv').length;y++){
+
+
+
+
+
+var theDayTitle = document.getElementsByClassName('newDayMainDiv')[y];
+
+
+var elementTop = $(theDayTitle).offset().top;
+var elementBottom = elementTop + $(theDayTitle).outerHeight();
+var viewportTop = $(window).scrollTop();
+var viewportBottom = viewportTop + $(window).height();
+if(elementBottom > viewportTop/4 && elementTop+300 < viewportBottom){
+  var monthName = fullMonthsName[theDayTitle.getAttribute('data-date').split('/')[1]];
+  var yearNumber = theDayTitle.getAttribute('data-date').split('/')[0];
+document.getElementById('monthNameDivDayView').innerText = monthName+" "+yearNumber;
+return;
+}
+    }
+  });
+
+
+  mainDivOfMonth.appendChild(dayScheduleDiv);
+
+
+    var cellHeight = 90;
+    var cellWidth = 90;
+
+
+
+    var allDayEventsDiv = document.createElement('div');
+    allDayEventsDiv.classList.add("allDayEventsDiv");
+    allDayEventsDiv.classList.add('all-day-'+dateSelected.getFullYear()+'/'+dateSelected.getMonth()+'/'+dateSelected.getDate());
+    var partDayEventsDiv = document.createElement('div');
+    partDayEventsDiv.classList.add("partDayEventsDiv");
+    partDayEventsDiv.classList.add('part-day-'+dateSelected.getFullYear()+'/'+dateSelected.getMonth()+'/'+dateSelected.getDate());
+
+
+
+
+  //do the styling css for event blocks
+  // code f = full day, code s = start today, code e = ends today, code p = some part of today
+
+var currentEventDate = dateSelected;
+    for(var r=0;r<events.length;r++){
+      if(sameDateOrLater(events[r].startDate, dateSelected)){
+
+if((events[r].fullDay == true || events[r].endDate == null) && document.getElementsByClassName('all-day-'+events[r].startDate.getFullYear()+'/'+events[r].startDate.getMonth()+'/'+events[r].startDate.getDate()).length != 0){
+allDayEventsDiv = document.getElementsByClassName('all-day-'+events[r].startDate.getFullYear()+'/'+events[r].startDate.getMonth()+'/'+events[r].startDate.getDate());
+
+                          //all day
+                          var eventDiv = document.createElement("div");
+
+                          eventDiv.onclick= function(arg) {
+                            return function() {
+                              createMoreInfoEventDiv(arg);
+                            }
+                          }(events[r]);
+
+
+
+
+                          eventDiv.classList.add("eventDivDayView");
+                          var eventDivString = "<p class='storeNameDayViewP'>"+events[r].storeName+"</p><p class='eventHoursDayViewP'>"+events[r].startDate.getHours()+":"+events[r].startDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                          for(var t=0;t<events[r].services.length;t++){
+                              eventDivString+="<div class='servicesAroundDiv'>"+events[r].services[t].name+"</div>";
+                            }
+                            eventDivString+="</div>";
+                            eventDiv.innerHTML = eventDivString;
+                          allDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+}else if(sameDate(events[r].endDate, events[r].startDate) && document.getElementsByClassName('part-day-'+events[r].startDate.getFullYear()+'/'+events[r].startDate.getMonth()+'/'+events[r].startDate.getDate()).length !=0){
+
+                                      partDayEventsDiv =  document.getElementsByClassName('part-day-'+events[r].startDate.getFullYear()+'/'+events[r].startDate.getMonth()+'/'+events[r].startDate.getDate());
+                                      var eventDiv = document.createElement("div");
+                                      eventDiv.classList.add("eventDivDayView");
+
+                                      eventDiv.onclick= function(arg) {
+                                        return function() {
+                                          createMoreInfoEventDiv(arg);
+                                        }
+                                      }(events[r]);
+
+
+                                      var eventDivString = "<p class='storeNameDayViewP'>"+events[r].storeName+"</p><p class='eventHoursDayViewP'>"+events[r].startDate.getHours()+":"+events[r].startDate.getMinutes()+" - "+events[r].endDate.getHours()+":"+events[r].endDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                                      for(var t=0;t<events[r].services.length;t++){
+                                        eventDivString+="<div class='servicesAroundDiv'>"+events[r].services[t].name+"</div>";
+                                      }
+                                      eventDivString+="</div>";
+                                      eventDiv.innerHTML = eventDivString;
+                                      partDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+}else{
+
+
+                            currentEventDate = events[r].startDate;
+
+                            allDayEventsDiv = document.createElement('div');
+                            allDayEventsDiv.classList.add("allDayEventsDiv");
+                            partDayEventsDiv = document.createElement('div');
+                            partDayEventsDiv.classList.add("partDayEventsDiv");
+                            allDayEventsDiv.classList.add('all-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+                            partDayEventsDiv.classList.add('part-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+
+
+                            var newDayDiv = document.createElement('div');
+                            newDayDiv.classList.add("newDayMainDiv");
+                            newDayDiv.dataset.date = currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate();
+
+                            var newDayP = document.createElement('p');
+                            newDayP.classList.add('newDayP');
+
+                            newDayP.innerText = monthsName[events[r].startDate.getMonth()]+" "+events[r].startDate.getDate()+", "+events[r].startDate.getFullYear();
+
+                            newDayDiv.appendChild(newDayP);
+                            var eventsDiv = document.getElementById("dayScheduleTableDiv");
+                            eventsDiv.appendChild(newDayDiv);
+
+
+
+
+
+
+                          currentEventDate = events[r].startDate;
+
+
+
+
+
+
+
+
+
+
+
+
+                          if(events[r].fullDay == true || events[r].endDate == null ){
+                            //all day
+                            var eventDiv = document.createElement("div");
+
+                            eventDiv.onclick= function(arg) {
+                              return function() {
+                                createMoreInfoEventDiv(arg);
+                              }
+                            }(events[r]);
+
+
+
+
+                            eventDiv.classList.add("eventDivDayView");
+                            var eventDivString = "<p class='storeNameDayViewP'>"+events[r].storeName+"</p><p class='eventHoursDayViewP'>"+events[r].startDate.getHours()+":"+events[r].startDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                            for(var t=0;t<events[r].services.length;t++){
+                                eventDivString+="<div class='servicesAroundDiv'>"+events[r].services[t].name+"</div>";
+                              }
+                              eventDivString+="</div>";
+                              eventDiv.innerHTML = eventDivString;
+                            allDayEventsDiv.classList.add('activeDayViewMainDiv');
+                            allDayEventsDiv.appendChild(eventDiv);
+
+                          }else if(sameDate(events[r].endDate, events[r].startDate)){
+
+
+                            var eventDiv = document.createElement("div");
+                            eventDiv.classList.add("eventDivDayView");
+
+                            eventDiv.onclick= function(arg) {
+                              return function() {
+                                createMoreInfoEventDiv(arg);
+                              }
+                            }(events[r]);
+
+
+                            var eventDivString = "<p class='storeNameDayViewP'>"+events[r].storeName+"</p><p class='eventHoursDayViewP'>"+events[r].startDate.getHours()+":"+events[r].startDate.getMinutes()+" - "+events[r].endDate.getHours()+":"+events[r].endDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                            for(var t=0;t<events[r].services.length;t++){
+                              eventDivString+="<div class='servicesAroundDiv'>"+events[r].services[t].name+"</div>";
+                            }
+                            eventDivString+="</div>";
+                            eventDiv.innerHTML = eventDivString;
+                            partDayEventsDiv.classList.add('activeDayViewMainDiv');
+                            partDayEventsDiv.appendChild(eventDiv);
+
+                          }else if(!sameDate(events[r].endDate, events[r].startDate)){
+
+                          }
+
+
+
+                          dayScheduleDiv.appendChild(allDayEventsDiv);
+                          dayScheduleDiv.appendChild(partDayEventsDiv);
+}
+
+
+
+      }
+  }
+
+
+
+
+
+            var stringForTodayDate = theDateToday.getFullYear()+"/"+theDateToday.getMonth()+"/"+theDateToday.getDate();
+            if(document.getElementsByClassName('newDayMainDiv')[0].getAttribute('data-date') == stringForTodayDate){
+            (document.getElementsByClassName('newDayMainDiv')[0]).firstChild.classList.add('todayStringP');
+            }else{
+              var theEventDivEmpty = document.createElement('div');
+              theEventDivEmpty.classList.add("allDayEventsDiv");
+              theEventDivEmpty.classList.add("activeDayViewMainDiv");
+
+
+              var theInsideDivEvent = document.createElement('div');
+              theInsideDivEvent.innerText = "No appointments for today";
+              theInsideDivEvent.classList.add('eventDivDayView');
+              theInsideDivEvent.style.padding = "20";
+              theInsideDivEvent.style.textAlign = "center";
+              theEventDivEmpty.appendChild(theInsideDivEvent);
+
+
+
+              var dayTitleDiv = document.createElement('div');
+              dayTitleDiv.classList.add("newDayMainDiv");
+              dayTitleDiv.dataset.date = theDateToday.getFullYear()+'/'+theDateToday.getMonth()+'/'+theDateToday.getDate();
+
+              var dayTitleP = document.createElement('p');
+              dayTitleP.classList.add('newDayP');
+              dayTitleP.classList.add('todayStringP')
+              dayTitleP.innerText = monthsName[theDateToday.getMonth()]+" "+theDateToday.getDate()+", "+theDateToday.getFullYear();
+
+              dayTitleDiv.appendChild(dayTitleP);
+
+
+              document.getElementById('dayScheduleTableDiv').prepend(theEventDivEmpty);
+              document.getElementById('dayScheduleTableDiv').prepend(dayTitleDiv);
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+  //the end of create month cal
+  }
+
+
+
+
+
+  function eventsOverlap(d1, d2){
+
+  if(d1.endDate.getTime()<= d2.startDate.getTime() || d1.startDate.getTime()>= d2.endDate.getTime() ){
+  return false;
+  }else{
+    return true;
+  }
+
+  }
+
+  function eventsSort(){
+
+
+
+  }
+
+
+
+eventsSort();
+
+createDayCalendar();
+
+
+
+
+
+function scrollToRightDateDayView(theWantedDate){
+closeAllTransparentOverlays();
+
+var posOfDiv = searchForSpecificDivWithDate(theWantedDate);
+if(posOfDiv[0]!=-1){
+
+var offsetTop = document.getElementsByClassName('newDayMainDiv')[posOfDiv[0]].offsetTop;
+document.getElementById('dayScheduleTableDiv').scrollTop = offsetTop-5;
+document.getElementById('monthNameDivDayView').innerText = fullMonthsName[theWantedDate.split('-')[1]]+" "+theWantedDate.split('-')[2];
+}
+}
+
+
+
+
+function closeAllTransparentOverlays(){
+  document.getElementById('rightArrowMonthDivDayView').innerHTML = "&#9660;";
+  var allTranspOverlays = document.getElementsByClassName('transparentOverlay');
+  while(allTranspOverlays.length>0){
+    allTranspOverlays[0].remove();
+  }
+}
+
+
+function searchForSpecificDivWithDate(theWantedDate){
+//date-month-year
+  var wantedDateFormat = new Date(theWantedDate);
+    var theDivForNewDay = document.getElementsByClassName('newDayMainDiv');
+      var nearestDivToDateAfter =[null, null];
+      var nearestDivToDateBefore =[null, null];
+    for(var i=0;i<theDivForNewDay.length;i++){
+      var theDateAssociatedWithDiv = new Date(theDivForNewDay[i].getAttribute("data-date"));
+      if(theDateAssociatedWithDiv == theWantedDate){
+        return [i];
+      }else {
+
+        if (theDateAssociatedWithDiv >= wantedDateFormat && (nearestDivToDateAfter[1]==null || theDateAssociatedWithDiv < nearestDivToDateAfter[1])) {
+              nearestDivToDateAfter[0] = i;
+              nearestDivToDateAfter[1] = theDateAssociatedWithDiv;
+        }else if(theDateAssociatedWithDiv <= wantedDateFormat && (nearestDivToDateBefore[1]==null || theDateAssociatedWithDiv > nearestDivToDateBefore[1])){
+          nearestDivToDateBefore[0] = i;
+          nearestDivToDateBefore[1] = theDateAssociatedWithDiv;
+        }
+
+
+      }
+    }
+
+
+    if(nearestDivToDateAfter[0]!=null){
+      return nearestDivToDateAfter;
+    }else if(nearestDivToDateBefore[0]!=null){
+      return nearestDivToDateBefore;
+    }else{
+      return [-1]
+    }
+}
+
+</script>

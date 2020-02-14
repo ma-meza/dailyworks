@@ -1,0 +1,103 @@
+<% include partials/regularEmptyHead.ejs%>
+<body>
+
+<% include partials/storeLandingPageHeaderPreRelease.ejs %>
+  <div id="textContainer">
+    <p class="pageTitle"><script>
+      document.write(translateWord("Welcome to our FAQ"));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("What is Dailyworks?"));
+    </script></p>
+
+    <p class="answerText"><script>
+      document.write(translateWord("Dailyworks is an online appointment manager for service-driven businesses."));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("What can I do on Dailyworks?"));
+    </script></p>
+
+    <p class="answerText"><script>
+      document.write(translateWord("On our platform, you can create, cancel and move appointments whenever you want. Your clients will receive a notification whenever an appointment is created or modified."));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("Why should I register on Dailyworks?"));
+    </script></p>
+
+    <p class="answerText"><script>
+      document.write(translateWord("Our teams are constantly releasing new features to help your business thrive. Also, you can count on our top notch customer service to help you solve any problems. You definitely won’t regret it."));
+    </script></p>
+
+
+    <p class="questionText"><script>
+      document.write(translateWord("How much does your platform cost?"));
+    </script></p>
+    <p class="answerText"><script>
+      document.write(translateWord("We offer a free tier that includes our top-of-the-line appointment manager. However, the premium 50$/month membership allows your customers to book appointments online instead of bothering you on the phone, and allows you to take advantage of our 24/7 customer service and free in-person setup assistant."));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("I’m not a tech expert, will I still be able to get around on your platform?"));
+    </script></p>
+    <p class="answerText"><script>
+      document.write(translateWord("Our platform is so simple that we are convinced you won’t have any trouble. If you however need assistance, our premium members can request a free in-person setup assistant who will help get around our platform and setup your account. Our assistants can help you register, import your appointments or complete any other task. Our free tier member can request the same in-person setup assistant for 60$."));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("What type of businesses can your platform host?"));
+    </script></p>
+    <p class="answerText"><script>
+      document.write(translateWord("If you are a barbershop, mechanic, doctor, veterinary, psychologist, physiotherapist, optometrist, or any other service-driven company, we are more than pleased to host your business on our platform."));
+    </script></p>
+
+    <p class="questionText"><script>
+      document.write(translateWord("If my business is located in Turkmenistan, can I still register on Dailyworks?"));
+    </script></p>
+    <p class="answerText"><script>
+      document.write(translateWord("Sadly for the moment, we can only host Canadian-based businesses. We will however be expanding very soon!"));
+    </script></p>
+  </div>
+</body>
+
+
+
+
+
+
+<style>
+  body{
+    background-color:#fff4ec;
+  }
+
+.questionText{
+font-weight:var(--mobile-font-weight-regular);
+font-size:var(--mobile-font-size-big);
+color:#000;
+margin:0;
+margin-bottom:10px;
+}
+.answerText{
+font-weight:var(--mobile-font-weight-regular);
+font-size:var(--mobile-font-size-big);
+color:var(--font-color-grey);
+margin:0;
+margin-bottom:50px;
+}
+.pageTitle{
+color:#000;
+font-weight:var(--mobile-font-weight-bold);
+font-size:var(--desktop-font-size-page-title);
+}
+#textContainer{
+  width:90%;
+  left:5%;
+  top:100px;
+  position:relative;
+  margin:0;
+  margin-bottom:100px;
+  padding-bottom:100px;
+}
+</style>

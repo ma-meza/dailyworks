@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+
+
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="email">Email:</label>
+  <input id="clientLoginEmail" name="email" class="loginInputs" type="email" placeholder="Email"></input>
+</div>
+<label class="inputUnderText" id="emailUnderText" for="email"></label>
+
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="password">Password:</label>
+  <input id="clientLoginPassword" name="password" class="loginInputs" type="password" placeholder="Password"></input>
+</div>
+<label class="inputUnderText" id="passwordUnderText" for="password"></label>
+
+
+
+    <input id="clientLoginSubmit" class="loginButton" type="submit" placeholder="Log In"></input>
+
+
+
+<a href="/googleAuth"><img id="loginGoogleButton" src="assets/socialIcons/googleIconLogin.png"></href>
+<a href="/facebookAuth"><img id="loginFacebookButton" src="assets/socialIcons/fbIcon.jpg"></href>
+  </body>
+</html>
+
+
+<style>
+.js-hide-label {
+    opacity: 0 !important;
+    top: 1.5em
+}
+.labelInput{
+opacity:1;
+-webkit-transition: .333s ease top, .333s ease opacity;
+    transition: .333s ease top, .333s ease opacity;
+}
+
+
+.inputAround{
+  width:500px;
+  background-color:#fff;
+  border:1px solid #000;
+}
+
+
+.loginInputs{
+font-size: 25px;
+bottom:0px;
+border:0px;
+background-color:#fff;
+width:100%;
+}
+
+#loginGoogleButton{
+  position:absolute;
+  left:10px;
+  top:200px;
+height:40px;
+
+}
+
+#loginFacebookButton{
+  position:absolute;
+  left:80px;
+  top:200px;
+height:40px;
+}
+
+
+</style>
+
+
+
+
+
+
+
+<script>
+
+
+
+
+var inputs = document.getElementsByClassName('loginInputs');
+for(var i =0;i<inputs.length;i++){
+
+
+  $( inputs[i] ).keyup(function() {
+    if(this.value==""){
+      this.previousElementSibling.classList.add('js-hide-label');
+    }else{
+      this.previousElementSibling.classList.remove('js-hide-label');
+    }
+  });
+}
+
+
+
+
+
+
+document.getElementById("clientLoginSubmit").onclick = function(){
+
+
+  var labelsUnderInput = document.getElementsByClassName('inputUnderText');
+  for(var i=0;i<labelsUnderInput.length;i++){
+    labelsUnderInput[i].innerText = "";
+  }
+
+
+  var email = $("#clientLoginEmail").val();
+  var password = $("#clientLoginPassword").val();
+
+
+
+
+
+  if(email != "" && password != ""){
+    //all fields are full
+    $.ajax({
+          url: '/postLocalClientLogin',
+          type: 'post',
+          data: {email:email, password:password},
+          success: function( data, textStatus){
+            if(data=="ok"){
+              location.href = "/home"
+            }else if(data=="userNoExist"){
+
+            }else if(data=="passwordNoMatch"){
+
+            }
+          },
+          error: function( textStatus, errorThrown ){
+              console.log( errorThrown );
+          }
+      });
+  }else{
+    if(email ==""){
+      document.getElementById("emailUnderText").innerText = "Please write your email";
+    }
+    if(password ==""){
+      document.getElementById("passwordUnderText").innerText = "Please write your password";
+    }
+    //one or more field is empty
+  }
+};
+
+
+
+</script>

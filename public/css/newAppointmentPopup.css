@@ -1,0 +1,397 @@
+.topPopupHeaderDiv{
+border-bottom:var(--nav-bar-border);
+top:0;
+left:0;
+position:absolute;
+width:100%;
+height:50px;
+}
+.topPopupHeaderP{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  line-height:50px;
+  text-align:center;
+  margin:0;
+}
+.newAppointmentCreateNewClient{
+  position:absolute;
+  top:75%;
+  border-radius:var(--official-border-radius);
+  transform:translateY(-50%);
+  width:calc(100% - 40px);
+  left:20px;
+  padding:6px 12px;
+  color: var(--font-color-black);
+  font-weight:var(--mobile-font-weight-regular);
+  font-size:var(--mobile-font-size-regular);
+    background-color: #eff3f6;
+    background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+    border:1px solid rgba(27,31,35,0.2);
+}
+.newAppointmentScrollableDiv{
+  height:calc(100% - 100px);
+  overflow-y:auto;
+  top:50px;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background-color:var(--background-page-color);
+    width:100%;
+    left:0;
+    transition:all 0.3s;
+}
+.scrollableListPopup{
+  overflow-y:auto;
+  display:none;
+  position:absolute;
+  height:calc(100% - 65px);
+  top:65px;
+  width:100%;
+  left:-100%;
+  transition:all 6s;
+  background-color:var(--background-page-color);
+  border:none;
+}
+.textInputNewClient{
+  color: var(--font-color-black);
+  font-weight:var(--mobile-font-weight-regular);
+  font-size:var(--mobile-font-size-regular);
+  top:25%;
+  transform:translateY(-50%);
+}
+
+.orSeparatorDiv{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:calc(100% - 40px);
+  left:20px;
+  border-bottom:1px solid #000;
+}
+.orSeparatorDiv::before{
+  content: <%= __('or') %>;
+  position:absolute;
+  left:50%;
+  font-size:var(--mobile-font-size-small);
+  color:var(--font-color-grey);
+  transform:translateX(-50%) translateY(-50%);
+  top:50%;
+  background-color:var(--background-page-color);
+  padding:0 10 0 10;
+}
+.fullWidthTextInput{
+  width:calc(100% - 85px);
+  position:absolute;
+  top:20;
+  transform:initial;
+  left:20;
+}
+.innerClientResultDiv{
+  width:calc(100% - 40px);
+  top:0;
+  height:auto;
+  padding-top:20;
+  padding-bottom:20;
+  margin-left:20px;
+  border-bottom:var(--nav-bar-border);
+}
+.cancelButton{
+  border:none;
+  padding:0;
+  margin:0;
+  position:absolute;
+  top:20;
+  right:0;
+  height:45;
+  width:65px;
+  background-color:transparent;
+}
+.clientProfileNewAppointmentContainer{
+  height:100%;
+  top:0;
+  position:absolute;
+  left:0;
+  width:100%;
+  background-color:var(--background-page-color);
+}
+.popupTitle{
+  font-size:var(--mobile-font-size-big);
+  position:relative;
+  padding:22 20 10 20;
+  font-weight:var(--mobile-font-weight-bold);
+  top:0px;
+  width:100%;
+  margin:0;
+}
+.newAppointmentNextButton{
+position:absolute;
+bottom:0;
+color:var(--icon-color-active);
+right:0;
+width:50%;
+height:100%;
+border-width:0.5 0 0 0;
+border-style:solid;
+background-color:#fff;
+display:block;
+}
+.newAppointmentBackButton{
+position:absolute;
+bottom:0;
+left:0;
+width:50%;
+color:var(--icon-color-active);
+height:100%;
+border-width:0.5 0 0 0;
+border-style:solid;
+background-color:#fff;
+display:block;
+}
+#newAppointmentBottomNavigationBar{
+  position:absolute;
+  bottom:0;
+  left:100%;
+  width:100%;
+  height:50px;
+  display:none;
+  transition:all 0.3s;
+}
+.serviceContainerMainDiv .servicesAroundDivNewAppointment:not(:last-child){
+border-width:0 0 0.3 0;
+border-style:solid;
+border-color:rgba(66, 66, 66, 0.76);
+
+}
+.checkboxServiceSelector:after{
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #808080;
+  content: "";
+  visibility:visible;
+  background: #FFF;
+  transition:0.3s all;
+}
+.checkboxServiceSelector:checked:after{
+    background-color:var(--icon-color-active);
+    border:none;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+  background-repeat: no-repeat;
+  background-position: 0px -2px;
+  background-size: inherit;
+}
+.checkboxServiceSelector{
+  visibility:hidden;
+  position: absolute;
+  right:20px;
+  top:calc(50% - 7px);
+  transform:translateY(-50%);
+}
+.checkboxServiceEmployeeSelector:after{
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #808080;
+  content: "";
+  visibility:visible;
+  background: #FFF;
+  transition:0.3s all;
+}
+.checkboxServiceEmployeeSelector{
+  visibility:hidden;
+  position: absolute;
+  right:20px;
+  top:calc(50% - 7px);
+  transform:translateY(-50%);
+}
+.checkboxServiceEmployeeSelector:checked:after{
+    background-color:var(--icon-color-active);
+    border:none;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+  background-repeat: no-repeat;
+  background-position: 0px -2px;
+  background-size: inherit;
+  }
+.servicesAroundDivNewAppointment{
+  position:relative;
+  width:100%;
+  margin:0;
+  left:0;
+  padding:15px;
+  background-color:transparent;
+  color:#000;
+  transition:all 0.3s;
+  text-align:center;
+}
+.selectedServiceDivNewAppointment{
+  background-color:var(--icon-color-active) !important;
+  color:#fff !important;
+}
+.mainParentEmployeePickerDiv{
+  position: relative;
+      top: 10px;
+      border: var(--nav-bar-border);
+      width: calc(100% - 40px);
+      height: auto;
+      left: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom:20px;
+}
+.employeePickerNameDiv{
+  position:relative;
+  width:calc(100% - 40px);
+  margin-top:5px;
+  margin-bottom:5px;
+  left:20px;
+  border-radius:var(--official-border-radius);
+  padding:10px;
+  background-color:var(--background-page-color);
+  color:#000;
+  border:var(--nav-bar-border);
+  transition:all 0.3s;
+  text-align:center;
+}
+.serviceNamePForEmployeePicker{
+  position:relative;
+  width:calc(100% - 40px);
+  margin:20 0 20 20;
+  color:#000;
+  text-align:left;
+}
+
+.serviceContainerMainDiv{
+  position:relative;
+  top:10px;
+border: var(--nav-bar-border);
+  width:calc(100% - 40px);
+  height:auto;
+  left:20px;
+  background-color:#fff;
+  border-radius:var(--official-border-radius);
+}
+.servicesEmployeeAroundDivNewAppointment{
+  position: relative;
+      width: 100%;
+      margin: 0;
+      left: 0;
+      padding: 15px;
+      background-color: transparent;
+      color: #000;
+      transition: all 0.3s;
+      text-align: center;
+      border-width:0.3 0 0.3 0;
+      border-style:solid;
+      border-color:rgba(66, 66, 66, 0.76);
+}
+
+.servicesTimePickerContainerNewAppointment{
+  position: relative;
+      width: 100%;
+      margin: 0;
+      left: 0;
+      padding: 15px;
+      background-color: transparent;
+      color: #000;
+      transition: all 0.3s;
+      text-align: center;
+      border-width:0.3 0 0.3 0;
+      border-style:solid;
+      border-color:rgba(66, 66, 66, 0.76);
+}
+.servicesTimePickerContainerNewAppointmentAroundChoices{
+  position: relative;
+      width: calc(100% - 40px);
+      margin: 0 0 20 0;
+      left: 20;
+      background-color: transparent;
+      color: #000;
+      transition: all 0.3s;
+      text-align: center;
+      border:none;
+}
+.fullWidthServiceDateTimeParentContainer{
+      position: relative;
+      top: 10px;
+      border: var(--nav-bar-border);
+      width: 100%;
+      height: auto;
+      left: 0;
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom:20px;
+}
+
+.serviceNamePDateTimeSelector{
+  position:relative;
+  width:calc(100% - 40px);
+  margin:20 0 20 20;
+  color:#000;
+  text-align:left;
+}
+.dateTimeSelectorDivnewAppointmentInfos{
+  width:calc(100% - 40px);
+  border-radius:var(--official-border-radius);
+  padding:10 20;
+  border:1px solid #000;
+  margin: 0 0 20 20;
+}
+.selectDatePInside{
+  text-align:center;
+  margin:0;
+}
+.servicesTimePickerContainerNewAppointment{
+  position: relative;
+  top: 10px;
+  border: var(--nav-bar-border);
+  width: calc(100% - 40px);
+  height: auto;
+  margin:0 0 20 20;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom:20px;
+}
+
+
+.servicesTimePickerCheckboxSelector:after{
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #808080;
+  content: "";
+  visibility:visible;
+  background: #FFF;
+  transition:0.3s all;
+}
+.servicesTimePickerCheckboxSelector{
+  visibility:hidden;
+  position: absolute;
+  right:20px;
+  top:calc(50% - 7px);
+  transform:translateY(-50%);
+}
+.servicesTimePickerCheckboxSelector:checked:after{
+    background-color:var(--icon-color-active);
+    border:none;
+  }
+  #newClientOrSearchClientDiv{
+    height:100% !important;
+  }
+
+  .newAppointmentTextarea{
+    width:calc(100% - 40px);
+    position:relative;
+    margin:20px;
+    resize:none;
+    height:200px;
+    border-radius:var(--official-border-radius);
+    padding:10px;
+  }

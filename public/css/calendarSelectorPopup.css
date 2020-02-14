@@ -1,0 +1,107 @@
+@media screen and (min-width:780px){
+  .calendarPopupDatePicker{
+
+    width:400px;
+    height:400px;
+    top:calc(50% - 200px);
+    background-color:#fff;
+    position:fixed;
+    left:calc(50% - 200px);
+    border-radius:var(--official-border-radius);
+    box-shadow:var(--box-shadow-card);
+  }
+  .monthCalendarPickerMonthName{
+    position:absolute;
+    text-align:center;
+    width:auto;
+    font-weight:var(--mobile-font-weight-bold);
+    color:var(--font-color-black);
+    font-size:var(--desktop-font-size-big);
+    left:50%;
+    transform:translateX(-50%);
+    top:10;
+    margin:0;
+  }
+  .calendarTextBlocked{
+    color:var(--font-color-lightgrey);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--desktop-font-size-small);
+  }
+  .calendarTextAvailable{
+    color:var(--font-color-black);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--desktop-font-size-regular);
+    cursor:pointer;
+  }
+}
+
+
+
+@media screen and (max-width:780px){
+  .calendarPopupDatePicker{
+
+    width:calc(100% - 50px);
+    height:320;
+    top:calc(50% - 160px);
+    background-color:#fff;
+    position:fixed;
+    left:25;
+    border-radius:var(--official-border-radius);
+    box-shadow:var(--box-shadow-card);
+  }
+  .monthCalendarPickerMonthName{
+    position:absolute;
+    text-align:center;
+    width:auto;
+    font-weight:var(--mobile-font-weight-bold);
+    color:var(--font-color-black);
+    font-size:var(--mobile-font-size-big);
+    left:50%;
+    transform:translateX(-50%);
+    top:10;
+    margin:0;
+  }
+  .calendarTextBlocked{
+    color:var(--font-color-lightgrey);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--mobile-font-size-small);
+  }
+  .calendarTextAvailable{
+    color:var(--font-color-black);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--mobile-font-size-regular);
+  }
+}
+
+.monthCalendarSelectorTable{
+position:absolute;
+bottom:0;
+left:20;
+width:calc(100% - 40px);
+height:calc(100% - 40px);
+margin:0;
+}
+.monthCalendarSelectorTable td{
+  width:calc(100% / 7);
+  text-align:center;
+}
+.monthCalendarPickerTopDiv{
+  height:40px;
+  top:0;
+  left:0;
+  width:calc(100% - 20px);
+}
+.monthCalendarPickerLeftArrow{
+position:absolute;
+text-align:left;
+left:20;
+top:10;
+margin:0;
+}
+.monthCalendarPickerRightArrow{
+  position:absolute;
+  text-align:right;
+  right:20;
+  top:10;
+  margin:0;
+}

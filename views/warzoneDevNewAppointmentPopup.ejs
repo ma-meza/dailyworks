@@ -1,0 +1,671 @@
+<%- include partials/regularEmptyHead.ejs %>
+
+<body>
+
+</body>
+
+<style>
+  .topPopupHeaderDiv{
+  border-bottom:var(--nav-bar-border);
+  top:0;
+  left:0;
+  position:absolute;
+  width:100%;
+  height:50px;
+  }
+  .topPopupHeaderP{
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    line-height:50px;
+    text-align:center;
+    margin:0;
+  }
+  .newAppointmentCreateNewClient{
+    position:absolute;
+    top:75%;
+    border-radius:var(--official-border-radius);
+    transform:translateY(-50%);
+    width:calc(100% - 40px);
+    left:20px;
+    padding:6px 12px;
+    color: var(--font-color-black);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--mobile-font-size-regular);
+      background-color: #eff3f6;
+      background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+      border:1px solid rgba(27,31,35,0.2);
+  }
+  .newAppointmentScrollableDiv{
+    height:calc(100% - 100px);
+    overflow-y:auto;
+    top:50px;
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      background-color:var(--background-page-color);
+      width:100%;
+      left:0;
+      transition:all 0.3s;
+  }
+  .scrollableListPopup{
+    overflow-y:auto;
+    display:none;
+    position:absolute;
+    height:calc(100% - 65px);
+    top:65px;
+    width:100%;
+    left:-100%;
+    transition:all 6s;
+    background-color:var(--background-page-color);
+    border:none;
+  }
+  .textInputNewClient{
+    color: var(--font-color-black);
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--mobile-font-size-regular);
+    top:25%;
+    transform:translateY(-50%);
+  }
+
+  .orSeparatorDiv{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:calc(100% - 40px);
+    left:20px;
+    border-bottom:1px solid #000;
+  }
+  .orSeparatorDiv::before{
+    content:'or';
+    position:absolute;
+    left:50%;
+    font-size:var(--mobile-font-size-small);
+    color:var(--font-color-grey);
+    transform:translateX(-50%) translateY(-50%);
+    top:50%;
+    background-color:var(--background-page-color);
+    padding:0 10 0 10;
+  }
+  .fullWidthTextInput{
+    width:calc(100% - 85px);
+    position:absolute;
+    top:20;
+    transform:initial;
+    left:20;
+  }
+  .innerClientResultDiv{
+    width:calc(100% - 40px);
+    top:0;
+    height:auto;
+    padding-top:20;
+    padding-bottom:20;
+    margin-left:20px;
+    border-bottom:var(--nav-bar-border);
+  }
+  .cancelButton{
+    border:none;
+    padding:0;
+    margin:0;
+    position:absolute;
+    top:20;
+    right:0;
+    height:45;
+    width:65px;
+    background-color:transparent;
+  }
+  .clientProfileNewAppointmentContainer{
+    height:100%;
+    top:0;
+    position:absolute;
+    left:0;
+    width:100%;
+    background-color:var(--background-page-color);
+  }
+  .popupTitle{
+    font-size:var(--mobile-font-size-big);
+    position:relative;
+    padding:10 20 10 20;
+    font-weight:var(--mobile-font-weight-regular);
+    top:0px;
+    width:100%;
+    margin:0;
+  }
+  .newAppointmentNextButton{
+  position:absolute;
+  bottom:0;
+  color:var(--icon-color-active);
+  right:0;
+  width:50%;
+  height:50px;
+  border-width:0.5 0 0 0;
+  border-style:solid;
+  background-color:#fff;
+  display:none;
+  }
+  .newAppointmentBackButton{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:50%;
+  color:var(--icon-color-active);
+  height:50px;
+  border-width:0.5 0 0 0;
+  border-style:solid;
+  background-color:#fff;
+  display:none;
+  }
+  .serviceContainerMainDiv .servicesAroundDivNewAppointment:not(:last-child){
+  border-width:0 0 0.3 0;
+  border-style:solid;
+  border-color:rgba(66, 66, 66, 0.76);
+
+  }
+  .checkboxServiceSelector:after{
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #808080;
+    content: "";
+    visibility:visible;
+    background: #FFF;
+    transition:0.3s all;
+  }
+  .checkboxServiceSelector:checked:after{
+      background-color:var(--icon-color-active);
+      border:none;
+    }
+  .checkboxServiceSelector{
+    visibility:hidden;
+    position: absolute;
+    right:20px;
+    top:calc(50% - 7px);
+    transform:translateY(-50%);
+  }
+  .checkboxServiceEmployeeSelector:after{
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #808080;
+    content: "";
+    visibility:visible;
+    background: #FFF;
+    transition:0.3s all;
+  }
+  .checkboxServiceEmployeeSelector{
+    visibility:hidden;
+    position: absolute;
+    right:20px;
+    top:calc(50% - 7px);
+    transform:translateY(-50%);
+  }
+  .checkboxServiceEmployeeSelector:checked:after{
+      background-color:var(--icon-color-active);
+      border:none;
+    }
+  .servicesAroundDivNewAppointment{
+    position:relative;
+    width:100%;
+    margin:0;
+    left:0;
+    padding:15px;
+    background-color:transparent;
+    color:#000;
+    transition:all 0.3s;
+    text-align:center;
+  }
+  .selectedServiceDivNewAppointment{
+    background-color:var(--icon-color-active) !important;
+    color:#fff !important;
+  }
+  .mainParentEmployeePickerDiv{
+    position: relative;
+        top: 10px;
+        border: var(--nav-bar-border);
+        width: calc(100% - 40px);
+        height: auto;
+        left: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        margin-bottom:20px;
+  }
+  .employeePickerNameDiv{
+    position:relative;
+    width:calc(100% - 40px);
+    margin-top:5px;
+    margin-bottom:5px;
+    left:20px;
+    border-radius:var(--official-border-radius);
+    padding:10px;
+    background-color:var(--background-page-color);
+    color:#000;
+    border:var(--nav-bar-border);
+    transition:all 0.3s;
+    text-align:center;
+  }
+  .serviceNamePForEmployeePicker{
+    position:relative;
+    width:calc(100% - 40px);
+    margin:20 0 20 20;
+    color:#000;
+    text-align:left;
+  }
+
+  .serviceContainerMainDiv{
+    position:relative;
+    top:10px;
+  border: var(--nav-bar-border);
+    width:calc(100% - 40px);
+    height:auto;
+    left:20px;
+    background-color:#fff;
+    border-radius:var(--official-border-radius);
+  }
+  .servicesEmployeeAroundDivNewAppointment{
+    position: relative;
+        width: 100%;
+        margin: 0;
+        left: 0;
+        padding: 15px;
+        background-color: transparent;
+        color: #000;
+        transition: all 0.3s;
+        text-align: center;
+        border-width:0.3 0 0.3 0;
+        border-style:solid;
+        border-color:rgba(66, 66, 66, 0.76);
+  }
+
+  .servicesTimePickerContainerNewAppointment{
+    position: relative;
+        width: 100%;
+        margin: 0;
+        left: 0;
+        padding: 15px;
+        background-color: transparent;
+        color: #000;
+        transition: all 0.3s;
+        text-align: center;
+        border-width:0.3 0 0.3 0;
+        border-style:solid;
+        border-color:rgba(66, 66, 66, 0.76);
+  }
+  .servicesTimePickerContainerNewAppointmentAroundChoices{
+    position: relative;
+        width: calc(100% - 40px);
+        margin: 0 0 20 0;
+        left: 20;
+        background-color: transparent;
+        color: #000;
+        transition: all 0.3s;
+        text-align: center;
+        border-radius:var(--official-border-radius);
+        border:0.3px solid rgba(66, 66, 66, 0.76);
+  }
+  .fullWidthServiceDateTimeParentContainer{
+        position: relative;
+        top: 10px;
+        border: var(--nav-bar-border);
+        width: 100%;
+        height: auto;
+        left: 0;
+        background-color: #fff;
+        border-radius: 10px;
+        margin-bottom:20px;
+  }
+
+  .serviceNamePDateTimeSelector{
+    position:relative;
+    width:calc(100% - 40px);
+    margin:20 0 20 20;
+    color:#000;
+    text-align:left;
+  }
+  .dateTimeSelectorDivnewAppointmentInfos{
+    width:calc(100% - 40px);
+    border-radius:var(--official-border-radius);
+    padding:10 20;
+    border:1px solid #000;
+    margin: 0 0 20 20;
+  }
+  .selectDatePInside{
+    text-align:center;
+    margin:0;
+  }
+  .servicesTimePickerContainerNewAppointment{
+    position: relative;
+    top: 10px;
+    border: var(--nav-bar-border);
+    width: calc(100% - 40px);
+    height: auto;
+    margin:0 0 20 20;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-bottom:20px;
+  }
+
+
+  .servicesTimePickerCheckboxSelector:after{
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #808080;
+    content: "";
+    visibility:visible;
+    background: #FFF;
+    transition:0.3s all;
+  }
+  .servicesTimePickerCheckboxSelector{
+    visibility:hidden;
+    position: absolute;
+    right:20px;
+    top:calc(50% - 7px);
+    transform:translateY(-50%);
+  }
+  .servicesTimePickerCheckboxSelector:checked:after{
+      background-color:var(--icon-color-active);
+      border:none;
+    }
+    #newClientOrSearchClientDiv{
+      height:calc(100% - 50px) !important;
+    }
+
+</style>
+
+
+
+
+<script>
+  var newAppointmentInfos = {
+      servicesName:[],
+      servicesEmployee:[],
+      servicesObj:[]
+  }
+
+
+  var newAppointmentMainDivContainer = document.createElement('div');
+  newAppointmentMainDivContainer.classList.add('openPopupDiv');
+  newAppointmentMainDivContainer.id ="newAppointmentMainDivContainer";
+  newAppointmentMainDivContainer.innerHTML = "<div class='topPopupHeaderDiv'><img onclick = 'closeAllOpenPopup()' class='downArrowClosePopup' src='assets/icons/octiconsSvg/chevron-down.svg'><p class='topPopupHeaderP'>New Appointment</p></div>";
+
+  var newAppointmentNextButton = document.createElement('button');
+  newAppointmentNextButton.innerText = "Next";
+  newAppointmentNextButton.classList.add('newAppointmentNextButton');
+
+
+  var newAppointmentBackButton = document.createElement('button');
+  newAppointmentBackButton.innerText = "Back";
+  newAppointmentBackButton.classList.add('newAppointmentBackButton');
+  newAppointmentMainDivContainer.appendChild(newAppointmentNextButton);
+  newAppointmentMainDivContainer.appendChild(newAppointmentBackButton);
+
+  newAppointmentNextButton.onclick = function(){
+    moveNext();
+  }
+  newAppointmentBackButton.onclick = function(){
+    moveBack();
+  }
+
+  var newAppointmentScrollableDivEmailPhoneName = document.createElement('div');
+  newAppointmentScrollableDivEmailPhoneName.classList.add('newAppointmentScrollableDiv');
+  newAppointmentScrollableDivEmailPhoneName.id = "newClientOrSearchClientDiv";
+
+  var existingClientSearchInput = document.createElement('input');
+  existingClientSearchInput.type = "text";
+  existingClientSearchInput.placeholder = "Search client (name, e-mail, phone)";
+  existingClientSearchInput.classList.add('basicInput-quasiFullWidth');
+  existingClientSearchInput.classList.add('textInputNewClient');
+
+  var orSeparatorDiv = document.createElement('div');
+  orSeparatorDiv.classList.add('orSeparatorDiv');
+
+
+  var newGuestClientButton = document.createElement('button');
+  newGuestClientButton.classList.add('newAppointmentCreateNewClient');
+  newGuestClientButton.innerText = "Create new client";
+  newGuestClientButton.onclick = function(){
+    console.log('yooo');
+  }
+
+  newAppointmentScrollableDivEmailPhoneName.appendChild(existingClientSearchInput);
+  newAppointmentScrollableDivEmailPhoneName.appendChild(orSeparatorDiv);
+  newAppointmentScrollableDivEmailPhoneName.appendChild(newGuestClientButton);
+
+  existingClientSearchResultsIsDisplayed = false;
+
+
+  existingClientSearchInput.onfocus = function(){
+    if(!existingClientSearchResultsIsDisplayed){
+      var cancelButton = document.createElement('button');
+      cancelButton.classList.add('cancelbutton');
+      cancelButton.innerText = "Cancel";
+      newAppointmentScrollableDivEmailPhoneName.appendChild(cancelButton);
+
+        var createExistingClientSearchContainerDiv = document.createElement('div');
+        createExistingClientSearchContainerDiv.classList.add('scrollableListPopup');
+        createExistingClientSearchContainerDiv.classList.add('scrollableNewClientResultMainDiv');
+        existingClientSearchInput.classList.add('fullWidthTextInput');
+        newAppointmentScrollableDivEmailPhoneName.appendChild(createExistingClientSearchContainerDiv);
+
+
+existingClientSearchInput.onkeyup = function(){
+          createExistingClientSearchContainerDiv.style.display = "block";
+          createExistingClientSearchContainerDiv.innerText = "";
+          var searchQuery = existingClientSearchInput.value;
+
+
+          //search for users that already took appointments with the store
+      <% if(typeof storeObj.localGuestClients != 'undefined'){ %>
+            <% if(storeObj.localGuestClients.length !=0){ %>
+                  <% for(var i=0;i<storeObj.localGuestClients.length;i++){ %>
+                        if('<%= storeObj.localGuestClients[i].fullName %>'.toLowerCase().includes(searchQuery.toLowerCase())){
+                              var clientEachResultDiv = document.createElement('div');
+                              clientEachResultDiv.onclick = function(){
+                                  newAppointmentScrollableDivEmailPhoneName.id = "";
+                                  createDivOfFoundClient(<%- storeObj.localGuestClients[i] %>);
+                              }
+                              clientEachResultDiv.classList.add('innerClientResultDiv');
+                              clientEachResultDiv.innerText = '<%= storeObj.localGuestClients[i].fullName %> (<%= storeObj.localGuestClients[i].phoneNumber %>)';
+                              createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                        }else if('<%= storeObj.localGuestClients[i].phoneNumber %>'.includes(searchQuery)){
+                              var clientEachResultDiv = document.createElement('div');
+                              clientEachResultDiv.onclick = function(){
+                                newAppointmentScrollableDivEmailPhoneName.id = "";
+                                  createDivOfFoundClient(<%- storeObj.localGuestClients[i] %>);
+                              }
+                              clientEachResultDiv.classList.add('innerClientResultDiv');
+                              clientEachResultDiv.innerText = '<%= storeObj.localGuestClients[i].fullName %> (<%= storeObj.localGuestClients[i].phoneNumber %>)';
+                              createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                        }else if('<%= storeObj.localGuestClients[i].email %>'.includes(searchQuery)){
+                              var clientEachResultDiv = document.createElement('div');
+                              clientEachResultDiv.onclick = function(){
+                                newAppointmentScrollableDivEmailPhoneName.id = "";
+                                  createDivOfFoundClient(<%- storeObj.localGuestClients[i] %>);
+                              }
+                              clientEachResultDiv.classList.add('innerClientResultDiv');
+                              clientEachResultDiv.innerText = '<%= storeObj.localGuestClients[i].fullName %> (<%= storeObj.localGuestClients[i].phoneNumber %>)';
+                              createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                        }
+                  <% } %>
+            <% }else{ %>
+                  createExistingClientSearchContainerDiv.innerText = "You have no clients yet";
+            <% } %>
+      <% }else{ %>
+            createExistingClientSearchContainerDiv.innerText = "You have no clients yet";
+      <% } %>
+
+      if(searchQuery !=""){
+        $.ajax({
+        url: '/searchAllRegisteredUsers',
+        type: 'get',
+        data:{searchQuery:existingClientSearchInput.value},
+        success: function( data, textStatus){
+        if(data == "error"){
+
+        }else{
+          console.log(data);
+          for(var g=0;g<data.length;g++){
+            var clientEachResultDiv = document.createElement('div');
+            clientEachResultDiv.onclick = function(){
+              newAppointmentScrollableDivEmailPhoneName.id = "";
+                createDivOfFoundClient(data[g]);
+            }
+            clientEachResultDiv.classList.add('innerClientResultDiv');
+            clientEachResultDiv.innerText = data[g].clientName;
+            if(data[g].PhoneNumber){
+               clientEachResultDiv.innerText += '('+data[g].phoneNumber+')';
+            }
+            createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+          }
+
+        }
+        },
+        error: function( textStatus, errorThrown ){
+
+        }
+        });
+      }
+
+      //search for users that are registered
+
+
+
+
+  }
+
+
+
+        existingClientSearchResultsIsDisplayed = true;
+        cancelButton.onclick = function(){
+          newAppointmentScrollableDivEmailPhoneName.id = "newClientOrSearchClientDiv";
+          removeClientResultDiv();
+        }
+        createExistingClientSearchContainerDiv.style.left = 0;
+
+        function removeClientResultDiv(){
+          existingClientSearchInput.value = "";
+          createExistingClientSearchContainerDiv.remove();
+          existingClientSearchInput.classList.remove('fullWidthTextInput');
+          existingClientSearchResultsIsDisplayed = false;
+          cancelButton.remove();
+        }
+
+    }
+
+
+    function createDivOfFoundClient(clientObj){
+      var clientProfileContainer = document.createElement('div');
+      clientProfileContainer.classList.add('clientProfileNewAppointmentContainer');
+      removeClientResultDiv();
+      newAppointmentScrollableDivEmailPhoneName.appendChild(clientProfileContainer);
+      var popupTitleClientProfile = document.createElement('p');
+      popupTitleClientProfile.classList.add('popupTitle');
+      popupTitleClientProfile.innerText = "Client profile";
+      document.getElementsByClassName('newAppointmentBackButton')[0].style.display = "block";
+      document.getElementsByClassName('newAppointmentNextButton')[0].style.display = "block";
+      clientProfileContainer.appendChild(popupTitleClientProfile);
+    }
+  }
+
+
+
+newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivEmailPhoneName);
+
+
+
+
+
+
+var newAppointmentScrollableDivServiceSelector = document.createElement('div');
+newAppointmentScrollableDivServiceSelector.classList.add('newAppointmentScrollableDiv');
+
+var servicesPopupTitle = document.createElement('p');
+servicesPopupTitle.innerText = "Choose the services needed";
+servicesPopupTitle.classList.add('popupTitle');
+newAppointmentScrollableDivServiceSelector.appendChild(servicesPopupTitle);
+
+newAppointmentScrollableDivServiceSelector.style.left = "100%";
+
+var serviceContainerMainDiv = document.createElement('div');
+serviceContainerMainDiv.classList.add('serviceContainerMainDiv');
+
+<% if(typeof storeObj.services != 'undefined'){ %>
+            <% if(storeObj.services.length !=0){ %>
+              <% for(var i=0;i<storeObj.services.length;i++)(function(i){ %>
+                var serviceMainDiv = document.createElement('div');
+                serviceMainDiv.classList.add('servicesAroundDivNewAppointment');
+
+                var serviceCheckboxLabel = document.createElement('label');
+                serviceCheckboxLabel.classList.add('serviceCheckboxLabel');
+                serviceCheckboxLabel.setAttribute('serviceId', <%- i %>);
+
+                var serviceCheckboxSpan = document.createElement('span');
+                serviceCheckboxSpan.classList.add('serviceCheckboxSpan');
+                serviceCheckboxSpan.innerText = '<%= storeObj.services[i].serviceName %>';
+                serviceCheckboxLabel.appendChild(serviceCheckboxSpan);
+
+                var serviceCheckboxInput = document.createElement('input');
+                serviceCheckboxInput.type = "checkbox";
+                serviceCheckboxInput.classList.add('checkboxServiceSelector');
+                serviceCheckboxLabel.appendChild(serviceCheckboxInput);
+
+                serviceMainDiv.appendChild(serviceCheckboxLabel);
+
+                serviceContainerMainDiv.appendChild(serviceMainDiv);
+                newAppointmentScrollableDivServiceSelector.appendChild(serviceContainerMainDiv);
+              <% })(i); %>
+            <% }else{ %> newAppointmentScrollableDivServiceSelector.innerText = "You have no services yet"; <% } %>
+          <% }else{ %>
+            newAppointmentScrollableDivServiceSelector.innerText = "You have no services yet";
+  <% } %>
+
+
+
+
+
+  var newAppointmentScrollableDivServiceEmployeeSelector = document.createElement('div');
+  newAppointmentScrollableDivServiceEmployeeSelector.classList.add('newAppointmentScrollableDiv');
+  newAppointmentScrollableDivServiceEmployeeSelector.style.left = "100%";
+
+
+
+  var newAppointmentScrollableDivServiceDateTimeSelector = document.createElement('div');
+  newAppointmentScrollableDivServiceDateTimeSelector.classList.add('newAppointmentScrollableDiv');
+  newAppointmentScrollableDivServiceDateTimeSelector.style.left = "100%";
+
+
+
+
+
+
+  newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceSelector);
+  newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceEmployeeSelector);
+  newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceDateTimeSelector);
+
+
+
+
+
+
+
+
+
+var currentDiv = 0;
+
+
+
+
+
+  document.body.appendChild(newAppointmentMainDivContainer);
+
+
+
+
+</script>

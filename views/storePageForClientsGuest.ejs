@@ -1,0 +1,516 @@
+<%- include partials/regularEmptyHead.ejs %>
+
+<%
+function decimalToHour12Format(num){
+  var hrs = parseInt(Number(num));
+  var min = Math.round((Number(num)-hrs) * 60);
+  if(min == 0){
+      min = "00";
+  }
+  var hourString = "";
+  if(hrs>11){
+    var amPm = "PM";
+    hourString = (hrs-12)+':'+min+amPm;
+  }else{
+    var amPm = "AM";
+    hourString = hrs+':'+min+amPm;
+  }
+  return hourString;
+}
+%>
+
+
+<% var todayDate = new Date().getDay() %>
+<% if(storeObj){ %>
+  <script type="text/javascript">
+    <% var storeTypeArray = ['Barber','Dentist', 'Garagist','Optometrist'] %>
+    <% var storeEmojiArray = ['✂️','Dentist', 'Garagist','Optometrist'] %>
+  </script>
+
+
+
+<div class="fullWidthContainerDiv noTopPadding">
+  <div class="" id="topNavBarFirstContainer">
+    <img src="" class="leftFloatLogoNavBar" alt="Logo Travay">
+    <a class="rightFloatNavLink">Login</a>
+    <p class="rightFloatNavLink">|</p>
+    <a class="rightFloatNavLink">Register</a>
+  </div>
+
+
+  <% if(storeObj.profilePictureLink){ %>
+    <img class="logoImg" src="<%= storeObj.profilePictureLink %>" alt="">
+    <p class="leftPTitle"><%= storeObj.storeName%></p>
+  <% }else{ %>
+    <p class="centeredPTitleFullWidth"><%= storeObj.storeName%></p>
+  <% } %>
+  <p class="leftRegularText extraTopMargin"><%= storeEmojiArray[storeObj.type]%> <%= storeTypeArray[storeObj.type]%> </p>
+  <p class='leftRegularText'>🏠 <%= storeObj.location %></p>
+</div>
+
+<div class="fullWidthContainerDiv">
+  <p class="sectionTitle">Description</p>
+  <% if(!storeObj.storeDescription){ %>
+    <p class="emptyScreenTextRegularP">No description yet.</p>
+  <% }else{ %>
+    <p class='leftRegularText'><%= storeObj.storeDescription %></p>
+  <% } %>
+</div>
+
+
+<div class="fullWidthContainerDiv">
+  <p class="sectionTitle">Services offered</p>
+  <% if(!storeObj.services || storeObj.services.length<1){ %>
+    <p class="emptyScreenTextRegularP">No services yet.</p>
+  <% }else{ %>
+    <div class="fullWidthScrollableDiv">
+        <% for(var i=0;i<storeObj.services.length; i++){ %>
+          <p class="serviceNameContainer">
+            <%= storeObj.services[i].serviceName %>
+          </p>
+        <% } %>
+    </div>
+  <% } %>
+</div>
+
+
+<div class="">
+  <% if(storeObj.backgroundPictures){ %>
+    <% for(var w=0;w<storeObj.backgroundPictures.length;w++){ %>
+      <img src="<%= storeObj.backgroundPictures[w].link %>" alt="">
+    <% } %>
+  <% } %>
+</div>
+
+
+<div class="fullWidthContainerDiv">
+  <p class="sectionTitle">🕜 Store schedule</p>
+    <p class="leftRegularText">
+      <% if(todayDate == 0){ %>
+        <span class="todayTextSpan">
+          Sunday :
+        <% if(storeObj.storeSchedule[0].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[0].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[0].endTime) %>
+        <% } %>
+        </span>
+      <% }else{ %>
+        Sunday :
+      <% if(storeObj.storeSchedule[0].startTime == 0){ %>
+        closed - closed
+      <% }else{ %>
+        <%= decimalToHour12Format(storeObj.storeSchedule[0].startTime) %>
+        -
+        <%= decimalToHour12Format(storeObj.storeSchedule[0].endTime) %>
+      <% } %>
+      <% } %>
+
+
+    </p>
+    <p class="leftRegularText">
+      <p class="leftRegularText">
+        <% if(todayDate == 1){ %>
+          <span class="todayTextSpan">
+            Monday :
+          <% if(storeObj.storeSchedule[1].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[1].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[1].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Monday :
+        <% if(storeObj.storeSchedule[1].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[1].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[1].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+    <p class="leftRegularText">
+      <p class="leftRegularText">
+        <% if(todayDate == 2){ %>
+          <span class="todayTextSpan">
+            Tuesday :
+          <% if(storeObj.storeSchedule[2].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[2].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[2].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Tuesday :
+        <% if(storeObj.storeSchedule[2].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[2].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[2].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+      <p class="leftRegularText">
+        <% if(todayDate == 3){ %>
+          <span class="todayTextSpan">
+            Wednesday :
+          <% if(storeObj.storeSchedule[3].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[3].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[3].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Wednesday :
+        <% if(storeObj.storeSchedule[3].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[3].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[3].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+    <p class="leftRegularText">
+        <% if(todayDate == 4){ %>
+          <span class="todayTextSpan">
+            Thursday :
+          <% if(storeObj.storeSchedule[4].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[4].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[4].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Thursday :
+        <% if(storeObj.storeSchedule[4].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[4].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[4].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+    <p class="leftRegularText">
+        <% if(todayDate == 5){ %>
+          <span class="todayTextSpan">
+            Friday :
+          <% if(storeObj.storeSchedule[5].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[5].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[5].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Friday :
+        <% if(storeObj.storeSchedule[5].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[5].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[5].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+    <p class="leftRegularText">
+        <% if(todayDate == 6){ %>
+          <span class="todayTextSpan">
+            Saturday :
+          <% if(storeObj.storeSchedule[6].startTime == 0){ %>
+            closed - closed
+          <% }else{ %>
+            <%= decimalToHour12Format(storeObj.storeSchedule[6].startTime) %>
+            -
+            <%= decimalToHour12Format(storeObj.storeSchedule[6].endTime) %>
+          <% } %>
+          </span>
+        <% }else{ %>
+          Saturday :
+        <% if(storeObj.storeSchedule[6].startTime == 0){ %>
+          closed - closed
+        <% }else{ %>
+          <%= decimalToHour12Format(storeObj.storeSchedule[6].startTime) %>
+          -
+          <%= decimalToHour12Format(storeObj.storeSchedule[6].endTime) %>
+        <% } %>
+        <% } %>
+    </p>
+</div>
+
+
+
+
+  <% if(storeObj.facebookLink || storeObj.instagramLink || storeObj.websiteLink){ %>
+
+
+    <div class="fullWidthContainerDiv" style="text-align:center;">
+      <% if(storeObj.facebookLink){ %>
+        <img src="/assets/icons/social/facebookSVG.svg" class="noWidthIconImg" onclick ="location.href='<%= storeObj.facebookLink %>'" alt="">
+      <% } %>
+
+      <% if(storeObj.instagramLink){ %>
+        <img src="/assets/icons/social/instagramSVG.svg" class="noWidthIconImg" onclick ="location.href='<%= storeObj.instagramLink %>'" alt="">
+      <% } %>
+
+      <% if(storeObj.websiteLink){ %>
+        <img src="/assets/icons/social/websiteSVG.svg" class="noWidthIconImg"  onclick ="location.href='<%= storeObj.websiteLink %>'" alt="">
+      <% } %>
+    </div>
+  <% } %>
+
+
+  <% var weekDayName = ["Sun","Mon", "Tues", "Wed", "Thur", "Fri", "Sat"] %>
+
+  <% var monthsName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
+
+  <div class="fullWidthContainerDiv">
+    <p class="sectionTitle">Ratings</p>
+    <% if(!storeObj.ratings || storeObj.ratings.length<1){ %>
+      <p class="emptyScreenTextRegularP">No ratings yet.</p>
+    <% }else{ %>
+
+      <% for(var t=0;t<storeObj.ratings.length; t++){ %>
+        <div class="ratingContainer">
+
+          <% if(storeObj.ratings[t].anonymous){ %>
+            <p class="inlineLeftP">By anonymous</p>
+          <% }else{ %>
+            <p class="inlineLeftP">By <%= storeObj.ratings[t].clientName %></p>
+          <% } %>
+            <p class="inlineRightP"><%= monthsName[new Date(storeObj.ratings[t].date).getMonth()] %>. <%= new Date(storeObj.ratings[t].date).getDate() %>, <%= new Date(storeObj.ratings[t].date).getFullYear() %></p>
+            <br>
+            <p class="inlineLeftP">
+              <% for(var s=0;s<storeObj.ratings[t].ratingValue; s++){%>
+                ⭐
+              <% } %>
+            </p>
+            <br>
+
+            <p class="leftRegularText" style="margin-top:15px;"><%= storeObj.ratings[t].comment %></p>
+
+
+
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+
+
+
+
+
+<div id="bottomFixedBar">
+  <button>Book now</button>
+</div>
+
+
+
+
+<% }else{ %>
+  System error
+<% } %>
+
+
+<style>
+  body{
+  background-color:rgba(0,0,0,0.03);
+  padding-bottom:80px;
+  }
+  .extraVerticalPadding{
+    padding-top:30px !important;
+    padding-bottom:20px !important;
+  }
+  .extraTopMargin{
+    margin-top:20px !important;
+  }
+  .noTopPadding{
+    padding-top:0px !important;
+  }
+  .fullWidthContainerDiv{
+    position:relative;
+    height:auto;
+    left:0;
+    top:0;
+    width:100%;
+    margin-bottom:15px;
+    padding:10px 0 10px 0;
+    background-color:#fff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .centeredPTitleFullWidth{
+    font-size:var(--mobile-font-size-page-title);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    display:inline-block;
+    text-align:center;
+    width:100%;
+    left:0;
+    margin:0;
+  }
+  .leftPTitle{
+    font-size:var(--mobile-font-size-page-title);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    display:inline-block;
+    text-align:left;
+    left:0;
+    vertical-align:middle;
+    margin:0;
+  }
+  .leftRegularText{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    position:relative;
+    text-align:left;
+    left:0;
+    margin:0 0 5px 0;
+    padding:0 20 0 20;
+  }
+  .profilePictureImg{
+    position:relative;
+    display:inline-block;
+  }
+  .logoImg{
+    display: inline-block;
+    position: relative;
+    width: 20%;
+    margin: 0 20 0 20;
+    vertical-align: middle;
+    border: 1px solid #000;
+    /* border-radius: 10px; */
+    padding: 10;
+  }
+  .sectionTitle{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    text-align:left;
+    left:0;
+    margin:0;
+    padding:0 20 0 20;
+    margin-bottom:10px;
+  }
+  .todayTextSpan{
+    color:var(--font-color-red);
+    font-weight:var(--mobile-font-weight-bold);
+  }
+  .noWidthIconImg{
+    position:relative;
+    display:inline-block;
+    margin:0 20px 0 20px;
+    width:40px;
+  }
+  .emptyScreenTextRegularP{
+    margin:0 0 0 20px;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-lightgrey);
+  }
+  #bottomFixedBar{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:70px;
+    background-color:transparent;
+  }
+  #bottomFixedBar button{
+    color:#fff;
+    width:calc(100% - 40px);
+    margin-left:20px;
+    font-size:var(--mobile-font-size-bold);
+    background-color:var(--icon-color-active);
+    border-radius:10px;
+    padding:12px;
+    position:absolute;
+    bottom:20px;
+    border:none;
+  }
+
+  .fullWidthScrollableDiv{
+    position:relative;
+    left:0;
+    margin:0;
+    width:100%;
+    background-color:transparent;
+    overflow-x:auto;
+    padding:0 10px 0 10px;
+  }
+  .serviceNameContainer{
+    background-color:rgba(0,0,0,0.06);
+    margin:10px;
+    border-radius:var(--official-border-radius);
+    display:inline-block;
+    padding:10px;
+    box-shadow:var(--box-shadow-card);
+  }
+
+  #topNavBarFirstContainer{
+    left:0;
+    position:relative;
+    width:100%;
+    height:70px;
+    background-color:#fff;
+    margin-bottom:30px;
+  }
+  .leftFloatLogoNavBar{
+    position:absolute;
+    left:20px;
+    height:calc(100% - 40px);
+    top:20px;
+  }
+  .rightFloatNavLink{
+    position:relative;
+    float:right;
+    top:20px;
+    margin:0 20 0 0;
+    color:#000;
+  }
+  .inlineRightP{
+    display:inline-block;
+    float:right;
+    margin:0;
+    padding:0 20px 0 20px;
+  }
+  .inlineLeftP{
+    display:inline-block;
+    float:left;
+    padding:0 20px 0 20px;
+    margin:0;
+  }
+  .ratingContainer{
+    position:relative;
+    width:calc(100% - 40px);
+    border-radius:var(--official-border-radius);
+    background-color:rgba(0,0,0,0.05);
+    left:20px;
+    padding:20px 0 20px 0;
+    margin-bottom:10px;
+    box-shadow:var(--box-shadow-card);
+  }
+  .ratingsHeader{
+    position:relative;
+    display:block;
+    height:30px;
+  }
+  .ratingsContent{
+    position:relative;
+    display:block;
+  }
+</style>

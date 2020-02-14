@@ -1,0 +1,172 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="email">Email:</label>
+    <input id="clientSignupEmail" name="email" equired class="signupInputs" type="email" placeholder="Email"></input>
+</div>
+<label class="inputUnderText" id="emailUnderText" for="email"></label>
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="password">Password:</label>
+    <input id="clientSignupPassword" name="password" minlength = '5' required class="signupInputs" type="password" placeholder="Password"></input>
+</div>
+<label class="inputUnderText" id="passwordUnderText" for="password"></label>
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="password2">Re-type password:</label>
+    <input id="clientSignupRetypePassword" name="password2" minlength = '5' required class="signupInputs" type="password" placeholder="re-type Password"></input>
+</div>
+<label class="inputUnderText" id="password2UnderText" for="password2"></label>
+
+
+<div class="inputAround">
+  <label class="labelInput js-hide-label" for="name">Your name:</label>
+    <input id="clientSignupName" minlength = '3' name="name" required class="signupInputs" type="text" placeholder="Your name"></input>
+</div>
+<label class="inputUnderText" id="nameUnderText" for="name"></label>
+
+
+
+    <input id="clientSignupSubmit" class="signupButton" type="submit" placeholder="Sign Up"></input>
+
+
+
+
+<a href="/googleAuth">Signup with google</a>
+<a href="/facebookAuth">Signup with facebook</a>
+
+  </body>
+</html>
+
+<style>
+.js-hide-label {
+    opacity: 0 !important;
+    top: 1.5em
+}
+.labelInput{
+opacity:1;
+-webkit-transition: .333s ease top, .333s ease opacity;
+    transition: .333s ease top, .333s ease opacity;
+}
+
+
+.inputAround{
+  width:500px;
+  background-color:#fff;
+  border:1px solid #000;
+}
+
+
+.signupInputs{
+font-size: 25px;
+bottom:0px;
+border:0px;
+background-color:#fff;
+width:100%;
+}
+</style>
+
+<script>
+var inputs = document.getElementsByClassName('signupInputs');
+for(var i =0;i<inputs.length;i++){
+
+
+  $( inputs[i] ).keyup(function() {
+    if(this.value==""){
+      this.previousElementSibling.classList.add('js-hide-label');
+    }else{
+      this.previousElementSibling.classList.remove('js-hide-label');
+    }
+  });
+}
+
+
+
+
+document.getElementById("clientSignupSubmit").onclick = function(){
+
+var labelsUnderInput = document.getElementsByClassName('inputUnderText');
+for(var i=0;i<labelsUnderInput.length;i++){
+  labelsUnderInput[i].innerText = "";
+}
+
+
+
+
+  var emailSignup = $("#clientSignupEmail").val();
+  var password = $("#clientSignupPassword").val();
+  var name = $("#clientSignupName").val();
+  var password2 = $("#clientSignupRetypePassword").val();
+
+
+
+  if(emailSignup!="" && password!="" && name!="" && password2!=""){
+    //all fields are full
+    if(password.length>=5 && password2.length>=5 && name.length>=3){
+      //ALL FIElds have good length
+      if(password == password2){
+        //both password match
+        $.ajax({
+              url: '/postLocalClientSignup',
+              type: 'post',
+              data: {email:emailSignup, password:password, name:name},
+              success: function( data, textStatus){
+                if(data == "ok"){
+                  location.href = "/login";
+                }else if(data=="alreadyExist"){
+                  alert("Client already exists");
+
+                }else if(data=="err"){
+
+                }else{
+
+                }
+              },
+              error: function( textStatus, errorThrown ){
+                  if(textStatus=="alreadyExist"){
+
+                  }else if(textStatus=="err"){
+
+                  }else{
+
+                  }
+              }
+          });
+      }else{
+        //passw dont match
+        document.getElementById("password2UnderText").innerText = "Your passwords do not match";
+
+      }
+    }else{
+      //not all fields have good length
+      if(password.length<5){
+        document.getElementById("passwordUnderText").innerText = "Your password must be at least 5 characters";
+      }
+      if(name.length<5){
+        document.getElementById("nameUnderText").innerText = "Your name must be at least 5 characters";
+      }
+    }
+
+  }else{
+    //one or more field is empty
+    if(emailSignup ==""){
+      document.getElementById("emailUnderText").innerText = "Please write your email";
+    }
+    if(password ==""){
+      document.getElementById("passwordUnderText").innerText = "Please write your password";
+    }
+    if(password2 ==""){
+      document.getElementById("password2UnderText").innerText = "Please re-type your password";
+    }
+    if(name ==""){
+      document.getElementById("nameUnderText").innerText = "Please write your name";
+    }
+  }
+}
+
+</script>

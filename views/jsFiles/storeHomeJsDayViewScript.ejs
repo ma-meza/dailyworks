@@ -1,0 +1,1038 @@
+
+<script>
+  function createDayViewCalendar(employeeName){
+console.log(dateSelected);
+    hideMonthWeekDateRangeContainer();
+    document.getElementById('dayViewMonthNameContainer').style.display = 'block';
+
+
+
+
+
+    var mainDivOfMonth = document.getElementById("scheduleContainerMainDiv");
+    mainDivOfMonth.innerHTML="";
+
+    var dateNumber = dateSelected.getDate();
+    var monthNumber = dateSelected.getMonth();
+    var yearNumber = dateSelected.getFullYear();
+    var weekDay = dateSelected.getDay();
+
+
+    var earliestStartTime = 0;
+    var latestEndTime = 24;
+
+    var realStartTime = 0;
+    var realEndTime = 24;
+    var storeIsClosed = false;
+
+<% var storeScheduleFromStoreObjLength = storeObj.storeSchedule.length %>
+<% for(var x=0;x<storeScheduleFromStoreObjLength;x++){%>
+  if(weekDay == '<%= storeObj.storeSchedule[x].weekDay %>'){
+    earliestStartTime = Math.floor(<%= storeObj.storeSchedule[x].startTime %>);
+    latestEndTime = Math.ceil(<%= storeObj.storeSchedule[x].endTime %>);
+    realEndTime = <%= storeObj.storeSchedule[x].endTime %>
+    realStartTime = <%= storeObj.storeSchedule[x].startTime %>
+  }
+<% } %>
+
+
+
+if(earliestStartTime == 0 && latestEndTime == 0){
+storeIsClosed = true;
+earliestStartTime = 8;
+latestEndTime = 21;
+}
+
+
+var oneHourBlockHeight = 0;
+
+var windowWidth = window.innerWidth;
+//tablet size and mobile in px
+if(windowWidth<900){
+oneHourBlockHeight = 90;
+}else{
+  //computer and tv size
+oneHourBlockHeight = 110;
+}
+
+
+
+
+
+    // document.getElementById("weekNameRangeDiv").innerHTML = getWeekRangeString(myDate);
+
+    var dayNameString = weekDayName[weekDay]+", "+monthName[monthNumber]+" "+dateNumber+", "+yearNumber;
+    document.getElementById("dayViewMonthNameP").innerText = dayNameString;
+
+
+
+    //in percent
+    var hourLeftBarDivWidth = 10;
+
+      var nbHoursToDisplay = latestEndTime - earliestStartTime;
+
+
+
+
+
+      var scheduleTableContainerDiv = document.createElement('div');
+      scheduleTableContainerDiv.classList.add('tableLinesContainerInsideWeekView');
+      scheduleTableContainerDiv.style.height = '100%';
+      scheduleTableContainerDiv.style.top = "0";
+
+      var scheduleHoursContainerWrapper = document.createElement('div');
+      scheduleHoursContainerWrapper.classList.add('scheduleHoursContainerWrapperWeekView');
+
+      var scheduleTableContainerDivInsideWrapper = document.createElement('div');
+      scheduleTableContainerDivInsideWrapper.classList.add('tableLinesContainerInsideWeekViewInsideWrapper');
+
+
+      for(d=0;d<nbHoursToDisplay;d++){
+
+
+        var hourToDisplay = earliestStartTime + d;
+
+        if(hourToDisplay>=12){
+          var additionalString = ":00 PM";
+          hourToDisplay += additionalString;
+        }else{
+          var additionalString = ":00 AM";
+          hourToDisplay += additionalString;
+        }
+        var individualHourContainer =  document.createElement('div');
+        individualHourContainer.style.height = oneHourBlockHeight+"px";
+        individualHourContainer.classList.add('individualHourContainerInsideWrapperWeekView');
+        var hourPWeekView = document.createElement('p');
+        hourPWeekView.classList.add('individualHourPWeekView');
+        hourPWeekView.innerText = hourToDisplay;
+        individualHourContainer.appendChild(hourPWeekView);
+        scheduleHoursContainerWrapper.appendChild(individualHourContainer);
+
+
+
+
+
+        var tablePlaceholderForOneHour = document.createElement('table');
+        tablePlaceholderForOneHour.classList.add("tablePlaceholderForOneHour");
+        tablePlaceholderForOneHour.style.height = oneHourBlockHeight+"px";
+        for(var f=0;f<4;f++){
+          var rowInTable = document.createElement('tr');
+          rowInTable.classList.add('rowInTablePlaceholder');
+            var tdInTable = document.createElement('td');
+            tdInTable.classList.add('TDinTablePlaceholder');
+            rowInTable.appendChild(tdInTable);
+
+          tablePlaceholderForOneHour.appendChild(rowInTable);
+        }
+        scheduleTableContainerDivInsideWrapper.appendChild(tablePlaceholderForOneHour);
+      }
+      scheduleTableContainerDiv.appendChild(scheduleTableContainerDivInsideWrapper);
+      scheduleTableContainerDiv.appendChild(scheduleHoursContainerWrapper);
+      mainDivOfMonth.appendChild(scheduleTableContainerDiv);
+
+
+
+
+absencesTime = [];
+
+
+
+
+      //set absence days of store
+      <% for(var s=0;s<storeObj.storeAbsences.length;s++){ %>
+        //absence 1 day
+        <% if( storeObj.storeAbsences[s].endDate == -1 ){ %>
+          if(sameDate(new Date('<%= storeObj.storeAbsences[s].startDate %>'), dateSelected)){
+            var absenceObj = new Object();
+            absenceObj.startTime = <%= storeObj.storeAbsences[s].startTime %>
+            absenceObj.endTime = <%= storeObj.storeAbsences[s].endTime %>
+
+            absencesTime.push(absenceObj);
+          }
+
+
+          //absence multiple days
+        <% }else{ %>
+          var startDateAbsence = new Date('<%= storeObj.storeAbsences[s].startDate %>');
+          var endDateAbsence = new Date('<%= storeObj.storeAbsences[s].endDate %>');
+                for(newDate = startDateAbsence, positionInAbsenceRange = 0; newDate<=endDateAbsence; newDate.setDate(newDate.getDate()+1), positionInAbsenceRange++){
+
+                        if(sameDate(dateSelected, newDate)){
+                                  var absenceObj = new Object();
+                                  absenceObj.startTime = -1;
+                                  absenceObj.endTime = -1;
+                                  if(positionInAbsenceRange == 0){
+                                  absenceObj.startTime = <%= storeObj.storeAbsences[s].startTime %>
+                                  }
+                                  if(sameDate(endDateAbsence, dateSelected)){
+                                  absenceObj.endTime = <%= storeObj.storeAbsences[s].endTime %>
+                                }
+                                absencesTime.push(absenceObj);
+                        }
+                }
+        <% } %>
+      <% } %>
+
+
+
+          //display of times
+          for(var w=0;w<absencesTime.length;w++){
+            var theAbsenceDayObj = absencesTime[w];
+
+                              var divTotalHeight = 0;
+                              var divTopValue = 0;
+
+                              //set values of height and top depending on start and end
+                              if(theAbsenceDayObj.startTime == -1 && theAbsenceDayObj.endTime == -1){
+                                divTotalHeight = nbHoursToDisplay * oneHourBlockHeight;
+                                divTopValue = 0;
+                              }else if(theAbsenceDayObj.startTime != -1 && theAbsenceDayObj.endTime != -1){
+                                divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneHourBlockHeight;
+                                divTotalHeight = (theAbsenceDayObj.endTime - theAbsenceDayObj.startTime)*oneHourBlockHeight;
+                              }else if(theAbsenceDayObj.startTime != -1){
+                                divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneHourBlockHeight;
+                                divTotalHeight = (latestEndTime - theAbsenceDayObj.startTime)*oneHourBlockHeight;
+
+                              }else{
+                                divTopValue = 0;
+                                divTotalHeight = (theAbsenceDayObj.endTime - earliestStartTime)*oneHourBlockHeight;
+
+                              }
+
+
+                              var closedDayDiv = document.createElement('div');
+                              closedDayDiv.style.width = "100%";
+                              closedDayDiv.style.height = divTotalHeight+"px";
+                              closedDayDiv.style.left = '0';
+                              closedDayDiv.style.top = divTopValue+"px";
+                              closedDayDiv.classList.add('storeClosedDayDiv');
+                              scheduleTableContainerDivInsideWrapper.appendChild(closedDayDiv);
+          }
+
+
+
+          if(storeIsClosed){
+            var divTotalHeight = nbHoursToDisplay * oneHourBlockHeight;
+            var divTopValue = 0;
+            var closedDayDiv = document.createElement('div');
+
+            closedDayDiv.style.width = "100%";
+            closedDayDiv.style.height = divTotalHeight+"px";
+            closedDayDiv.style.left = '0';
+            closedDayDiv.style.top = divTopValue+"px";
+            closedDayDiv.classList.add('storeClosedDayDiv');
+            scheduleTableContainerDivInsideWrapper.appendChild(closedDayDiv);
+          }else{
+            if(realStartTime != earliestStartTime){
+              var divTotalHeight = (realStartTime - earliestStartTime)*oneHourBlockHeight;
+              var divTopValue = 0;
+              var closedDayDiv = document.createElement('div');
+
+              closedDayDiv.style.width = "100%";
+              closedDayDiv.style.height = divTotalHeight+"px";
+              closedDayDiv.style.left = '0';
+              closedDayDiv.style.top = divTopValue+"px";
+              closedDayDiv.classList.add('storeClosedDayDiv');
+              scheduleTableContainerDivInsideWrapper.appendChild(closedDayDiv);
+            }
+            if(realEndTime != latestEndTime){
+              var divTotalHeight = (latestEndTime - realEndTime)*oneHourBlockHeight;
+              var divTopValue = (realEndTime - earliestStartTime)*oneHourBlockHeight;
+              var closedDayDiv = document.createElement('div');
+
+              closedDayDiv.style.width = "100%";
+              closedDayDiv.style.height = divTotalHeight+"px";
+              closedDayDiv.style.left = '0';
+              closedDayDiv.style.top = divTopValue+"px";
+              closedDayDiv.classList.add('storeClosedDayDiv');
+              scheduleTableContainerDivInsideWrapper.appendChild(closedDayDiv);
+            }
+          }
+
+
+
+
+    // //script for the name of weekdays
+    //   var calendarWeekTable = document.createElement("table");
+    //   calendarWeekTable.classList.add("tableWeek");
+    //
+    //   var dateDisplayRow = document.createElement("tr");
+    //   dateDisplayRow.id="rowWeekDate";
+    //   dateDisplayRow.style.border = "0px";
+    //   var emptyCornerCell = document.createElement("th");
+    //   emptyCornerCell.classList.add("emptyCornerCell");
+    //   var weekTHead = document.createElement("thead");
+    //   dateDisplayRow.appendChild(emptyCornerCell);
+    //
+    //   for(var i=0;i<weekDayName.length;i++){
+    //     if(weekDaysOff.includes(i) == false){
+    //       var tableWeekDayCell = document.createElement("th");
+    //       tableWeekDayCell.style.width=cellWidth+"%";
+    //       tableWeekDayCell.classList.add("thWeek");
+    //       var textInTh = document.createTextNode(new Date(weekDateArray[i]).getUTCDate()+" "+weekDayName[i]);
+    //       tableWeekDayCell.appendChild(textInTh);
+    //
+    //       dateDisplayRow.appendChild(tableWeekDayCell);
+    //     }
+    //   }
+    // document.getElementById("weekDateRangeTable").appendChild(dateDisplayRow);
+    //
+    //
+    //
+    //
+    //
+    // var weekTBody = document.createElement('tbody');
+    // weekTBody.id='weekTBody';
+    // //hour script
+    // for(var i = 0;i<finishHour - startingHour;i++){
+    // var rowHour = document.createElement("tr");
+    // rowHour.style.height = oneHourBlockHeight+"px";
+    // for(var j = 0;j<nbWorkDays+1;j++){
+    //   if(j==0){
+    //     var cellSpecificHour = document.createElement("td");
+    //     cellSpecificHour.style.border = "none";
+    //     cellSpecificHour.style.verticalAlign = "top";
+    //     var textHour = document.createTextNode(startingHour+i);
+    //     cellSpecificHour.appendChild(textHour);
+    //     rowHour.appendChild(cellSpecificHour);
+    //
+    //   }else{
+    //     var cellSpecificHour = document.createElement("td");
+    //     cellSpecificHour.style.width = cellWidth+"%";
+    //     rowHour.appendChild(cellSpecificHour);
+    //   }
+    //
+    // }
+    // weekTBody.appendChild(rowHour);
+    // calendarWeekTable.appendChild(weekTBody);
+    // }
+    //
+    //   document.getElementById("calMainDiv").appendChild(calendarWeekTable);
+    //
+    //
+    //
+    //
+    //
+    // //add the events and check OVERLAPPINGs
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // // code f = full day, code s = start today, code e = ends today, code p = some part of today
+    //
+    //
+    // // //ADD EVENTS AND CHECK FOR OVERLAPPINGs
+    // // for(var w=0;w<events.length;w++){
+    // // var collisionGroupsOfDay = new Array();
+    // //
+    // // if(events[w].employee == employeeSelected){
+    // //
+    // //   if(events[w].start_date.getDate()!=events[w].ending_date.getDate()){
+    // //     if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+    // //                 //code s
+    // //
+    // //                 var collidedRows = new Array();
+    // //                 for(var y =0;y<collisionGroups.length;y++){
+    // //
+    // //                   for(var z = 0;z<collisionGroups[y].length;z++){
+    // //                     console.log(collisionGroups);
+    // //                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+    // //                       collidedRows.push(y);
+    // //                       break;
+    // //                     }
+    // //                   }
+    // //
+    // //
+    // //                 }
+    // //                 if(collidedRows.length==0){
+    // //                 collisionGroups.push([]);
+    // //                 collisionGroups[collisionGroups.length-1].push(w);
+    // //                 }else{
+    // //                   for(var t=1;t<collidedRows.length;t++){
+    // //                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+    // //                 collisionGroups.splice(collidedRows[t],1);
+    // //
+    // //                   }
+    // //                   collisionGroups[collidedRows[0]].push(w);
+    // //                 }
+    // //
+    // //
+    // //
+    // //     }else if(events[w].ending_date.getFullYear() == myDate.getFullYear() && events[w].ending_date.getMonth() == myDate.getMonth() && events[w].ending_date.getDate() == myDate.getDate()){
+    // //         //code e
+    // //
+    // //                           var collidedRows = new Array();
+    // //                           for(var y =0;y<collisionGroups.length;y++){
+    // //
+    // //                             for(var z = 0;z<collisionGroups[y].length;z++){
+    // //                               if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+    // //                                 collidedRows.push(y);
+    // //                                 break;
+    // //                               }
+    // //                             }
+    // //
+    // //
+    // //                           }
+    // //                           if(collidedRows.length==0){
+    // //                           collisionGroups.push([]);
+    // //                           collisionGroups[collisionGroups.length-1].push(w);
+    // //                           }else{
+    // //                             for(var t=1;t<collidedRows.length;t++){
+    // //                           collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+    // //                           collisionGroups.splice(collidedRows[t],1);
+    // //
+    // //                             }
+    // //                             collisionGroups[collidedRows[0]].push(w);
+    // //                           }
+    // //
+    // //
+    // //
+    // //
+    // //     }else if(events[w].start_date.getTime()<= myDate.getTime() && events[w].ending_date.getTime()>= myDate.getTime()){
+    // // //code f
+    // //
+    // //                 var collidedRows = new Array();
+    // //                 for(var y =0;y<collisionGroups.length;y++){
+    // //
+    // //                   for(var z = 0;z<collisionGroups[y].length;z++){
+    // //                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+    // //                       collidedRows.push(y);
+    // //                       break;
+    // //                     }
+    // //                   }
+    // //
+    // //
+    // //                 }
+    // //                 if(collidedRows.length==0){
+    // //                 collisionGroups.push([]);
+    // //                 collisionGroups[collisionGroups.length-1].push(w);
+    // //                 }else{
+    // //                   for(var t=1;t<collidedRows.length;t++){
+    // //                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+    // //                 collisionGroups.splice(collidedRows[t],1);
+    // //
+    // //                   }
+    // //                   collisionGroups[collidedRows[0]].push(w);
+    // //                 }
+    // //
+    // //
+    // //
+    // //     }
+    // //   }else if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+    // // //code p
+    // // console.log(collisionGroups);
+    // //
+    // //                 var collidedRows = new Array();
+    // //                 for(var y =0;y<collisionGroups.length;y++){
+    // //
+    // //                   for(var z = 0;z<collisionGroups[y].length;z++){
+    // //                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+    // //                       collidedRows.push(y);
+    // //                       break;
+    // //                     }
+    // //                   }
+    // //
+    // //
+    // //                 }
+    // //                 if(collidedRows.length==0){
+    // //                 collisionGroups.push([]);
+    // //                 collisionGroups[collisionGroups.length-1].push(w);
+    // //                 }else{
+    // //                   for(var t=1;t<collidedRows.length;t++){
+    // //                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+    // //                 collisionGroups.splice(collidedRows[t],1);
+    // //
+    // //                   }
+    // //                   collisionGroups[collidedRows[0]].push(w);
+    // //                 }
+    // //
+    // //
+    // //
+    // //   }
+    // // }
+    // //
+    // // }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // var collisionGroupsOfDay = [[],[],[],[],[],[],[]];
+    //
+    //
+    //
+    // for(var w=0;w<events.length;w++){
+    //   //check if pertinent to employee
+    // if(events[w].employee == employeeSelected){
+    //   //check if pertinent to date range
+    //   if((events[w].start_date.getTime()>=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()) || (events[w].ending_date.getTime()>=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime())  ||    (events[w].start_date.getTime()<=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()>=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime())){
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //     if(events[w].start_date.getDate()!=events[w].ending_date.getDate() || events[w].start_date.getMonth()!=events[w].ending_date.getMonth() || events[w].start_date.getFullYear()!=events[w].ending_date.getFullYear()){
+    //       //multiple days
+    // var nbDaysSpanningEvent = events[w].ending_date.getDate() - events[w].start_date.getDate();
+    //
+    //     if(nbDaysSpanningEvent > 1){
+    //
+    //           for(var i=1;i<nbDaysSpanningEvent;i++){
+    //             //the days in between first and last SO FULL DAYS AKA
+    //                 var newDateDay = new Date(monthsName[events[w].start_date.getMonth()]+" "+(events[w].start_date.getDate()+i)+","+events[w].start_date.getFullYear());
+    //             if(newDateDay.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && newDateDay.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime() && ((weekDaysOff.indexOf(newDateDay.getDay()))<0)){
+    //               var weekDayOfEvent = newDateDay.getDay();
+    //
+    //                               var collidedRows = new Array();
+    //                               for(var y =0;y<collisionGroupsOfDay[weekDayOfEvent].length;y++){
+    //
+    //                                 for(var z = 0;z<collisionGroupsOfDay[weekDayOfEvent][y].length;z++){
+    //                                   if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEvent][y][z]], events[w])){
+    //                                     collidedRows.push(y);
+    //                                     break;
+    //                                   }
+    //                                 }
+    //
+    //
+    //                               }
+    //                               if(collidedRows.length==0){
+    //                               collisionGroupsOfDay[weekDayOfEvent].push([]);
+    //                               collisionGroupsOfDay[weekDayOfEvent][collisionGroupsOfDay[weekDayOfEvent].length-1].push(w);
+    //                               }else{
+    //                                 for(var t=1;t<collidedRows.length;t++){
+    //                               collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEvent][collidedRows[t]]);
+    //                               collisionGroupsOfDay[weekDayOfEvent].splice(collidedRows[t],1);
+    //
+    //                                 }
+    //                                 collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].push(w);
+    //                               }
+    //
+    //
+    //
+    //
+    //
+    //             }
+    //           }
+    //
+    //           //the first and last day
+    //           if(events[w].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //                     var weekDayOfEventFD = events[w].start_date.getDay();
+    //
+    //
+    //                                 var collidedRows = new Array();
+    //                                 for(var y =0;y<collisionGroupsOfDay[weekDayOfEventFD].length;y++){
+    //
+    //                                   for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventFD][y].length;z++){
+    //                                     if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventFD][y][z]], events[w])){
+    //                                       collidedRows.push(y);
+    //                                       break;
+    //                                     }
+    //                                   }
+    //
+    //
+    //                                 }
+    //                                 if(collidedRows.length==0){
+    //                                 collisionGroupsOfDay[weekDayOfEventFD].push([]);
+    //                                 collisionGroupsOfDay[weekDayOfEventFD][collisionGroupsOfDay[weekDayOfEventFD].length-1].push(w);
+    //                                 }else{
+    //                                   for(var t=1;t<collidedRows.length;t++){
+    //                                 collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventFD][collidedRows[t]]);
+    //                                 collisionGroupsOfDay[weekDayOfEventFD].splice(collidedRows[t],1);
+    //
+    //                                   }
+    //                                   collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].push(w);
+    //                                 }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //           }
+    //           if(events[w].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //                     var weekDayOfEventLD = events[w].ending_date.getDay();
+    //
+    //
+    //                                 var collidedRows = new Array();
+    //                                 for(var y =0;y<collisionGroupsOfDay[weekDayOfEventLD].length;y++){
+    //
+    //                                   for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventLD][y].length;z++){
+    //                                     if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventLD][y][z]], events[w])){
+    //                                       collidedRows.push(y);
+    //                                       break;
+    //                                     }
+    //                                   }
+    //
+    //
+    //                                 }
+    //                                 if(collidedRows.length==0){
+    //                                 collisionGroupsOfDay[weekDayOfEventLD].push([]);
+    //                                 collisionGroupsOfDay[weekDayOfEventLD][collisionGroupsOfDay[weekDayOfEventLD].length-1].push(w);
+    //                                 }else{
+    //                                   for(var t=1;t<collidedRows.length;t++){
+    //                                 collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventLD][collidedRows[t]]);
+    //                                 collisionGroupsOfDay[weekDayOfEventLD].splice(collidedRows[t],1);
+    //
+    //                                   }
+    //                                   collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].push(w);
+    //                                 }
+    //
+    //
+    //
+    //           }
+    //
+    //
+    //
+    //
+    //
+    //   }else{
+    // //2 days event, no day in middle
+    //
+    //
+    //
+    //       if(events[w].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //         var weekDayOfEventFD = events[w].start_date.getDay();
+    //
+    //
+    //                           var collidedRows = new Array();
+    //                           for(var y =0;y<collisionGroupsOfDay[weekDayOfEventFD].length;y++){
+    //
+    //                             for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventFD][y].length;z++){
+    //                               if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventFD][y][z]], events[w])){
+    //                                 collidedRows.push(y);
+    //                                 break;
+    //                               }
+    //                             }
+    //
+    //
+    //                           }
+    //                           if(collidedRows.length==0){
+    //                           collisionGroupsOfDay[weekDayOfEventFD].push([]);
+    //                           collisionGroupsOfDay[weekDayOfEventFD][collisionGroupsOfDay[weekDayOfEventFD].length-1].push(w);
+    //                           }else{
+    //                             for(var t=1;t<collidedRows.length;t++){
+    //                           collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventFD][collidedRows[t]]);
+    //                           collisionGroupsOfDay[weekDayOfEventFD].splice(collidedRows[t],1);
+    //
+    //                             }
+    //                             collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].push(w);
+    //                           }
+    //
+    //
+    //
+    //
+    //       }
+    //       if(events[w].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //         var weekDayOfEventLD = events[w].ending_date.getDay();
+    //
+    //
+    //
+    //                     var collidedRows = new Array();
+    //                     for(var y =0;y<collisionGroupsOfDay[weekDayOfEventLD].length;y++){
+    //
+    //                       for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventLD][y].length;z++){
+    //                         if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventLD][y][z]], events[w])){
+    //                           collidedRows.push(y);
+    //                           break;
+    //                         }
+    //                       }
+    //
+    //
+    //                     }
+    //                     if(collidedRows.length==0){
+    //                     collisionGroupsOfDay[weekDayOfEventLD].push([]);
+    //                     collisionGroupsOfDay[weekDayOfEventLD][collisionGroupsOfDay[weekDayOfEventLD].length-1].push(w);
+    //                     }else{
+    //                       for(var t=1;t<collidedRows.length;t++){
+    //                     collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventLD][collidedRows[t]]);
+    //                     collisionGroupsOfDay[weekDayOfEventLD].splice(collidedRows[t],1);
+    //
+    //                       }
+    //                       collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].push(w);
+    //                     }
+    //
+    //
+    //
+    //
+    //
+    //
+    //       }
+    //
+    //
+    //
+    //
+    //
+    //   }
+    //
+    //
+    //
+    //
+    //
+    //
+    //     }else{
+    //
+    // //ONE DAY ONLY
+    //
+    //
+    //       var weekDayOfEvent = events[w].start_date.getDay();
+    //
+    //
+    //                           var collidedRows = new Array();
+    //                           for(var y =0;y<collisionGroupsOfDay[weekDayOfEvent].length;y++){
+    //
+    //                             for(var z = 0;z<collisionGroupsOfDay[weekDayOfEvent][y].length;z++){
+    //                               if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEvent][y][z]], events[w])){
+    //                                 collidedRows.push(y);
+    //                                 break;
+    //                               }
+    //                             }
+    //
+    //
+    //                           }
+    //                           if(collidedRows.length==0){
+    //                           collisionGroupsOfDay[weekDayOfEvent].push([]);
+    //                           collisionGroupsOfDay[weekDayOfEvent][collisionGroupsOfDay[weekDayOfEvent].length-1].push(w);
+    //                           }else{
+    //                             for(var t=1;t<collidedRows.length;t++){
+    //                           collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEvent][collidedRows[t]]);
+    //                           collisionGroupsOfDay[weekDayOfEvent].splice(collidedRows[t],1);
+    //
+    //                             }
+    //                             collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].push(w);
+    //                           }
+    //
+    //
+    //
+    //     }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //   }
+    // }
+    // }
+    //
+    //
+    // console.log(collisionGroupsOfDay);
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // var alreadyDisplayedEvents = new Array();
+    //
+    //
+    //
+    //
+    // //styling from the collision groups=''
+    //
+    // for(var q=0;q<collisionGroupsOfDay.length;q++){
+    //   for(var j=0;j<collisionGroupsOfDay[q].length;j++){
+    //     for(var g=0;g<collisionGroupsOfDay[q][j].length;g++){
+    //
+    //       if(events[collisionGroupsOfDay[q][j][g]].start_date.getDate()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getDate() || events[collisionGroupsOfDay[q][j][g]].start_date.getMonth()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getMonth() || events[collisionGroupsOfDay[q][j][g]].start_date.getFullYear()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getFullYear()){
+    //         //multiple days
+    // if(alreadyDisplayedEvents.indexOf(collisionGroupsOfDay[q][j][g])== -1){
+    //
+    //
+    //
+    //
+    //
+    //     var nbDaysSpanningEvent = events[collisionGroupsOfDay[q][j][g]].ending_date.getDate() - events[collisionGroupsOfDay[q][j][g]].start_date.getDate();
+    //
+    //         if(nbDaysSpanningEvent > 1){
+    //
+    //     //means its at least total 3 days; the days in between first and last; nbDaysSpanningEvent +1 = total days event
+    //
+    // //the day in between first and last
+    //     for(var i=1;i<nbDaysSpanningEvent;i++){
+    //
+    //
+    //         var newDateDay = new Date(monthsName[events[collisionGroupsOfDay[q][j][g]].start_date.getMonth()]+" "+(events[collisionGroupsOfDay[q][j][g]].start_date.getDate()+i)+","+events[collisionGroupsOfDay[q][j][g]].start_date.getFullYear());
+    //
+    //     if(newDateDay.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && newDateDay.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime() && ((weekDaysOff.indexOf(newDateDay.getDay()))<0)){
+    //
+    //         var nbBlocsNewDate = finishHour - startingHour; //entire day
+    //
+    //         var totalHeightDiv = nbBlocsNewDate*oneHourBlockHeight;
+    //         var topPosDiv = 0;
+    //         var eventDiv = document.createElement("div");
+    //         eventDiv.style.top = topPosDiv+"px";
+    //         eventDiv.className+=" eventDivWeekView";
+    //         eventDiv.style.height = totalHeightDiv+"px";
+    //         eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+    //
+    //         eventDiv.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //         var weekDayOfEvent = newDateDay.getDay();
+    //
+    //
+    //         var leftPosOfDiv = ((weekDayNumber.indexOf(weekDayOfEvent))*cellWidth);
+    //         eventDiv.style.left = "calc(5% + "+leftPosOfDiv+"%)";
+    //
+    //       document.getElementById("calMainDiv").appendChild(eventDiv);
+    //
+    //     }
+    //     }
+    //
+    //
+    //
+    //
+    //
+    //
+    //     //the first day
+    //           if(events[collisionGroupsOfDay[q][j][g]].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //           var nbBlocsFirstDay = finishHour - timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date);
+    //
+    //           var totalHeightDivFD = nbBlocsFirstDay*oneHourBlockHeight;
+    //           var topPosDivFD = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*oneHourBlockHeight);
+    //           var eventDivFD = document.createElement("div");
+    //           eventDivFD.style.top = topPosDivFD+"px";
+    //           eventDivFD.className+=" eventDivWeekView";
+    //           eventDivFD.style.height = totalHeightDivFD+"px";
+    //           eventDivFD.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+    //
+    //           eventDivFD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //           var weekDayOfEventFD = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+    //           var leftPosOfDivFD = ((weekDayNumber.indexOf(weekDayOfEventFD))*cellWidth);
+    //           eventDivFD.style.left = "calc(5% + "+leftPosOfDivFD+"%)";
+    //
+    //         document.getElementById("calMainDiv").appendChild(eventDivFD);
+    //
+    //
+    //
+    //     }
+    //
+    //
+    // //event last day
+    //     if(events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //
+    //         var nbBlocsLastDay = timeToDecimal(events[collisionGroupsOfDay[q][j][g]].ending_date) - startingHour;
+    //
+    //         var totalHeightDivLD = nbBlocsLastDay*oneHourBlockHeight;
+    //         var topPosDivLD = 0;
+    //         var eventDivLD = document.createElement("div");
+    //         eventDivLD.style.top = topPosDivLD+"px";
+    //         eventDivLD.className+=" eventDivWeekView";
+    //         eventDivLD.style.height = totalHeightDivLD+"px";
+    //         eventDivLD.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+    //
+    //         eventDivLD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //         var weekDayOfEventLD = events[collisionGroupsOfDay[q][j][g]].ending_date.getDay();
+    //         var leftPosOfDivLD = ((weekDayNumber.indexOf(weekDayOfEventLD))*cellWidth);
+    //         eventDivLD.style.left = "calc(5% + "+leftPosOfDivLD+"%)";
+    //
+    //         document.getElementById("calMainDiv").appendChild(eventDivLD);
+    //
+    //     }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //         }else{
+    //
+    //           if(events[collisionGroupsOfDay[q][j][g]].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //           var nbBlocsFirstDay = finishHour - timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date);
+    //
+    //           var totalHeightDivFD = nbBlocsFirstDay*oneHourBlockHeight;
+    //           var topPosDivFD = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*oneHourBlockHeight);
+    //           var eventDivFD = document.createElement("div");
+    //           eventDivFD.style.top = topPosDivFD+"px";
+    //           eventDivFD.className+=" eventDivWeekView";
+    //           eventDivFD.style.height = totalHeightDivFD+"px";
+    //           eventDivFD.style.width = "calc("+cellWidth+"%)";
+    //
+    //           eventDivFD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //           var weekDayOfEventFD = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+    //           var leftPosOfDivFD = ((weekDayNumber.indexOf(weekDayOfEventFD))*cellWidth);
+    //           eventDivFD.style.left = "calc(5% + "+leftPosOfDivFD+"%)";
+    //
+    //         document.getElementById("calMainDiv").appendChild(eventDivFD);
+    //
+    //
+    //
+    //     }
+    //
+    //
+    //
+    //     if(events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+    //
+    //         var nbBlocsLastDay = timeToDecimal(events[collisionGroupsOfDay[q][j][g]].ending_date) - startingHour;
+    //
+    //         var totalHeightDivLD = nbBlocsLastDay*oneHourBlockHeight;
+    //         var topPosDivLD = 0;
+    //         var eventDivLD = document.createElement("div");
+    //         eventDivLD.style.top = topPosDivLD+"px";
+    //         eventDivLD.className+=" eventDivWeekView";
+    //         eventDivLD.style.height = totalHeightDivLD+"px";
+    //         eventDivLD.style.width = "calc("+cellWidth+"%)";
+    //
+    //         eventDivLD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //         var weekDayOfEventLD = events[collisionGroupsOfDay[q][j][g]].ending_date.getDay();
+    //         var leftPosOfDivLD = ((weekDayNumber.indexOf(weekDayOfEventLD))*cellWidth);
+    //         eventDivLD.style.left = "calc(5% + "+leftPosOfDivLD+"%)";
+    //
+    //         document.getElementById("calMainDiv").appendChild(eventDivLD);
+    //
+    //     }
+    //
+    //
+    //
+    //         }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // alreadyDisplayedEvents.push(collisionGroupsOfDay[q][j][g]);
+    // }//end of check if already displayed
+    //        }else{
+    //
+    //     //ONE DAY ONLY
+    //
+    //         var minutesTotalDurationEvent =Math.abs(((events[collisionGroupsOfDay[q][j][g]].start_date.getTime() - events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()) / 1000)/60);
+    //
+    //         var nbBlocksOf30min = minutesTotalDurationEvent / 60;
+    //         var totalHeightDiv = nbBlocksOf30min*oneHourBlockHeight;
+    //         var topPosDiv = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*oneHourBlockHeight);
+    //         var eventDiv = document.createElement("div");
+    //         eventDiv.style.top = topPosDiv+"px";
+    //         eventDiv.className+=" eventDivWeekView";
+    //         eventDiv.style.height = totalHeightDiv+"px";
+    //         eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+    //
+    //         eventDiv.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+    //
+    //         var weekDayOfEvent = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+    //
+    //     eventDiv.style.left = "calc(5% + ("+cellWidth+"%"+" * ("+q+" - 1)) + ("+cellWidth+"%"+" / "+collisionGroupsOfDay[q][j].length+" * "+ g +"))";
+    //
+    //
+    //
+    //
+    //
+    //       document.getElementById("calMainDiv").appendChild(eventDiv);
+    //
+    //
+    //       }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //       //end of 3rd for loop
+    //     }
+    //     //end of 2nd for loop
+    //   }
+    //
+    //
+    // //end firs for loop
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+</script>

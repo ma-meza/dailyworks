@@ -1,0 +1,40 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="/css/styleGuidelines.css">
+</head>
+
+<div id="mainAroundNavDiv" class="">
+  <img src="" id="logoImg" alt="">
+  <img src="assets/icons/settingsIcon.png" id="settingsIcon" onclick="location.href='/settings' ">
+</div>
+
+
+
+<style>
+#mainAroundNavDiv{
+  z-index:5;
+width:100%;
+top:0;
+left:0;
+position:fixed;
+height:70px;
+background-color:var(--background-page-color);
+/* -webkit-box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75);
+box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75); */
+}
+#logoImg{
+position:absolute;
+height:90%;
+top:5%;
+left:10px;
+}
+#settingsIcon{
+  position:absolute;
+  height:42%;
+  top:29%;
+  right:20px;
+}
+</style>

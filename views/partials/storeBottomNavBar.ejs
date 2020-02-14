@@ -1,0 +1,182 @@
+<link rel="stylesheet" href="/css/styleGuidelines.css">
+
+<script>
+var pageUrl = (window.location.href).split("/");
+
+
+
+var dateNumberArray = ["01","02","03","04","05","06","07","08","09","10","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"];
+var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+  var todayDateNUmber = new Date().getDate();
+  var todayMonthName = new Date().getMonth();
+</script>
+
+
+<div id="bottomNavMainDiv" class="">
+
+  <div id="innerDiv1" onclick="location.href='/home' " class="innerDivs">
+    <img id="homeImgIcon" src="assets/icons/octiconsSvg/home-white.svg" class="navIcons clickableIconImg" alt="">
+  </div>
+  <!-- <div id="innerDiv2" onclick="location.href='/analytics'" class="innerDivs">
+    <img id="analyticsImgIcon" src="assets/icons/octiconsSvg/graph-inactive.svg" class="navIcons clickableIconImg" alt="">
+  </div> -->
+  <!-- <div id="innerDiv3" onclick="location.href='/messages' " class="innerDivs">
+    <img id="messagesImgIcon" src="assets/icons/octiconsSvg/comment-inactive.svg" class="navIcons clickableIconImg" alt="">
+
+    <% if(typeof storeObj != 'undefined' && storeObj){ %>
+            <% if(storeObj.newMessageNotifications == true){ %>
+              <div id="newMessagesNotificationAlertCircle"></div>
+            <% } %>
+      <% } %>
+
+
+
+
+  </div> -->
+  <div id="innerDiv4" onclick="location.href='/settings' " class="innerDivs clickableIconImg">
+    <img id="settingsImgIcon" src="assets/icons/octiconsSvg/gear-white.svg" class="navIcons" alt="">
+  </div>
+</div>
+
+
+<style>
+
+@media screen and (min-width:780px){
+  #bottomNavMainDiv{
+    z-index:5;
+    width:80px;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    height:100%;
+    border:0.3px solid rgba(66, 66, 66, 0.76);
+    background-color:var(--dark-blue-color);
+  }
+  .innerDivs{
+    position:absolute;
+    width:80%;
+    height:80px;
+    left:10%;
+    margin-top:50px;
+  }
+  #innerDiv1{
+    top:0px;
+  }
+  #innerDiv4{
+    top:80px;
+  }
+  .navIcons{
+    height:50%;
+    position:absolute;
+    top:0;
+    transform:translateX(-50%);
+    left:50%;
+  }
+}
+
+
+
+@media screen and (max-width:780px){
+  #bottomNavMainDiv{
+    z-index:5;
+    width:100%;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    height:65px;
+    border-top:0.3px solid rgba(66, 66, 66, 0.76);
+    background-color:var(--dark-blue-color);
+  }
+  .innerDivs{
+    position:absolute;
+    width:50%;
+    height:100%;
+    top:0px;
+  }
+  #innerDiv1{
+    left:0px;
+  }
+  #innerDiv4{
+    left:50%;
+  }
+  .navIcons{
+    height:calc(100% - 22px);
+    position:absolute;
+    top:11px;
+    transform:translateX(-50%);
+    left:50%;
+  }
+}
+
+
+
+
+
+
+
+
+  #innerDiv2{
+    left:25%;
+  }
+  #innerDiv3{
+    left:50%;
+  }
+  .innerDivPBottomNavBar{
+    line-height:22px;
+    text-align:center;
+    width:100%;
+    position:absolute;
+    bottom:0;
+    margin:0;
+  }
+
+  #monthAgendaIcon{
+    text-align:center;
+    width:100%;
+    position:absolute;
+    top:15px;
+    margin:0;
+    font-size:10px;
+    font-weight:900;
+    z-index:2;
+    letter-spacing:1;
+  }
+  #dateAgendaIcon{
+    text-align:center;
+    width:100%;
+    position:absolute;
+    top:29px;
+    margin:0;
+    font-size:16px;
+    font-weight:900;
+  }
+  #newMessagesNotificationAlertCircle{
+    position:absolute;
+    background-color:red;
+    display:block;
+    top:10;
+    right:23;
+    height:12px;
+    width:12px;
+    border-radius:50%;
+  }
+</style>
+
+
+<script>
+if(pageUrl.indexOf('home') != -1){
+    document.getElementById('homeImgIcon').src ="assets/icons/octiconsSvg/home-active.svg";
+  }else if(pageUrl.indexOf('analytics') != -1){
+  document.getElementById('analyticsImgIcon').src ="assets/icons/octiconsSvg/graph-active.svg";
+}else if(pageUrl.indexOf('settings') != -1){
+    document.getElementById('settingsImgIcon').src ="assets/icons/octiconsSvg/gear-active.svg";
+  }else if(pageUrl.indexOf('messages') != -1){
+    document.getElementById('messagesImgIcon').src ="assets/icons/octiconsSvg/comment-active.svg";
+  }
+
+
+
+
+
+</script>

@@ -1,0 +1,449 @@
+<script>
+  function createListViewCalendar(employeeName){
+    console.log(employeeName);
+    hideMonthWeekDateRangeContainer();
+    document.getElementById('listViewMonthNameContainer').style.display = "block";
+
+  var mainDivOfMonth = document.getElementById("scheduleContainerMainDiv");
+  mainDivOfMonth.innerHTML="";
+
+  var monthNumber = dateSelected.getMonth();
+  var yearNumber = dateSelected.getFullYear();
+
+
+document.getElementById("listViewMonthNameP").innerText = fullMonthsName[monthNumber] + " "+yearNumber;
+
+
+
+//createtheDaySchedule
+var dayScheduleDiv = document.createElement("div");
+dayScheduleDiv.id = "dayScheduleTableDiv";
+
+$(dayScheduleDiv).scroll(function() {
+
+  for(var y=0;y<document.getElementsByClassName('newDayMainDiv').length;y++){
+
+
+
+
+
+var theDayTitle = document.getElementsByClassName('newDayMainDiv')[y];
+
+
+var elementTop = $(theDayTitle).offset().top;
+var elementBottom = elementTop + $(theDayTitle).outerHeight();
+var viewportTop = $(window).scrollTop();
+var viewportBottom = viewportTop + $(window).height();
+if(elementBottom > viewportTop/4 && elementTop+300 < viewportBottom){
+var monthName = fullMonthsName[theDayTitle.getAttribute('data-date').split('/')[1]];
+var yearNumber = theDayTitle.getAttribute('data-date').split('/')[0];
+document.getElementById('monthNameDivListView').innerText = monthName+" "+yearNumber;
+return;
+}
+  }
+});
+
+
+mainDivOfMonth.appendChild(dayScheduleDiv);
+
+
+  var cellHeight = 90;
+  var cellWidth = 90;
+
+
+
+  var allDayEventsDiv = document.createElement('div');
+  allDayEventsDiv.classList.add("allDayEventsDiv");
+  allDayEventsDiv.classList.add('all-day-'+dateSelected.getFullYear()+'/'+dateSelected.getMonth()+'/'+dateSelected.getDate());
+  var partDayEventsDiv = document.createElement('div');
+  partDayEventsDiv.classList.add("partDayEventsDiv");
+  partDayEventsDiv.classList.add('part-day-'+dateSelected.getFullYear()+'/'+dateSelected.getMonth()+'/'+dateSelected.getDate());
+
+
+
+
+//do the styling css for event blocks
+// code f = full day, code s = start today, code e = ends today, code p = some part of today
+
+
+var currentEventDate = dateSelected;
+<%  for(var r=0;r<eventsObj.length;r++){ %>
+
+var eventObjInForLoop = <%- JSON.stringify(eventsObj[r]) %>;
+
+var eventObjInForLoopStartDate = new Date(eventObjInForLoop.backendDateObjStart);
+var eventObjInForLoopEndDate = new Date(eventObjInForLoop.backendDateObjEnd);
+
+
+    if(employeeName != null){
+
+      if(eventObjInForLoop.employeeName == employeeName){
+
+        if(sameDateOrLater(eventObjInForLoopStartDate, dateSelected)){
+
+  if((eventObjInForLoop.fullDay == true || eventObjInForLoopEndDate == null) && document.getElementsByClassName('all-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate()).length != 0){
+  allDayEventsDiv = document.getElementsByClassName('all-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate());
+
+                            //all day
+                            var eventDiv = document.createElement("div");
+
+                            eventDiv.onclick= function(arg) {
+                              return function() {
+                                createMoreInfoEventDiv(arg);
+                              }
+                            }(eventObjInForLoop);
+
+
+
+
+                            eventDiv.classList.add("eventDivListView");
+                            var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                            for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                              }
+                              eventDivString+="</div>";
+                              eventDiv.innerHTML = eventDivString;
+                            allDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+  }else if(sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate) && document.getElementsByClassName('part-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate()).length !=0){
+
+
+                                        partDayEventsDiv =  document.getElementsByClassName('part-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate());
+                                        var eventDiv = document.createElement("div");
+                                        eventDiv.classList.add("eventDivListView");
+
+                                        eventDiv.onclick= function(arg) {
+                                          return function() {
+                                            createMoreInfoEventDiv(arg);
+                                          }
+                                        }(eventObjInForLoop);
+
+
+                                        var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - "+eventObjInForLoopEndDate.getHours()+":"+eventObjInForLoopEndDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                                        for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                          eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].name+"</div>";
+                                        }
+                                        eventDivString+="</div>";
+                                        eventDiv.innerHTML = eventDivString;
+                                        partDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+  }else{
+
+                              currentEventDate = eventObjInForLoopStartDate;
+
+                              allDayEventsDiv = document.createElement('div');
+                              allDayEventsDiv.classList.add("allDayEventsDiv");
+                              partDayEventsDiv = document.createElement('div');
+                              partDayEventsDiv.classList.add("partDayEventsDiv");
+                              allDayEventsDiv.classList.add('all-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+                              partDayEventsDiv.classList.add('part-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+
+
+                              var newDayDiv = document.createElement('div');
+                              newDayDiv.classList.add("newDayMainDiv");
+                              newDayDiv.dataset.date = currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate();
+
+                              var newDayP = document.createElement('p');
+                              newDayP.classList.add('newDayP');
+
+                              newDayP.innerText = monthsName[eventObjInForLoopStartDate.getMonth()]+" "+eventObjInForLoopStartDate.getDate()+", "+eventObjInForLoopStartDate.getFullYear();
+
+                              newDayDiv.appendChild(newDayP);
+                              var eventsDiv = document.getElementById("dayScheduleTableDiv");
+                              eventsDiv.appendChild(newDayDiv);
+
+
+
+
+
+
+                            currentEventDate = eventObjInForLoopStartDate;
+
+
+
+
+
+
+
+
+
+
+
+
+                            if(eventObjInForLoop.fullDay == true || eventObjInForLoopEndDate == null ){
+                              //all day
+                              var eventDiv = document.createElement("div");
+
+                              eventDiv.onclick= function(arg) {
+                                return function() {
+                                  createMoreInfoEventDiv(arg);
+                                }
+                              }(eventObjInForLoop);
+
+
+
+
+                              eventDiv.classList.add("eventDivListView");
+                              var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                              for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                  eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                                }
+                                eventDivString+="</div>";
+                                eventDiv.innerHTML = eventDivString;
+                              allDayEventsDiv.classList.add('activeListViewMainDiv');
+                              allDayEventsDiv.appendChild(eventDiv);
+
+                            }else if(sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate)){
+
+
+                              var eventDiv = document.createElement("div");
+                              eventDiv.classList.add("eventDivListView");
+
+                              eventDiv.onclick= function(arg) {
+                                return function() {
+                                  createMoreInfoEventDiv(arg);
+                                }
+                              }(eventObjInForLoop);
+
+
+                              var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - "+eventObjInForLoopEndDate.getHours()+":"+eventObjInForLoopEndDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                              for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                              }
+                              eventDivString+="</div>";
+                              eventDiv.innerHTML = eventDivString;
+                              partDayEventsDiv.classList.add('activeListViewMainDiv');
+                              partDayEventsDiv.appendChild(eventDiv);
+
+                            }else if(!sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate)){
+
+                            }
+
+
+
+                            dayScheduleDiv.appendChild(allDayEventsDiv);
+                            dayScheduleDiv.appendChild(partDayEventsDiv);
+  }
+
+
+
+        }
+      }
+    }else{
+      if(sameDateOrLater(eventObjInForLoopStartDate, dateSelected)){
+      if((eventObjInForLoop.fullDay == true || eventObjInForLoopEndDate == null) && document.getElementsByClassName('all-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate()).length != 0){
+      allDayEventsDiv = document.getElementsByClassName('all-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate());
+
+                          //all day
+                          var eventDiv = document.createElement("div");
+
+                          eventDiv.onclick= function(arg) {
+                            return function() {
+                              createMoreInfoEventDiv(arg);
+                            }
+                          }(eventObjInForLoop);
+
+
+
+
+                          eventDiv.classList.add("eventDivListView");
+                          var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                          for(var t=0;t<eventObjInForLoop.services.length;t++){
+                              eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                            }
+                            eventDivString+="</div>";
+                            eventDiv.innerHTML = eventDivString;
+                          allDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+      }else if(sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate) && document.getElementsByClassName('part-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate()).length !=0){
+
+                                      partDayEventsDiv =  document.getElementsByClassName('part-day-'+eventObjInForLoopStartDate.getFullYear()+'/'+eventObjInForLoopStartDate.getMonth()+'/'+eventObjInForLoopStartDate.getDate());
+                                      var eventDiv = document.createElement("div");
+                                      eventDiv.classList.add("eventDivListView");
+
+                                      eventDiv.onclick= function(arg) {
+                                        return function() {
+                                          createMoreInfoEventDiv(arg);
+                                        }
+                                      }(eventObjInForLoop);
+
+
+                                      var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - "+eventObjInForLoopEndDate.getHours()+":"+eventObjInForLoopEndDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                                      for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                        eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                                      }
+                                      eventDivString+="</div>";
+                                      eventDiv.innerHTML = eventDivString;
+                                      partDayEventsDiv[0].appendChild(eventDiv);
+
+
+
+      }else{
+
+
+                            currentEventDate = eventObjInForLoopStartDate;
+
+                            allDayEventsDiv = document.createElement('div');
+                            allDayEventsDiv.classList.add("allDayEventsDiv");
+                            partDayEventsDiv = document.createElement('div');
+                            partDayEventsDiv.classList.add("partDayEventsDiv");
+                            allDayEventsDiv.classList.add('all-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+                            partDayEventsDiv.classList.add('part-day-'+currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate());
+
+
+                            var newDayDiv = document.createElement('div');
+                            newDayDiv.classList.add("newDayMainDiv");
+                            newDayDiv.dataset.date = currentEventDate.getFullYear()+'/'+currentEventDate.getMonth()+'/'+currentEventDate.getDate();
+
+                            var newDayP = document.createElement('p');
+                            newDayP.classList.add('newDayP');
+
+                            newDayP.innerText = monthsName[eventObjInForLoopStartDate.getMonth()]+" "+eventObjInForLoopStartDate.getDate()+", "+eventObjInForLoopStartDate.getFullYear();
+
+                            newDayDiv.appendChild(newDayP);
+                            var eventsDiv = document.getElementById("dayScheduleTableDiv");
+                            eventsDiv.appendChild(newDayDiv);
+
+
+
+
+
+
+                          currentEventDate = eventObjInForLoopStartDate;
+
+
+
+
+
+
+
+
+
+
+
+
+                          if(eventObjInForLoop.fullDay == true || eventObjInForLoopEndDate == null ){
+                            //all day
+                            var eventDiv = document.createElement("div");
+
+                            eventDiv.onclick= function(arg) {
+                              return function() {
+                                createMoreInfoEventDiv(arg);
+                              }
+                            }(eventObjInForLoop);
+
+
+
+
+                            eventDiv.classList.add("eventDivListView");
+                            var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - all day"+"</p><div class='serviceScrollMainDiv'>";
+
+                            for(var t=0;t<eventObjInForLoop.services.length;t++){
+                                eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                              }
+                              eventDivString+="</div>";
+                              eventDiv.innerHTML = eventDivString;
+                            allDayEventsDiv.classList.add('activeListViewMainDiv');
+                            allDayEventsDiv.appendChild(eventDiv);
+
+                          }else if(sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate)){
+
+
+                            var eventDiv = document.createElement("div");
+                            eventDiv.classList.add("eventDivListView");
+
+                            eventDiv.onclick= function(arg) {
+                              return function() {
+                                createMoreInfoEventDiv(arg);
+                              }
+                            }(eventObjInForLoop);
+
+
+                            var eventDivString = "<p class='clientNameListViewP'>"+eventObjInForLoop.clientName+"</p><p class='eventHoursListViewP'>"+eventObjInForLoopStartDate.getHours()+":"+eventObjInForLoopStartDate.getMinutes()+" - "+eventObjInForLoopEndDate.getHours()+":"+eventObjInForLoopEndDate.getMinutes()+"</p><div class='serviceScrollMainDiv'>";
+                            for(var t=0;t<eventObjInForLoop.services.length;t++){
+                              eventDivString+="<div class='servicesAroundDiv'>"+eventObjInForLoop.services[t].serviceName+"</div>";
+                            }
+                            eventDivString+="</div>";
+                            eventDiv.innerHTML = eventDivString;
+                            partDayEventsDiv.classList.add('activeListViewMainDiv');
+                            partDayEventsDiv.appendChild(eventDiv);
+
+                          }else if(!sameDate(eventObjInForLoopEndDate, eventObjInForLoopStartDate)){
+
+                          }
+
+
+
+                          dayScheduleDiv.appendChild(allDayEventsDiv);
+                          dayScheduleDiv.appendChild(partDayEventsDiv);
+      }
+
+
+
+      }
+
+    }
+<% } %>
+
+
+
+
+
+          var stringForTodayDate = theDateToday.getFullYear()+"/"+theDateToday.getMonth()+"/"+theDateToday.getDate();
+          if(document.getElementsByClassName('newDayMainDiv')[0] != null && document.getElementsByClassName('newDayMainDiv')[0].getAttribute('data-date') == stringForTodayDate){
+          (document.getElementsByClassName('newDayMainDiv')[0]).firstChild.classList.add('todayStringP');
+          }else{
+            var theEventDivEmpty = document.createElement('div');
+            theEventDivEmpty.classList.add("allDayEventsDiv");
+            theEventDivEmpty.classList.add("activeListViewMainDiv");
+
+
+            var theInsideDivEvent = document.createElement('div');
+            theInsideDivEvent.innerText = "No appointments for today";
+            theInsideDivEvent.classList.add('eventDivListView');
+            theInsideDivEvent.style.padding = "20";
+            theInsideDivEvent.style.textAlign = "center";
+            theInsideDivEvent.style.color = "var(--font-color-grey)";
+            theInsideDivEvent.style.fontWeight = "var(--mobile-font-weight-regular)";
+            theInsideDivEvent.style.fontSize = "var(--mobile-font-size-big)";
+
+            theEventDivEmpty.appendChild(theInsideDivEvent);
+
+
+
+            var dayTitleDiv = document.createElement('div');
+            dayTitleDiv.classList.add("newDayMainDiv");
+            dayTitleDiv.dataset.date = theDateToday.getFullYear()+'/'+theDateToday.getMonth()+'/'+theDateToday.getDate();
+
+            var dayTitleP = document.createElement('p');
+            dayTitleP.classList.add('newDayP');
+            dayTitleP.classList.add('todayStringP')
+            dayTitleP.innerText = monthsName[theDateToday.getMonth()]+" "+theDateToday.getDate()+", "+theDateToday.getFullYear();
+
+            dayTitleDiv.appendChild(dayTitleP);
+
+
+            document.getElementById('dayScheduleTableDiv').prepend(theEventDivEmpty);
+            document.getElementById('dayScheduleTableDiv').prepend(dayTitleDiv);
+
+
+          }
+
+
+
+
+
+
+}
+
+
+</script>

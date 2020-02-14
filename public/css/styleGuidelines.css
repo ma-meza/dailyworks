@@ -1,0 +1,114 @@
+:root{
+
+--box-shadow-card:0px 0px 2px rgba(0, 0, 0, 0.25);
+
+
+
+/*for small event card*/
+--font-color-event-small-card-storename:rgba(0, 0, 0, 1);
+
+--font-color-event-small-card-datetime:rgba(0, 0, 0, 0.5);
+
+--border-radius-event-small-card-servicebox:10;
+--font-color-event-small-card-servicebox:#000;
+
+
+
+/*for store card */
+--font-color-store-big-card-storename:rgba(0, 0, 0, 1);
+
+--font-color-store-big-card-supportingtext:rgba(0, 0, 0, 0.5);
+
+
+/*more event info card */
+--font-color-event-more-info-title:rgba(0, 0, 0, 1);
+
+--font-color-event-more-info-subtext:rgba(0, 0, 0, 0.5);
+
+
+
+--background-page-color:rgba(250, 250, 250, 1);
+
+--system-font:'Roboto', sans-serif;
+
+
+--official-border-radius:10px;
+--official-light-grey-border:0.3px solid rgba(66, 66, 66, 0.76);
+--nav-bar-border:0.3px solid rgba(66, 66, 66, 0.76);
+
+
+--icon-color-inactive:rgba(0, 0, 0, 0.7);
+--icon-color-active:rgba(58, 122, 182, 1);
+
+--inactive-blue-color:rgba(58, 122, 182, 0.25);
+
+--input-border:1px solid #d1d5da;
+
+--mobile-font-size-extra-big:3.125rem;
+--mobile-font-size-page-title:30px;
+--mobile-font-size-regular:16px;
+--mobile-font-size-small:14px;
+--mobile-font-size-extra-small:12px;
+--mobile-font-size-big:18px;
+
+--desktop-font-size-extra-big:3.125rem;
+--desktop-font-size-page-title:32px;
+--desktop-font-size-regular:18px;
+--desktop-font-size-small:16px;
+--desktop-font-size-extra-small:12px;
+--desktop-font-size-big:22px;
+--dark-blue-color: rgb(28, 48, 68);
+
+
+
+--mobile-font-weight-bold:900;
+--mobile-font-weight-regular:400;
+
+--font-color-black:rgba(0, 0, 0, 1);
+--font-color-grey:rgba(0, 0, 0, 0.7);
+--font-color-lightgrey:rgba(0, 0, 0, 0.2);
+--font-color-red:rgba(210, 0, 0, 0.6);
+}
+
+
+
+body
+{
+margin:0px;
+padding:0px;
+width:100%;
+}
+*{
+
+  box-sizing:border-box;
+  font-family:var(--system-font);
+}
+
+*:focus {
+    outline: none;
+}
+
+.clickableIconImg:hover{
+  cursor:pointer;
+}
+
+.basicInput-quasiFullWidth{
+  width:calc(100% - 40px);
+  position:absolute;
+  left:20;
+  transition:all 0.3s;
+  height:45px;
+  border-radius:var(--official-border-radius);
+  border:var(--input-border);
+  padding: 0 20 0 20;
+  box-shadow:inset 0 1px 2px rgba(27,31,35,.075);
+}
+.transparentOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-color:rgba(0,0,0,0.1);
+z-index:1000;
+}

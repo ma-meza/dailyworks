@@ -1,0 +1,59 @@
+
+<%- include partials/regularEmptyHead.ejs %>
+<%- include partials/storeBottomNavBar.ejs %>
+
+
+<% if(!storeObj || storeObj.length == 0){ %>
+
+<script>
+location.href="/home";
+</script>
+
+
+  <% }else{ %>
+    <%= storeObj %>
+
+
+    <div  id="mainScreenBody">
+      <div id="" class="analyticsTopNavBar">
+        <p class="pageTitle">Analytics</p>
+        <!-- <button id="weekViewButton" class="changeViewButton">Week View</button> -->
+      </div>
+      </div>
+
+
+
+
+
+<style>
+
+
+  #mainScreenBody{
+  left:0px;
+  position:absolute;
+  top:0px;
+  width:100%;
+  height:calc(100% - 65px);
+  background-color:#f9f9f9;
+
+  }
+  .pageTitle{
+    font-size:var(--font-size-page-title);
+    font-weight:var(--font-weight-page-title);
+    color:var(--font-color-page-title);
+    width:100%;
+    margin-top:20px;
+    padding-left:20;
+    padding-right:20;
+  }
+  .analyticsTopNavBar{
+  position:absolute;
+  top:0px;
+  width:100%;
+  left:0;
+  background-color:#f9f9f9;
+  height:80px;
+  border-bottom:0.3px solid rgba(66, 66, 66, 0.76);
+  }
+</style>
+<% } %>

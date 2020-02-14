@@ -1,0 +1,1651 @@
+<%- include partials/regularEmptyHead.ejs %>
+<%- include partials/storeBottomNavBar.ejs %>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgRl2MKw024PModYPvSktDkFbsOird77o&libraries=places"></script>
+<script type="text/javascript" src="/jsFiles/miscFunctions.js"></script>
+
+<% if(!storeObj || storeObj.length == 0){ %>
+sorry no store
+  <% }else{ %>
+<div id="settingsPageMainBody" class="">
+
+
+
+
+
+  <div id="servicesSettingsMainContainer" class="secondLevelParentCategorySelector">
+    <div class="settingsContentScrolling">
+      <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
+      <p class="settingsPageTitleSecondLevel">Services</p>
+      <div class="mainInputContainer">
+
+          <% for(var y=0;y<storeObj.services.length;y++){ %>
+
+            <button type="button" class="collapsibleSettingsServicesButton" name="button"><%= storeObj.services[y].serviceName %></button>
+            <div class="collapsibleSettingsServicesContent">
+              <p class="leftServicesLabel">Name:</p>
+              <br>
+              <input class="textInputSetting" type="text" name="" value="">
+              <br>
+              <p class="leftServicesLabel">Price:</p>
+              <br>
+              <input class="textInputSetting" type="number" name="" value="">
+            </div>
+
+          <% } %>
+
+
+
+
+        <p class="inputSettingLabel">Business name</p>
+        <input class="textInputSetting" id="bNameInput" type="text" name="" value="" placeholder="<%= storeObj.storeName %>">
+        <p class="labelUnderInputGeneralSettings" id="bNameInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Location</p>
+        <% if(typeof storeObj.location == "undefined"){ %>
+          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="Business location">
+        <% }else{ %>
+          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="<%= storeObj.location %>">
+        <% } %>
+        <input id="locationLat" type="hidden" name="lat">
+        <input id="locationLong" type="hidden" name="long">
+
+
+
+      </div>
+    </div>
+    <div class="saveButtonDiv">
+      <button class="quasiFullWidthCtaButton" id="servicesSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <div id="generalSettingsMainContainer" class="secondLevelParentCategorySelector">
+    <div class="settingsContentScrolling">
+      <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
+      <p class="settingsPageTitleSecondLevel" id="">General Settings</p>
+      <div class="mainInputContainer">
+
+
+
+        <p class="inputSettingLabel">Business name</p>
+        <input class="textInputSetting" id="bNameInput" type="text" name="" value="" placeholder="<%= storeObj.storeName %>">
+        <p class="labelUnderInputGeneralSettings" id="bNameInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Location</p>
+        <% if(typeof storeObj.location == "undefined"){ %>
+          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="Business location">
+        <% }else{ %>
+          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="<%= storeObj.location %>">
+        <% } %>
+        <input id="locationLat" type="hidden" name="lat">
+        <input id="locationLong" type="hidden" name="long">
+
+        <p class="labelUnderInputGeneralSettings" id="locationInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Phone number</p>
+        <% if(typeof storeObj.phoneNumber == "undefined"){ %>
+          <input class="textInputSetting" id="bPhoneInput" type="text" name="" value="" placeholder="ex: 5149932019">
+        <% }else{ %>
+          <input class="textInputSetting" id="bPhoneInput" type="text" name="" value="" placeholder="<%= storeObj.phoneNumber %>">
+        <% } %>
+        <p class="labelUnderInputGeneralSettings" id="phoneNumberInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Social pages</p>
+        <% if(typeof storeObj.facebookLink == "undefined"){ %>
+          <input class="textInputSetting" id="fbLinkInput" type="text" name="" value="" placeholder="Facebook page link">
+        <% }else{ %>
+          <input class="textInputSetting" id="fbLinkInput" type="text" name="" value="" placeholder="<%= storeObj.facebookLink %>">
+        <% } %>
+        <p class="labelUnderInputGeneralSettings" id="fbLinkInputUnderLabel"></p>
+
+        <% if(typeof storeObj.instagramLink == "undefined"){ %>
+          <input class="textInputSetting" id="instaLinkInput" type="text" name="" value="" placeholder="Instagram page link">
+        <% }else{ %>
+          <input class="textInputSetting" id="instaLinkInput" type="text" name="" value="" placeholder="<%= storeObj.instagramLink %>">
+        <% } %>
+        <p class="labelUnderInputGeneralSettings" id="instaLinkInputUnderLabel"></p>
+
+        <% if(typeof storeObj.websiteLink == "undefined"){ %>
+          <input class="textInputSetting" id="websiteLinkInput" type="text" name="" value="" placeholder="Business website page link">
+        <% }else{ %>
+          <input class="textInputSetting" id="websiteLinkInput" type="text" name="" value="" placeholder="<%= storeObj.websiteLink %>">
+        <% } %>
+        <p class="labelUnderInputGeneralSettings" id="websiteLinkInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Email address</p>
+        <input class="textInputSetting" type="email" id="bEmailInput" name="" value="" placeholder="<%= storeObj.email %>">
+        <p class="labelUnderInputGeneralSettings" id="emailInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Password</p>
+        <input class="passwordInputSetting" id="oldPasswordInput" type="password" name="" value="" placeholder="Old password"><img class="eyeIconPassword" id="oldPasswordEyeIcon" data-relatedpasswordid="oldPasswordInput" src="assets/icons/octiconsSvg/eye.svg" alt="">
+        <input class="passwordInputSetting" id="newPasswordInput" type="password" name="" value="" placeholder="New Password"><img class="eyeIconPassword" id="newPasswordEyeIcon" data-relatedpasswordid="newPasswordInput" src="assets/icons/octiconsSvg/eye.svg" alt="">
+        <p class="labelUnderInputGeneralSettings" id="passwordInputUnderLabel"></p>
+
+        <p class="inputSettingLabel">Owner's name</p>
+        <% if(typeof storeObj.ownerName == "undefined"){ %>
+          <input class="textInputSetting" id="ownerNameInput" type="text" name="" value="" placeholder="Business owner's name">
+        <% }else{ %>
+          <input class="textInputSetting" id="ownerNameInput" type="text" name="" value="" placeholder="<%= storeObj.ownerName %>">
+        <% } %>
+        <p class="labelUnderInputGeneralSettings" id="ownerNameInputUnderLabel"></p>
+
+      </div>
+    </div>
+    <div class="saveButtonDiv">
+      <button class="quasiFullWidthCtaButton" id="generalSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+    </div>
+  </div>
+
+
+
+
+  <div id="storeScheduleSettingsMainContainer" class="secondLevelParentCategorySelector">
+    <div class="settingsContentScrolling">
+      <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
+      <p class="settingsPageTitleSecondLevel" id="">Store Schedule</p>
+      <div class="mainInputContainer">
+        <div id="storeScheduleMonday" class="storeScheduleDayLineContainer">
+          <p class="storeScheduleDayText">Monday :</p><input readonly class="storeScheduleTimeInput storeScheduleStartTime storeScheduleMondayInput" type="text" name="" value=""><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleMondayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleMondayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleMondayInput"><label for="storeScheduleMondayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer" id="storeScheduleTuesday">
+          <p class="storeScheduleDayText">Tuesday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleTuesdayInput" type="text" name="" value=""  readonly><p class="storeScheduleDayText">to</p><input class="storeScheduleTuesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""  readonly ><input id="storeScheduleTuesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleTuesdayInput"><label for="storeScheduleTuesdayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer" id="storeScheduleWednesday">
+          <p class="storeScheduleDayText">Wednesday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleWednesdayInput" type="text" name="" value=""  readonly ><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleWednesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleWednesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleWednesdayInput"><label for="storeScheduleWednesdayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer" id="storeScheduleThursday">
+          <p class="storeScheduleDayText">Thursday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleThursdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleThursdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleThursdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleThursdayInput"><label for="storeScheduleThursdayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer" id="storeScheduleFriday">
+          <p class="storeScheduleDayText">Friday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleFridayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleFridayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleFridayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleFridayInput"><label for="storeScheduleFridayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer" id="storeScheduleSaturday">
+          <p class="storeScheduleDayText">Saturday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSaturdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleSaturdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSaturdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSaturdayInput"><label for="storeScheduleSaturdayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+        <div class="storeScheduleDayLineContainer storeScheduleSunday" id="storeScheduleSunday">
+          <p class="storeScheduleDayText">Sunday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSundayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleSundayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSundayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSundayInput"><label for="storeScheduleSundayCheckbox" class="storeScheduleDayText">Closed</label>
+        </div>
+      </div>
+
+      <div class="mainStoreAbsencesContainer">
+          <p class="settingsPageTitleSecondLevel">Store absences</p>
+          <div class="currentAbsencesDiv storeAbsencesInnerDiv">
+
+            <% for(var y=0; y<storeObj.storeAbsences.length;y++){ %>
+              <div class="currentAbsenceEntryContainer" data-id="<%=storeObj.storeAbsences[y]._id %>">
+                  <input type="text" name="" value="" class="existingStoreAbsenceReason" placeholder="<%=storeObj.storeAbsences[y].reason %>">
+
+                    <% if(storeObj.storeAbsences[y].startTime == -1){ %>
+                    <input type="text" class="absenceInputDateTime existingStoreAbsenceStart" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="-1" readonly name="" placeholder="<%=storeObj.storeAbsences[y].startDate %> (full day)">
+                    <% }else{ %>
+                    <input type="text" class="absenceInputDateTime existingStoreAbsenceStart" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="<%=storeObj.storeAbsences[y].startTime %>" readonly name="" value="" placeholder="<%=storeObj.storeAbsences[y].startDate %> <%=decimalToHour12FormatEJS(storeObj.storeAbsences[y].startTime) %>">
+                    <% } %>
+
+
+                  <% if(storeObj.storeAbsences[y].endDate == -1){ %>
+                  <input type="text" name="" class="absenceInputDateTime" data-date="-1" data-time="-1" readonly placeholder="same day">
+                  <% }else{ %>
+
+                    <% if(storeObj.storeAbsences[y].endTime == -1){ %>
+                    <input type="text" name="" class="absenceInputDateTime existingStoreAbsenceEnd" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="-1" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> (full day)">
+                    <% }else{ %>
+                    <input type="text" name="" value="" class="absenceInputDateTime existingStoreAbsenceEnd" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="<%=storeObj.storeAbsences[y].endTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> <%= decimalToHour12FormatEJS(storeObj.storeAbsences[y].endTime) %>">
+                    <% } %>
+                  <% } %>
+
+                  <img src="assets/icons/octiconsSvg/x.svg" class="storeAbsencesRemoveX" alt="">
+              </div>
+            <% } %>
+          </div>
+          <div class="newAbsencesDiv storeAbsencesInnerDiv">
+            <input type="text" name="" value="" id="newAbsenceReason" placeholder="Reason">
+            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceStart" class="absenceInputDateTime newStoreAbsenceStart" placeholder="Start date">
+            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceEnd" class="absenceInputDateTime newStoreAbsenceEnd" placeholder="End date">
+            <button type="button" id="addAbsenceButton" name="button">Add absence</button>
+          </div>
+      </div>
+    </div>
+    <div class="saveButtonDiv">
+      <button class="quasiFullWidthCtaButton" id="storeScheduleSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+    </div>
+  </div>
+
+
+<div class="activeCategorySelector parentCategorySelector" id="firstLevelCategorySelector">
+  <p class="settingsPageTitle" id="">Settings</p>
+  <div id="mainMenuSettingSelector" class="settingSelectorMainContainer">
+    <p class="settingsSubCategoryMainTitle">Business Settings</p>
+    <div class="mainCategorySelectorDiv">
+      <div id="generalFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p>General Settings</p>
+        </div>
+      </div>
+      <div id="servicesFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p>Services</p>
+        </div>
+      </div>
+      <div id="scheduleFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p>Store Schedule</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- <p class="settingsSubCategoryMainTitle">Staff Settings</p>
+    <div class="mainCategorySelectorDiv">
+      <div id="manageStaffFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p>Manage Members</p>
+        </div>
+      </div>
+      <div id="staffScheduleFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p>Members Schedule</p>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+
+<% function decimalToHourEJS(num){
+  var hrs = parseInt(Number(num));
+  var min = Math.round((Number(num)-hrs) * 60);
+  if(min == 0){
+      min = "00";
+  }
+  var hourString = hrs+':'+min;
+  if(hrs>11){
+    hourString +="PM";
+  }else{
+    hourString+="AM";
+  }
+  return hourString;
+} %>
+
+
+
+<% function decimalToHour12FormatEJS(num){
+  var hrs = parseInt(Number(num));
+  var min = Math.round((Number(num)-hrs) * 60);
+  if(min == 0){
+      min = "00";
+  }
+  var hourString = "";
+  if(hrs>11){
+    hourString = (hrs-12)+':'+min+"PM";
+  }else{
+    hourString = hrs+':'+min+"AM";
+  }
+  return hourString;
+} %>
+
+
+<script>
+var oldPassIsVisible = false;
+var newPassIsVisible = false;
+
+
+
+
+
+var collapsibleServicesButton = document.getElementsByClassName("collapsibleSettingsServicesButton");
+for (var w = 0; w < collapsibleServicesButton.length; w++) {
+  collapsibleServicesButton[w].addEventListener("click", function() {
+    this.classList.toggle("activeCollapsible");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+
+
+
+
+
+
+var storeAbsencesRemoveX = document.getElementsByClassName('storeAbsencesRemoveX');
+for(var w=0;w<storeAbsencesRemoveX.length;w++){
+  storeAbsencesRemoveX[w].onclick = function(){
+    removeExistingAbsenceEntry(this.closest(".currentAbsenceEntryContainer"));
+  }
+}
+
+
+
+var absenceInputDateTime = document.getElementsByClassName('absenceInputDateTime');
+for(var g=0;g<absenceInputDateTime.length;g++){
+  absenceInputDateTime[g].onclick = function(){
+    createDivForDateTimePicker(this);
+  }
+}
+
+
+
+function setStoreScheduleDayValues(){
+var mondayDiv = document.getElementById("storeScheduleMonday");
+var tuesdayDiv = document.getElementById("storeScheduleTuesday");
+var wednesdayDiv = document.getElementById("storeScheduleWednesday");
+var thursdayDiv = document.getElementById("storeScheduleThursday");
+var fridayDiv = document.getElementById("storeScheduleFriday");
+var saturdayDiv = document.getElementById("storeScheduleSaturday");
+var sundayDiv = document.getElementById("storeScheduleSunday");
+
+
+<% if(storeObj.storeSchedule[0].startTime == 0 && storeObj.storeSchedule[0].endTime == 0){ %>
+var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+sundayStart.setAttribute('data-time', -1);
+sundayStart.placeholder = "closed";
+sundayStart.disabled = true;
+var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+sundayEnd.placeholder = "closed";
+sundayEnd.disabled = true;
+sundayEnd.setAttribute('data-time', -1);
+sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  sundayStart.setAttribute('data-time', <%- storeObj.storeSchedule[0].startTime %>);
+  sundayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[0].endTime %>);
+
+  sundayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].startTime %>);
+  sundayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].endTime %>);
+  sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[1].startTime == 0 && storeObj.storeSchedule[1].endTime == 0){ %>
+var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+mondayStart.placeholder = "closed";
+mondayStart.disabled = true;
+var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+mondayEnd.placeholder = "closed";
+mondayEnd.disabled = true;
+mondayStart.setAttribute('data-time', -1);
+mondayEnd.setAttribute('data-time', -1);
+mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  mondayStart.setAttribute('data-time', <%- storeObj.storeSchedule[1].startTime %>);
+  mondayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[1].endTime %>);
+
+  mondayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].startTime %>);
+  mondayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].endTime %>);
+  mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[2].startTime == 0 && storeObj.storeSchedule[2].endTime == 0){ %>
+var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+tuesdayStart.placeholder = "closed";
+tuesdayStart.disabled = true;
+var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+tuesdayEnd.placeholder = "closed";
+tuesdayEnd.disabled = true;
+tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+tuesdayStart.setAttribute('data-time', -1);
+tuesdayEnd.setAttribute('data-time', -1);
+<% }else{ %>
+  var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  tuesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[2].startTime %>);
+  tuesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[2].endTime %>);
+
+  tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].startTime %>);
+  tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].endTime %>);
+  tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[3].startTime == 0 && storeObj.storeSchedule[3].endTime == 0){ %>
+var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+wednesdayStart.placeholder = "closed";
+wednesdayStart.disabled = true;
+var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+wednesdayEnd.placeholder = "closed";
+wednesdayEnd.disabled = true;
+wednesdayStart.setAttribute('data-time', -1);
+wednesdayEnd.setAttribute('data-time', -1);
+wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  wednesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[3].startTime %>);
+  wednesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[3].endTime %>);
+
+  wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].startTime %>);
+  wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].endTime %>);
+  wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[4].startTime == 0 && storeObj.storeSchedule[4].endTime == 0){ %>
+var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+thursdayStart.placeholder = "closed";
+thursdayStart.disabled = true;
+var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+thursdayEnd.placeholder = "closed";
+thursdayEnd.disabled = true;
+thursdayStart.setAttribute('data-time', -1);
+thursdayEnd.setAttribute('data-time', -1);
+thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  thursdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[4].startTime %>);
+  thursdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[4].endTime %>);
+
+  thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].startTime %>);
+  thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].endTime %>);
+  thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[5].startTime == 0 && storeObj.storeSchedule[5].endTime == 0){ %>
+var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+fridayStart.placeholder = "closed";
+fridayStart.disabled = true;
+var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+fridayEnd.placeholder = "closed";
+fridayEnd.disabled = true;
+fridayStart.setAttribute('data-time', -1);
+fridayEnd.setAttribute('data-time', -1);
+fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  fridayStart.setAttribute('data-time', <%- storeObj.storeSchedule[5].startTime %>);
+  fridayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[5].endTime %>);
+
+  fridayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].startTime %>);
+  fridayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].endTime %>);
+  fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+<% if(storeObj.storeSchedule[6].startTime == 0 && storeObj.storeSchedule[6].endTime == 0){ %>
+var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+saturdayStart.placeholder = "closed";
+saturdayStart.disabled = true;
+var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+saturdayEnd.placeholder = "closed";
+saturdayEnd.disabled = true;
+saturdayStart.setAttribute('data-time', -1);
+saturdayEnd.setAttribute('data-time', -1);
+saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+<% }else{ %>
+  var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+
+  saturdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[6].startTime %>);
+  saturdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[6].endTime %>);
+
+  saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].startTime %>);
+  saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].endTime %>);
+  saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+<% } %>
+
+
+
+}
+setStoreScheduleDayValues();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//navigation back button arrow
+var backbuttons = document.getElementsByClassName('backArrowSettings');
+for(var i=0;i<backbuttons.length;i++){
+  backbuttons[i].onclick = function(){
+  moveSecondLevelDivsToRight();
+  document.getElementById('firstLevelCategorySelector').className = "parentCategorySelector activeCategorySelector";
+  }
+}
+
+
+
+
+
+//display hide eye icon
+document.getElementById('oldPasswordEyeIcon').onclick = function(){
+  if(oldPassIsVisible){
+    this.src="assets/icons/octiconsSvg/eye.svg";
+    document.getElementById(this.getAttribute('data-relatedpasswordid')).type = "password";
+    oldPassIsVisible = false;
+  }else{
+    this.src="assets/icons/octiconsSvg/eye-closed.svg";
+    document.getElementById(this.getAttribute('data-relatedpasswordid')).type = "text";
+    oldPassIsVisible = true;
+  }
+}
+document.getElementById('newPasswordEyeIcon').onclick = function(){
+  if(newPassIsVisible){
+    this.src="assets/icons/octiconsSvg/eye.svg";
+    document.getElementById(this.getAttribute('data-relatedpasswordid')).type = "password";
+    newPassIsVisible = false;
+  }else{
+    this.src="assets/icons/octiconsSvg/eye-closed.svg";
+    document.getElementById(this.getAttribute('data-relatedpasswordid')).type = "text";
+    newPassIsVisible = true;
+  }
+}
+
+
+
+
+
+
+
+//save button onclick for general settings
+document.getElementById('generalSettingsSaveButton').onclick = function(){
+  displayLoader();
+  clearLabelUnderInput();
+  var bName = document.getElementById('bNameInput');
+  var bLocation = document.getElementById('bLocationInput');
+  var bPhone = document.getElementById('bPhoneInput');
+  var fbLink = document.getElementById('fbLinkInput');
+  var instaLink = document.getElementById('instaLinkInput');
+  var websiteLink = document.getElementById('websiteLinkInput');
+  var bEmail = document.getElementById('bEmailInput');
+  var oldPass = document.getElementById('oldPasswordInput');
+  var newPass = document.getElementById('newPasswordInput');
+  var ownerName = document.getElementById('ownerNameInput');
+
+
+  if((newPass.value != "" && oldPass.value == "") || (newPass.value == "" && oldPass.value != "")){
+    document.getElementById('passwordInputUnderLabel').innerText = "Your old password and new password must be filled in";
+  }else{
+    if(newPass.value !="" && oldPass.value != "" && newPass.value == oldPass.value){
+      document.getElementById('passwordInputUnderLabel').innerText = "Your new password must not be the same as your old password";
+    }else{
+      $.ajax({
+         url : 'updateStoreGeneralSettings',
+         type : 'POST',
+         data:{bName:bName.value, bLocation:bLocation.value, bPhone:bPhone.value,fbLink:fbLink.value, instaLink:instaLink.value, websiteLink:websiteLink.value, bEmail:bEmail.value, oldPass:oldPass.value, newPass:newPass.value, ownerName:ownerName.value},
+         success : function(data, textStatut){
+           if(data =="oldPassNoMatch"){
+             //given password doesnt match real current pass
+             document.getElementById('passwordInputUnderLabel').innerText = "Your current password doesn't match your real one";
+
+           }else if(data == "ok"){
+             if(bName.value!=""){
+               bName.placeholder = bName.value;
+               bName.value="";
+             }
+             if(bLocation.value!=""){
+               bLocation.placeholder = bLocation.value;
+               bLocation.value="";
+             }
+             if(bPhone.value!=""){
+               bPhone.placeholder = bPhone.value;
+               bPhone.value="";
+             }
+             if(fbLink.value!=""){
+               fbLink.placeholder = fbLink.value;
+               fbLink.value="";
+             }
+             if(instaLink.value!=""){
+               instaLink.placeholder = instaLink.value;
+               instaLink.value="";
+             }
+             if(websiteLink.value!=""){
+               websiteLink.placeholder = websiteLink.value;
+               websiteLink.value="";
+             }
+             if(bEmail.value!=""){
+               bEmail.placeholder = bEmail.value;
+               bEmail.value="";
+             }
+             if(ownerName.value!=""){
+               ownerName.placeholder = ownerName.value;
+               ownerName.value="";
+             }
+             if(oldPass.value!=""){
+               oldPass.placeholder = oldPass.value;
+               oldPass.value="";
+             }
+             if(newPass.value!=""){
+               newPass.placeholder = newPass.value;
+               newPass.value="";
+             }
+             deleteLoader();
+
+          displaySnackbar('Settings successfully updated', document.getElementById('settingsPageMainBody'));
+        }else if(data=="error"){
+          deleteLoader();
+          displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+        }
+         },
+         error : function(textStatut, errorThrown){
+           deleteLoader();
+           displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+         }
+
+      });
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+//save button onclick for store schedule settings
+document.getElementById('storeScheduleSettingsSaveButton').onclick = function(){
+  displayLoader();
+var dailyScheduleUpdateArray = [];
+var existingAbsencesUpdateArray = [];
+
+//scan for changes in daily regular schedule
+var dailyScheduleClass = document.getElementsByClassName('storeScheduleDayLineContainer');
+  for(var w=0;w<dailyScheduleClass.length;w++){
+    var startTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleStartTime')[0];
+    var endTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleEndTime')[0];
+    if(startTime.value!=""){
+      var arrayTimes = [startTime.getAttribute('data-time'), endTime.getAttribute('data-time')];
+      if(startTime.classList.contains('storeScheduleMondayInput')){
+        arrayTimes.push(1);
+      }else if(startTime.classList.contains('storeScheduleTuesdayInput')){
+        arrayTimes.push(2);
+      }else if(startTime.classList.contains('storeScheduleWednesdayInput')){
+        arrayTimes.push(3);
+      }else if(startTime.classList.contains('storeScheduleThursdayInput')){
+        arrayTimes.push(4);
+      }else if(startTime.classList.contains('storeScheduleFridayInput')){
+        arrayTimes.push(5);
+      }else if(startTime.classList.contains('storeScheduleSaturdayInput')){
+        arrayTimes.push(6);
+      }else if(startTime.classList.contains('storeScheduleSundayInput')){
+        arrayTimes.push(0);
+      }
+      dailyScheduleUpdateArray.push(arrayTimes);
+    }
+  }
+
+//scan for changes in store absences that already exist
+var existingStoreAbsences = document.getElementsByClassName('currentAbsenceEntryContainer');
+for(var t=0;t<existingStoreAbsences.length;t++){
+  var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
+  var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
+  var reasonInput = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceReason')[0];
+  var absenceId = existingStoreAbsences[t].getAttribute('data-id');
+  if(startTime.value!="" || endTime.value!="" || reasonInput.value!=""){
+    var startDateTimeArray = [startTime.getAttribute('data-date'), startTime.getAttribute('data-time')];
+    var endDateTimeArray = [endTime.getAttribute('data-date'), endTime.getAttribute('data-time')];
+    var modifiedAbsenceArray = [startDateTimeArray, endDateTimeArray, reasonInput.value, absenceId];
+    existingAbsencesUpdateArray.push(modifiedAbsenceArray);
+  }
+}
+console.log(dailyScheduleUpdateArray);
+console.log(existingAbsencesUpdateArray);
+
+
+
+
+$.ajax({
+   url : 'updateStoreScheduleSettings',
+   type : 'POST',
+   data:{dailySchedule:dailyScheduleUpdateArray, absences:existingAbsencesUpdateArray},
+   success : function(data, textStatut){
+      if(data == "ok"){
+
+        for(var w=0;w<dailyScheduleClass.length;w++){
+          var startTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleStartTime')[0];
+          var endTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleEndTime')[0];
+          if(startTime.value!=""){
+            startTime.placeholder = startTime.value;
+            startTime.value="";
+          }
+          if(endTime.value!=""){
+            endTime.placeholder = endTime.value;
+            endTime.value="";
+          }
+        }
+
+
+        for(var t=0;t<existingStoreAbsences.length;t++){
+          var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
+          var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
+          var reasonInput = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceReason')[0];
+          if(startTime.value!=""){
+            startTime.placeholder = startTime.value;
+            startTime.value="";
+          }
+          if(endTime.value!=""){
+            endTime.placeholder = endTime.value;
+            endTime.value="";
+          }
+          if(reasonInput.value!=""){
+            reasonInput.placeholder = reasonInput.value;
+            reasonInput.value="";
+          }
+
+        }
+
+
+
+
+
+
+       deleteLoader();
+
+    displaySnackbar('Settings successfully updated', document.getElementById('settingsPageMainBody'));
+  }else if(data="error"){
+    deleteLoader();
+    displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+  }
+   },
+   error : function(textStatut, errorThrown){
+     deleteLoader();
+     displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+   }
+
+});
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+  document.getElementById('servicesFirstSelector').onclick = function(){
+    var firstLevelCat = document.getElementById('firstLevelCategorySelector');
+    firstLevelCat.classList.remove('activeCategorySelector');
+    firstLevelCat.classList.add('leftCategorySelector');
+
+    var servicesSettingsMainContainer = document.getElementById('servicesSettingsMainContainer');
+    servicesSettingsMainContainer.classList.add('activeCategorySelector');
+    }
+
+
+
+  document.getElementById('generalFirstSelector').onclick = function(){
+    var firstLevelCat = document.getElementById('firstLevelCategorySelector');
+      firstLevelCat.classList.remove('activeCategorySelector');
+      firstLevelCat.classList.add('leftCategorySelector');
+      var generalSettingsMainContainer = document.getElementById('generalSettingsMainContainer');
+      generalSettingsMainContainer.classList.add('activeCategorySelector');
+  }
+
+
+
+  document.getElementById('scheduleFirstSelector').onclick = function(){
+    var firstLevelCat = document.getElementById('firstLevelCategorySelector');
+      firstLevelCat.classList.remove('activeCategorySelector');
+      firstLevelCat.classList.add('leftCategorySelector');
+      var storeScheduleSettingsMainContainer = document.getElementById('storeScheduleSettingsMainContainer');
+      storeScheduleSettingsMainContainer.classList.add('activeCategorySelector');
+  }
+
+
+
+
+  function moveSecondLevelDivsToRight(){
+var secondLevelMainContainer = document.getElementsByClassName('secondLevelParentCategorySelector');
+    for(var x=0;x<secondLevelMainContainer.length;x++){
+      secondLevelMainContainer[x].className = "secondLevelParentCategorySelector";
+    }
+  }
+
+
+
+function clearLabelUnderInput(){
+  var labelUnderInputGeneralSettings = document.getElementsByClassName('labelUnderInputGeneralSettings');
+  for(var w=0;w<labelUnderInputGeneralSettings.length;w++){
+    labelUnderInputGeneralSettings[w].innerText = "";
+  }
+}
+
+
+
+function displaySnackbar(textToDisplay, divToPutItIn){
+  var snackbarContainer = document.createElement('div');
+  snackbarContainer.classList.add('snackbarMainContainer');
+
+  var textInsideSnackbar = document.createElement('p');
+  textInsideSnackbar.classList.add('textInsideSnackbar');
+  textInsideSnackbar.innerText = textToDisplay;
+  snackbarContainer.appendChild(textInsideSnackbar);
+
+  divToPutItIn.appendChild(snackbarContainer);
+  setTimeout(function(){ snackbarContainer.style.bottom = "20px";
+  setTimeout(function(){ snackbarContainer.style.bottom = "-200px";
+   setTimeout(function(){ snackbarContainer.remove();}, 1000);
+   }, 3000);
+ }, 1);
+}
+
+
+var storeScheduleRadioButton = document.getElementsByClassName('storeScheduleRadioButton');
+console.log(storeScheduleRadioButton.length);
+for(var u=0;u<storeScheduleRadioButton.length;u++){
+  storeScheduleRadioButton[u].onchange = function(){
+    console.log(this.checked);
+
+    if(this.checked == true){
+      console.log(this.getAttribute('relevantinputclass'));
+      var theStoreScheduleInputs = document.getElementsByClassName(this.getAttribute('data-relevantinputclass'));
+      for(var t=0;t<theStoreScheduleInputs.length;t++){
+        theStoreScheduleInputs[t].disabled = true;
+        theStoreScheduleInputs[t].value = "closed";
+        theStoreScheduleInputs[t].setAttribute('data-time','0') ;
+      }
+    }else{
+      console.log(this.getAttribute('data-relevantinputclass'));
+      var theStoreScheduleInputs = document.getElementsByClassName(this.getAttribute('data-relevantinputclass'));
+      for(var t=0;t<theStoreScheduleInputs.length;t++){
+        theStoreScheduleInputs[t].disabled = false;
+        theStoreScheduleInputs[t].value = "";
+      }
+    }
+  }
+
+}
+
+
+
+
+
+var storeScheduleTimeInput = document.getElementsByClassName('storeScheduleTimeInput');
+for(var e=0;e<storeScheduleTimeInput.length;e++){
+  storeScheduleTimeInput[e].onclick = function(){
+    var semiTransparentOverlay = document.createElement('div');
+    semiTransparentOverlay.classList.add('transparentOverlay');
+
+    function closeTimePopup(){
+    semiTransparentOverlay.remove();
+    }
+    semiTransparentOverlay.onclick = function(e){
+      if(e.target != this){
+
+      }else{
+        closeTimePopup();
+      }
+    }
+    createTimePicker(this, semiTransparentOverlay, closeTimePopup, this.getAttribute('data-time'));
+    document.body.appendChild(semiTransparentOverlay);
+  }
+
+}
+
+
+
+
+
+function decimalToHour(num){
+  var hrs = parseInt(Number(num));
+  var min = Math.round((Number(num)-hrs) * 60);
+  if(min == 0){
+      min = "00";
+  }
+  var hourString = hrs+':'+min;
+  if(hrs>11){
+    hourString +="PM";
+  }else{
+    hourString+="AM";
+  }
+  return hourString;
+}
+
+
+
+
+
+
+
+
+document.getElementById('addAbsenceButton').onclick = function(){
+  var absenceObj = new Object();
+  var absStart = document.getElementById('newStoreAbsenceStart');
+  var absEnd = document.getElementById('newStoreAbsenceEnd');
+  var absReason = document.getElementById('newAbsenceReason');
+  if(absStart.value=="" || absEnd.value == "" || absReason.value == ""){
+
+  }else{
+    absenceObj['startDate'] = absStart.getAttribute('data-date');
+    absenceObj['endDate'] = absEnd.getAttribute('data-date');
+    absenceObj['startTime'] = absStart.getAttribute('data-time');
+    absenceObj['endTime'] = absEnd.getAttribute('data-time');
+    absenceObj["reason"] = absReason.value;
+    $.ajax({
+       url : '/addStoreAbsence',
+       type : 'POST',
+       data:{absenceObj:absenceObj},
+       success : function(data, textStatut){
+
+         if(data.status == "ok"){
+           console.log(data.absenceId);
+           clearInput(absStart);
+           clearInput(absEnd);
+           absReason.value="";
+
+
+           var absenceEntryContainer = document.createElement('div');
+           absenceEntryContainer.classList = 'currentAbsenceEntryContainer';
+           absenceEntryContainer.setAttribute('data-id',data.absenceId);
+           var reasonInput = document.createElement('input');
+           reasonInput.type="text";
+           reasonInput.classList = "existingStoreAbsenceReason";
+           reasonInput.placeholder = absenceObj["reason"];
+           var startInput = document.createElement('input');
+           startInput.type="text";
+           startInput.classList = 'absenceInputDateTime existingStoreAbsenceStart';
+           startInput.readOnly = true;
+           startInput.setAttribute('data-date', absenceObj['startDate']);
+           startInput.setAttribute('data-time', absenceObj['startTime']);
+           startInput.placeholder = absenceObj['startDate']+" "+decimalToHour12Format(absenceObj['startTime']);
+           startInput.onclick = function(){
+             createDivForDateTimePicker(this);
+           }
+           var endInput = document.createElement('input');
+           endInput.type="text";
+           endInput.classList = 'absenceInputDateTime existingStoreAbsenceEnd';
+           endInput.readOnly = true;
+           endInput.setAttribute('data-date', absenceObj['endDate']);
+           endInput.setAttribute('data-time', absenceObj['endTime']);
+           endInput.placeholder = absenceObj['endDate']+" "+decimalToHour12Format(absenceObj['endTime']);
+           endInput.onclick = function(){
+             createDivForDateTimePicker(this);
+           }
+           var xImg = document.createElement('img');
+           xImg.src="assets/icons/octiconsSvg/x.svg";
+           xImg.onclick = function(){
+             removeExistingAbsenceEntry(this.closest(".currentAbsenceEntryContainer"));
+           }
+
+           absenceEntryContainer.appendChild(reasonInput);
+           absenceEntryContainer.appendChild(startInput);
+           absenceEntryContainer.appendChild(endInput);
+           absenceEntryContainer.appendChild(xImg);
+
+           document.getElementsByClassName('currentAbsencesDiv')[0].appendChild(absenceEntryContainer);
+         }else if(data.status == "error"){
+           displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+         }
+       },
+       error : function(textStatut, errorThrown){
+         displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+       }
+
+    });
+  }
+
+
+}
+
+
+
+function clearInput(inputField){
+  inputField.value="";
+  inputField.setAttribute('data-date', "");
+  inputField.setAttribute('data-time', "");
+  return;
+}
+
+
+
+
+
+function removeExistingAbsenceEntry(parentEntryContainer){
+  $.ajax({
+     url : '/deleteStoreAbsence',
+     type : 'POST',
+     data:{absenceId:parentEntryContainer.getAttribute('data-id')},
+     success : function(data, textStatut){
+       if(data =="ok"){
+         displaySnackbar('Absence successfully deleted', document.getElementById('settingsPageMainBody'));
+       }else if(data == "error"){
+        displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+       }
+     },
+     error : function(textStatut, errorThrown){
+       displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+     }
+
+  });
+  parentEntryContainer.remove();
+}
+
+
+
+
+
+function createDivForDateTimePicker(clickedInput){
+
+    var semiTransparentOverlay = document.createElement('div');
+    semiTransparentOverlay.classList.add('transparentOverlay');
+
+    function closeTimePopup(){
+    semiTransparentOverlay.remove();
+    }
+    semiTransparentOverlay.onclick = function(e){
+      if(e.target != this){
+
+      }else{
+        closeTimePopup();
+      }
+    }
+    createDateTimePicker(clickedInput, semiTransparentOverlay, closeTimePopup, clickedInput.getAttribute('data-date'), clickedInput.getAttribute('data-time'));
+    document.body.appendChild(semiTransparentOverlay);
+}
+</script>
+
+
+
+<style>
+  .currentAbsenceEntryContainer{
+    border:1px solid #000;
+    position:relative;
+    width:100%;
+    height:auto;
+    padding:20px;
+  }
+  .storeScheduleDayLineContainer{
+    margin:0px 20px 0px 20px;
+    text-align:right;
+  }
+  .storeScheduleTimeInput{
+    width:60px;
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    border-bottom:var(--official-light-grey-border);
+    margin:0px 10px 0px 10px;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-grey);
+  }
+  .storeScheduleDayText{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-grey);
+    position:relative;
+    display:inline-block;
+      }
+  .textInsideSnackbar{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:#fff;
+    background-color:rgba(0, 0, 0, 0.84);
+    border-radius:var(--official-border-radius);
+    border:none;
+    width:fit-content;
+    padding:20px;
+    position:relative;
+    top:0;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height:var(--mobile-font-size-regular);
+    height:auto;
+    margin:0;
+    text-align:center;
+  }
+  .snackbarMainContainer{
+    transition:0.3s all;
+    position:absolute;
+    width:100%;
+    left:0;
+    bottom:-200px;
+    background-color:transparent;
+  }
+  .labelUnderInputGeneralSettings{
+  margin:0px 20px 0 20px;
+  position:relative;
+  left:0;
+  top:0;
+  color:red;
+  font-size:var(--mobile-font-size-regular);
+  font-weight:var(--mobile-font-weight-regular);
+  }
+
+  .quasiFullWidthCtaButton{
+    position:absolute;
+    width:calc(100% - 40px);
+    left:20px;
+    height:40px;
+    top:50%;
+    transform:translateY(-50%);
+    background-color:var(--icon-color-active);
+    border-radius:var(--official-border-radius);
+    border:none;
+    color:#fff;
+    text-align:center;
+  }
+  .settingsContentScrolling{
+    position:absolute;
+    top:0;
+    left:0;
+    height:calc(100% - 60px);
+    width:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .saveButtonDiv{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:60px;
+    border:none
+    background-color:#fff;
+  }
+  .inputSettingLabel{
+    position:relative;
+    top:0;
+    left:0;
+    margin:20px 0 10px 20px;
+    display:block;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-grey);
+  }
+  .textInputSetting{
+    padding-left:10px;
+    padding-right:10px;
+    position:relative;
+    top:0;
+    left:0;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-grey);
+    margin:0px 20px 10px 20px;
+    display:block;
+    width:calc(100% - 40px);
+    border-radius:5px;
+    border:var(--official-light-grey-border);
+    height:30px;
+  }
+  .passwordInputSetting{
+    padding-left:10px;
+    padding-right:10px;
+    position:relative;
+    top:0;
+    left:0;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:var(--font-color-grey);
+    margin:0px 5px 10px 20px;
+    display:inline-block;
+    width:calc(100% - 70px);
+    border-radius:5px;
+    border:var(--official-light-grey-border);
+    height:30px;
+  }
+  .eyeIconPassword{
+    width:20px;
+    display:inline-block;
+    vertical-align:sub;
+  }
+  .mainInputContainer{
+    position:relative;
+    width:100%;
+    left:0;
+    margin:20px 0 50px 0;
+    min-height:70px;
+  }
+  .mainStoreAbsencesContainer{
+    position:relative;
+    width:100%;
+    left:0;
+    margin:20px 0 50px 0;
+    min-height:10px;
+    padding-bottom:20px;
+    border:1px solid #000;
+  }
+  .storeAbsencesInnerDiv{
+    position:relative;
+    top:0;
+    left:0;
+    width:calc(100% - 40px);
+    margin:0 20 0 20;
+    border:none;
+  }
+  .settingsSubCategoryMainTitle{
+    color:var(--font-color-black);
+    font-size:var(--mobile-font-size-big);
+    font-weight:var(--mobile-font-weight-bold);
+    padding-left:20px;
+  }
+  .parentCategorySelector{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:100%;
+    left:100%;
+    transition:0.3s all;
+  }
+  .secondLevelParentCategorySelector{
+      position:absolute;
+      top:0;
+      height:100%;
+      width:100%;
+      left:100%;
+      transition:0.3s all
+  }
+  .activeCategorySelector{
+    left:0 !important;
+  }
+  .leftCategorySelector{
+    left:-100% !important;
+  }
+
+  .subCategoryInnerDiv{
+    position:relative;
+    top:0;
+    left:20px;
+    width:calc(100% - 20px);
+    border-bottom:1px solid #000;
+    height:100%;
+  }
+  .categoryRightArrow{
+position:absolute;
+top:20px;
+height:calc(100% - 40px);
+right:20px;
+  }
+  .subCategoryInnerDiv p{
+    font-size:var(--mobile-font-size-regular);
+    color:var(--font-color-grey);
+    line-height:60px;
+    font-weight:var(--mobile-font-weight-big);
+    margin:0;
+  }
+  .firstChildSubCategory{
+    border-top:1px solid #000;
+  }
+  .subCategorySelectorDiv{
+    position:relative;
+    margin:0;
+    width:100%;
+    border:none;
+    height:60px;
+  }
+  .mainCategorySelectorDiv{
+    width:100%;
+    margin:0px 0px 60px 0px;
+    min-height:30px;
+    border:none;
+    background-color:#fff;
+  }
+  .mainCategorySelectorDiv > div:first-of-type > div{
+    border-top:1px solid #000;
+  }
+
+  .settingsPageTitle{
+    position:relative;
+    display:inline-block;
+    margin:20px;
+    font-size:var(--mobile-font-size-page-title);
+    font-weight:var(--mobile-font-weight-bold);
+    color:#000;
+    vertical-align:top;
+  }
+  .settingsPageTitleSecondLevel{
+    position:relative;
+    display:inline-block;
+    margin:20px;
+    font-size:var(--mobile-font-size-big);
+    font-weight:var(--mobile-font-weight-bold);
+    color:#000;
+    vertical-align:top;
+  }
+  .backArrowSettings{
+    position:relative;
+    display:inline-block;
+    margin:23px;
+    height:var(--mobile-font-size-big);
+    vertical-align:top;
+  }
+#settingsPageMainBody{
+  overflow-x:hidden;
+  overflow-y:auto;
+  width:100%;
+  position:absolute;
+  height:calc(100% - 65px);
+  top:0;
+  border:none;
+}
+.settingSelectorMainContainer{
+width:100%;
+position:relative;
+margin:30px 0px;
+border:none;
+min-height:80px;
+background-color:transparent;
+}
+
+.dateTimePickerMainTypeInnerContainer{
+  position:relative;
+  width:100%;
+  left:0;
+  top:0;
+  height:auto;
+}
+
+.dateTimePickerChangeViewDivMainContainer{
+  position:relative;
+  left:0;
+  width:calc(100% - 40px);
+  margin:0px 20px 20px 20px;
+}
+.dateTimePickerChangeViewInnerDiv{
+  position:relative;
+  left:0;
+  width:50%;
+  margin:0;
+  display:inline-block;
+}
+.dateTimePickerChangeViewIcon{
+  height:23px;
+  left:50%;
+  transform:translateX(-50%);
+  position:relative;
+}
+
+.timePickerCancelMainDiv{
+position:relative;
+width:50%;
+height:auto;
+border-top:1px solid #000;
+display:inline-block;
+}
+.timePickerDoneMainDiv{
+  position:relative;
+  width:50%;
+  height:auto;
+  border-top:1px solid #000;
+  border-left:1px solid #000;
+  display:inline-block;
+}
+.timePickerCancelInsideDiv{
+width:100%;
+height:auto;
+left:0;
+padding:10px 0;
+text-align:center;
+cursor:pointer;
+}
+
+.timePickerDoneInsideDiv{
+width:100%;
+height:auto;
+left:0;
+text-align:center;
+cursor:pointer;
+padding:10px 0;
+}
+
+
+
+.timePickerPopupMainDiv{
+  width:300px;
+  height:auto;
+  background-color:#fff;
+  border:none;
+  position:relative;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  padding-top:20px;
+  padding-bottom:0;
+  top:50%;
+  border-radius:var(--official-border-radius);
+}
+
+.timePickerHoursTable{
+  width:calc(100% - 40px);
+  position:relative;
+  top:0px;
+  left:20px;
+  height:100px;
+  border-collapse:collapse;
+}
+.timePickerHoursTable tr{
+  height:50%;
+}
+.timePickerHoursTable td{
+  text-align:center;
+  border:none;
+  font-size:var(--mobile-font-size-regular);
+  font-color:var(--font-color-black);
+  font-weight:var(--mobile-font-weight-regular);
+}
+
+.timePickerMinutesTable{
+  width:calc(100% - 40px);
+  position:relative;
+  top:0;
+  left:20;
+  height:100px;
+  border-collapse:collapse;
+}
+.timePickerMinutesTable tr{
+  height:50%;
+}
+.timePickerMinutesTable td{
+  text-align:center;
+  border:none;
+  font-size:var(--mobile-font-size-regular);
+  font-color:var(--font-color-black);
+  font-weight:var(--mobile-font-weight-regular);
+}
+.timePickerHeaderP{
+  width:100%;
+  left:0;
+  top:0;
+  margin:20px 0px 0px 0px;
+  text-align:center;
+  font-size:var(--mobile-font-size-regular);
+  color:var(--font-color-grey);
+  font-weight:var(--mobile-font-weight-regular);
+}
+.timePickerPlaceholderTimeHeader{
+  width:100%;
+  left:0;
+  top:0;
+  margin:0;
+  text-align:center;
+  font-size:var(--mobile-font-size-big);
+  color:var(--font-color-black);
+  font-weight:var(--mobile-font-weight-bold);
+}
+.timePickerAmPmContainer{
+  width:100%;
+  position:relative;
+}
+.timePickerAmContainer{
+  width: 50%;
+  position: relative;
+  left: 0;
+  text-align: center;
+  display: inline-block;
+}
+.timePickerPmContainer{
+  width: 50%;
+  position: relative;
+  left: 0;
+  text-align: center;
+  display: inline-block;
+}
+
+
+
+
+.dateTableContainer{
+  width: 100%;
+    position: relative;
+    height: auto;
+}
+.calendarPopupDatePicker{
+
+  width:calc(100% - 50px);
+  height:320;
+  top:0;
+  background-color:#fff;
+  position:relative;
+  left:50%;
+  transform:translateX(-50%);
+}
+.monthCalendarSelectorTable{
+position:relative;
+bottom:0;
+left:0;
+width:100%;
+height:260px;
+margin:0;
+}
+.monthCalendarSelectorTable td{
+  width:calc(100% / 7);
+  text-align:center;
+}
+.monthCalendarPickerTopDiv{
+  height:40px;
+  top:0;
+  left:0;
+  width:calc(100% - 20px);
+}
+.monthCalendarPickerLeftArrow{
+position:absolute;
+text-align:left;
+left:0;
+top:10;
+margin:0;
+}
+.monthCalendarPickerRightArrow{
+  position:absolute;
+  text-align:right;
+  right:0;
+  top:10;
+  margin:0;
+}
+.monthCalendarPickerMonthName{
+  position:absolute;
+  text-align:center;
+  width:180px;
+  font-weight:var(--mobile-font-weight-bold);
+  color:var(--font-color-black);
+  font-size:var(--mobile-font-size-big);
+  left:50%;
+  transform:translateX(-50%);
+  top:10;
+  margin:0;
+}
+.calendarTextBlocked{
+  color:var(--font-color-lightgrey);
+  font-weight:var(--mobile-font-weight-regular);
+  font-size:var(--mobile-font-size-small);
+}
+.calendarTextAvailable{
+  color:var(--font-color-black);
+  font-weight:var(--mobile-font-weight-regular);
+  font-size:var(--mobile-font-size-regular);
+}
+
+
+
+
+
+
+
+.collapsibleSettingsServicesContent{
+  display:none;
+  border:var(--official-light-grey-border);
+  background-color:#fff;
+  padding-top:15px;
+}
+.collapsibleSettingsServicesButton{
+  width:100%;
+  position:relative;
+  left:0;
+  margin:0;
+  padding:10px 20px 10px 20px;
+  border:var(--official-light-grey-border);
+  background-color:#f9f9f9;
+}
+.collapsibleSettingsServicesButton:after{
+  content: '\002B';
+    color: black;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+.activeCollapsible:after{
+  content: '-';
+    color: black;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+.leftServicesLabel{
+  position:relative;
+  display:inline-block;
+  margin:0 10px 0 20px;
+}
+.inline-servicesInput{
+  position:relative;
+  display:inline-block;
+  margin-bottom:15px;
+}
+</style>
+
+<% } %>
+
+
+<script>
+  google.maps.event.addDomListener(window, 'load', initialize);
+    function initialize() {
+      var input = document.getElementById('bLocationInput');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.addListener('place_changed', function () {
+      var place = autocomplete.getPlace();
+      // place variable will have all the information you are looking for.
+      $('#locationLong').val(place.geometry['location'].lat());
+      $('#locationLat').val(place.geometry['location'].lng());
+    });
+  }
+</script>

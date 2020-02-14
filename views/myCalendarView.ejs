@@ -1,0 +1,1734 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.0.min.js"></script>
+<script>
+var myDate = new Date(2019,03,26);
+var startingHour = 08;
+var finishHour = 17;
+var weekDaysOff = [0,6];
+
+var weekDayName = ["Sun","Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+
+var monthsName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+</script>
+<style>
+  *{
+box-sizing: border-box;
+  }
+  .eventDivWeekView{
+  position:absolute;
+background-color:#f9f9f9;
+border:1px solid #f4d742;
+overflow-wrap: break-word;
+word-wrap:break-word;
+  }
+#calMainDiv{
+width:100%;
+position:absolute;
+height:90%;
+top:10%;
+right:0%;
+border: 1ox solid #f9f9f9;
+overflow-y:auto;
+}
+
+.tableWeek{
+width:100%;
+border:none;
+top:0px;
+position:absolute;
+border-collapse:collapse;
+text-align:center;
+}
+.dayTable{
+  width:100%;
+}
+#monthCalendarTable{
+  width:100%;
+  position:absolute;
+  top:0px;
+  border-collapse:collapse;
+  height:40%;
+}
+#dayScheduleMainDiv{
+  width:100%;
+  position:absolute;
+  top:40%;
+  height:60%;
+  border-radius:5px;
+  border:1px solid #000;
+  overflow-y:auto;
+
+}
+
+td{
+border:1px solid #000;
+
+}
+.arrowDiv{
+width:20px;
+height:20px;
+border:1px solid #000;
+position:relative;
+display:inline-block;
+}
+#weekNameRangeDiv{
+height:20px;
+padding-left:5px;
+padding-right:5px;
+width:auto;
+position:relative;
+display:inline-block;
+border:1px solid #000;
+}
+#weekRangeContainer{
+border:1px solid #000;
+position:absolute;
+left: 50%;
+ transform: translateX(-50%);
+ top:0px;
+}
+#monthNameRangeDiv{
+height:20px;
+padding-left:5px;
+padding-right:5px;
+width:auto;
+position:relative;
+display:inline-block;
+border:1px solid #000;
+}
+#monthRangeContainer{
+border:1px solid #000;
+position:absolute;
+left: 50%;
+ transform: translateX(-50%);
+ top:0px;
+ display:none
+}
+.changeViewButton{
+height:20px;
+border:1px solid #000;
+position:absolute;
+top:0px;
+right:10px;
+}
+#employeeSelect{
+  height:20px;
+  border:1px solid #000;
+  position:absolute;
+  top:0px;
+  left:10px;
+}
+#weekDateRangeTable{
+background-color:#fff;
+top:calc(10% - 31px);
+position:absolute;
+height:30px;
+width:100%;
+left:0px;
+-webkit-box-shadow: 0px 6px 8px -3px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 6px 8px -3px rgba(0,0,0,0.75);
+box-shadow: 0px 6px 8px -3px rgba(0,0,0,0.75);
+}
+
+#eventNumberDivInMonthCalendar{
+background-color:#bababa;
+color:#000;
+border-radius:50%;
+text-align:center;
+vertical-align:middle;
+right:3px;
+bottom:3px;
+position:absolute;
+height:30px;
+padding-top:5px;
+width:30px;
+}
+.wrapperInsideMonthCell{
+
+  height:100%;
+  width:100%;
+  position:relative;
+}
+.monthDateCell{
+left:0px;
+top:0px;
+position:absolute;
+
+}
+
+  </style>
+<table id="weekDateRangeTable"></table>
+<div id="calMainDiv"></div>
+
+
+<select id="employeeSelect">
+</select>
+
+
+
+
+<div id="weekRangeContainer">
+<div id="leftArrowWeekDiv" class="arrowDiv"><</div>
+<div id="weekNameRangeDiv"></div>
+<div id="rightArrowWeekDiv" class="arrowDiv">></div>
+</div>
+
+<div id="monthRangeContainer">
+<div id="leftArrowMonthDiv" class="arrowDiv"><</div>
+<div id="monthNameRangeDiv"></div>
+<div id="rightArrowMonthDiv" class="arrowDiv">></div>
+</div>
+
+
+
+<button id="weekViewButton" style="display:none" class="changeViewButton">Week View</button>
+<button id="monthViewButton"  class="changeViewButton">Month View</button>
+
+
+
+<script>
+var weekViewBool = true;
+
+document.getElementById("leftArrowWeekDiv").onclick = function(){changeWeek(-1)};
+document.getElementById("rightArrowWeekDiv").onclick = function(){changeWeek(1)};
+
+document.getElementById("leftArrowMonthDiv").onclick = function(){changeMonth(-1)};
+document.getElementById("rightArrowMonthDiv").onclick = function(){changeMonth(1)};
+
+
+
+document.getElementById("weekViewButton").onclick = function(){
+  weekViewBool = true;
+document.getElementById("weekViewButton").style.display="none";
+document.getElementById("weekRangeContainer").style.display="block";
+document.getElementById("monthRangeContainer").style.display="none";
+document.getElementById("monthViewButton").style.display="block";
+document.getElementById("weekDateRangeTable").style.display="table";
+createWeekCalendar();
+};
+document.getElementById("monthViewButton").onclick = function(){
+  weekViewBool = false;
+  createMonthCalendar();
+document.getElementById("weekViewButton").style.display="block";
+document.getElementById("monthViewButton").style.display="none";
+document.getElementById("weekRangeContainer").style.display="none";
+document.getElementById("monthRangeContainer").style.display="block";
+document.getElementById("weekDateRangeTable").style.display="none";
+};
+
+
+
+$('#employeeSelect').change(function(){
+  if(weekViewBool == true){
+
+    createWeekCalendar();
+  }else{
+
+    createMonthCalendar();
+  }
+
+})
+
+
+var employeesOfCommerce = ["Mark", "Tim"]
+
+
+var events = [
+{"title":"yo",
+"start_date":new Date(2019, 03, 25, 14, 30,00,00),
+"ending_date":new Date(2019, 03, 25, 16, 00,00,00),
+"employee":"Mark",
+"service":"tire change"},
+{"title":"yo",
+"start_date":new Date(2019, 03, 24, 10, 30,00,00),
+"ending_date":new Date(2019, 03, 26, 12, 00,00,00),
+"employee":"Mark",
+"service":"wtf"},
+{"title":"yo",
+"start_date":new Date(2019, 03, 24, 10, 30,00,00),
+"ending_date":new Date(2019, 03, 24, 12, 00,00,00),
+"employee":"Mark",
+"service":"tire change"},
+{"title":"yo",
+"start_date":new Date(2019, 03, 24, 11, 30,00,00),
+"ending_date":new Date(2019, 03, 24, 12, 00,00,00),
+"employee":"Mark",
+"service":"scan"},
+{"title":"yo",
+"start_date":new Date(2019, 03, 24, 10, 45,00,00),
+"ending_date":new Date(2019, 03, 24, 11, 30,00,00),
+"employee":"Mark",
+"service":"oil change"},
+{"title":"yo",
+"start_date":new Date(2019, 03, 24, 15, 00,00,00),
+"ending_date":new Date(2019, 03, 24, 15, 30,00,00),
+"employee":"Mark",
+"service":"remove window"},
+
+{"title":"yo",
+"start_date":new Date(2019, 03, 25, 11, 00,00,00),
+"ending_date":new Date(2019, 03, 25, 11, 30,00,00),
+"employee":"Tim",
+"service":"tire change"}
+
+];
+
+
+
+
+
+var eventsToKEEP = [{
+            title: 'PARTEYYYYY',
+            start: '2019-06-07',
+            end: '2019-06-10',
+            constraint: 'businessHours'
+        },
+        {
+            groupId: 999,
+            title: 'Repeating Event',
+            start: '2019-06-09T16:00:00',
+            constraint: 'businessHours'
+        },
+        {
+            groupId: 999,
+            title: 'Repeating Event',
+            start: '2019-06-16T16:00:00'
+        },
+        {
+            title: 'Conference',
+            start: '2019-06-11',
+            end: '2019-06-13'
+        },
+        {
+            title: 'Meeting',
+            start: '2019-06-12T10:30:00',
+            end: '2019-06-12T12:30:00'
+        },
+        {
+            title: 'Lunch',
+            start: '2019-06-12T12:00:00'
+        },
+        {
+            title: 'Meeting',
+            start: '2019-06-12T14:30:00'
+        },
+        {
+            title: 'Happy Hour',
+            start: '2019-06-12T17:30:00'
+        },
+        {
+            title: 'Dinner',
+            start: '2019-06-12T20:00:00'
+        },
+        {
+            title: 'Birthday Party',
+            start: '2019-06-13T07:00:00'
+        },
+        {
+            title: 'Click for Google',
+            url: 'http://google.com/',
+            start: '2019-06-28'
+        }
+    ];
+
+
+function createEmployeeList(){
+
+  var selectOfEmployees = document.getElementById("employeeSelect");
+  if(employeesOfCommerce.length < 1){
+  selectOfEmployees.style.display = "none";
+  }else{
+  for(var e=0;e<selectOfEmployees.options.length;e++){
+    selectOfEmployees.remove(e);
+  }
+
+  for(var w =0;w<employeesOfCommerce.length;w++){
+    var optionForSelect = document.createElement("option");
+  optionForSelect.text = employeesOfCommerce[w];
+  optionForSelect.value = employeesOfCommerce[w];
+  selectOfEmployees.add(optionForSelect);
+  }
+
+  }
+
+}
+
+
+
+
+function createWeekCalendar(){
+var employeeSelected = $('#employeeSelect').val();
+
+document.getElementById("calMainDiv").innerHTML = "";
+document.getElementById("weekDateRangeTable").innerHTML="";
+  var weekDayNumber = [0,1,2,3,4,5,6];
+  var cellHeight = 90;
+
+
+
+  var displayWeekends = false;
+
+
+
+
+
+
+document.getElementById("weekNameRangeDiv").innerHTML = getWeekRangeString(myDate);
+
+//remove non-workdays from arr of weekdaynumber
+  for(var e=0;e<weekDaysOff.length;e++){
+    weekDayNumber.splice(weekDayNumber.indexOf(weekDaysOff[e]),1);
+  }
+
+
+  var nbWorkDays = weekDayName.length - weekDaysOff.length;
+
+  var cellWidth = 95/nbWorkDays;
+
+  var weekDateArray = getWeekDateArray(myDate);
+
+
+
+//script for the name of weekdays
+  var calendarWeekTable = document.createElement("table");
+  calendarWeekTable.classList.add("tableWeek");
+
+  var dateDisplayRow = document.createElement("tr");
+  dateDisplayRow.id="rowWeekDate";
+  dateDisplayRow.style.border = "0px";
+  var emptyCornerCell = document.createElement("th");
+  emptyCornerCell.classList.add("emptyCornerCell");
+  var weekTHead = document.createElement("thead");
+  dateDisplayRow.appendChild(emptyCornerCell);
+
+  for(var i=0;i<weekDayName.length;i++){
+    if(weekDaysOff.includes(i) == false){
+      var tableWeekDayCell = document.createElement("th");
+      tableWeekDayCell.style.width=cellWidth+"%";
+      tableWeekDayCell.classList.add("thWeek");
+      var textInTh = document.createTextNode(new Date(weekDateArray[i]).getUTCDate()+" "+weekDayName[i]);
+      tableWeekDayCell.appendChild(textInTh);
+
+      dateDisplayRow.appendChild(tableWeekDayCell);
+    }
+  }
+document.getElementById("weekDateRangeTable").appendChild(dateDisplayRow);
+
+
+
+
+
+var weekTBody = document.createElement('tbody');
+weekTBody.id='weekTBody';
+//hour script
+for(var i = 0;i<finishHour - startingHour;i++){
+var rowHour = document.createElement("tr");
+rowHour.style.height = cellHeight+"px";
+for(var j = 0;j<nbWorkDays+1;j++){
+  if(j==0){
+    var cellSpecificHour = document.createElement("td");
+    cellSpecificHour.style.border = "none";
+    cellSpecificHour.style.verticalAlign = "top";
+    var textHour = document.createTextNode(startingHour+i);
+    cellSpecificHour.appendChild(textHour);
+    rowHour.appendChild(cellSpecificHour);
+
+  }else{
+    var cellSpecificHour = document.createElement("td");
+    cellSpecificHour.style.width = cellWidth+"%";
+    rowHour.appendChild(cellSpecificHour);
+  }
+
+}
+weekTBody.appendChild(rowHour);
+calendarWeekTable.appendChild(weekTBody);
+}
+
+  document.getElementById("calMainDiv").appendChild(calendarWeekTable);
+
+
+
+
+
+//add the events and check OVERLAPPINGs
+
+
+
+
+
+
+
+// code f = full day, code s = start today, code e = ends today, code p = some part of today
+
+
+// //ADD EVENTS AND CHECK FOR OVERLAPPINGs
+// for(var w=0;w<events.length;w++){
+// var collisionGroupsOfDay = new Array();
+//
+// if(events[w].employee == employeeSelected){
+//
+//   if(events[w].start_date.getDate()!=events[w].ending_date.getDate()){
+//     if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+//                 //code s
+//
+//                 var collidedRows = new Array();
+//                 for(var y =0;y<collisionGroups.length;y++){
+//
+//                   for(var z = 0;z<collisionGroups[y].length;z++){
+//                     console.log(collisionGroups);
+//                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+//                       collidedRows.push(y);
+//                       break;
+//                     }
+//                   }
+//
+//
+//                 }
+//                 if(collidedRows.length==0){
+//                 collisionGroups.push([]);
+//                 collisionGroups[collisionGroups.length-1].push(w);
+//                 }else{
+//                   for(var t=1;t<collidedRows.length;t++){
+//                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+//                 collisionGroups.splice(collidedRows[t],1);
+//
+//                   }
+//                   collisionGroups[collidedRows[0]].push(w);
+//                 }
+//
+//
+//
+//     }else if(events[w].ending_date.getFullYear() == myDate.getFullYear() && events[w].ending_date.getMonth() == myDate.getMonth() && events[w].ending_date.getDate() == myDate.getDate()){
+//         //code e
+//
+//                           var collidedRows = new Array();
+//                           for(var y =0;y<collisionGroups.length;y++){
+//
+//                             for(var z = 0;z<collisionGroups[y].length;z++){
+//                               if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+//                                 collidedRows.push(y);
+//                                 break;
+//                               }
+//                             }
+//
+//
+//                           }
+//                           if(collidedRows.length==0){
+//                           collisionGroups.push([]);
+//                           collisionGroups[collisionGroups.length-1].push(w);
+//                           }else{
+//                             for(var t=1;t<collidedRows.length;t++){
+//                           collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+//                           collisionGroups.splice(collidedRows[t],1);
+//
+//                             }
+//                             collisionGroups[collidedRows[0]].push(w);
+//                           }
+//
+//
+//
+//
+//     }else if(events[w].start_date.getTime()<= myDate.getTime() && events[w].ending_date.getTime()>= myDate.getTime()){
+// //code f
+//
+//                 var collidedRows = new Array();
+//                 for(var y =0;y<collisionGroups.length;y++){
+//
+//                   for(var z = 0;z<collisionGroups[y].length;z++){
+//                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+//                       collidedRows.push(y);
+//                       break;
+//                     }
+//                   }
+//
+//
+//                 }
+//                 if(collidedRows.length==0){
+//                 collisionGroups.push([]);
+//                 collisionGroups[collisionGroups.length-1].push(w);
+//                 }else{
+//                   for(var t=1;t<collidedRows.length;t++){
+//                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+//                 collisionGroups.splice(collidedRows[t],1);
+//
+//                   }
+//                   collisionGroups[collidedRows[0]].push(w);
+//                 }
+//
+//
+//
+//     }
+//   }else if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+// //code p
+// console.log(collisionGroups);
+//
+//                 var collidedRows = new Array();
+//                 for(var y =0;y<collisionGroups.length;y++){
+//
+//                   for(var z = 0;z<collisionGroups[y].length;z++){
+//                     if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+//                       collidedRows.push(y);
+//                       break;
+//                     }
+//                   }
+//
+//
+//                 }
+//                 if(collidedRows.length==0){
+//                 collisionGroups.push([]);
+//                 collisionGroups[collisionGroups.length-1].push(w);
+//                 }else{
+//                   for(var t=1;t<collidedRows.length;t++){
+//                 collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+//                 collisionGroups.splice(collidedRows[t],1);
+//
+//                   }
+//                   collisionGroups[collidedRows[0]].push(w);
+//                 }
+//
+//
+//
+//   }
+// }
+//
+// }
+
+
+
+
+
+
+
+var collisionGroupsOfDay = [[],[],[],[],[],[],[]];
+
+
+
+for(var w=0;w<events.length;w++){
+  //check if pertinent to employee
+if(events[w].employee == employeeSelected){
+  //check if pertinent to date range
+  if((events[w].start_date.getTime()>=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()) || (events[w].ending_date.getTime()>=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime())  ||    (events[w].start_date.getTime()<=new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()>=new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime())){
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if(events[w].start_date.getDate()!=events[w].ending_date.getDate() || events[w].start_date.getMonth()!=events[w].ending_date.getMonth() || events[w].start_date.getFullYear()!=events[w].ending_date.getFullYear()){
+      //multiple days
+var nbDaysSpanningEvent = events[w].ending_date.getDate() - events[w].start_date.getDate();
+
+    if(nbDaysSpanningEvent > 1){
+
+          for(var i=1;i<nbDaysSpanningEvent;i++){
+            //the days in between first and last SO FULL DAYS AKA
+                var newDateDay = new Date(monthsName[events[w].start_date.getMonth()]+" "+(events[w].start_date.getDate()+i)+","+events[w].start_date.getFullYear());
+            if(newDateDay.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && newDateDay.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime() && ((weekDaysOff.indexOf(newDateDay.getDay()))<0)){
+              var weekDayOfEvent = newDateDay.getDay();
+
+                              var collidedRows = new Array();
+                              for(var y =0;y<collisionGroupsOfDay[weekDayOfEvent].length;y++){
+
+                                for(var z = 0;z<collisionGroupsOfDay[weekDayOfEvent][y].length;z++){
+                                  if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEvent][y][z]], events[w])){
+                                    collidedRows.push(y);
+                                    break;
+                                  }
+                                }
+
+
+                              }
+                              if(collidedRows.length==0){
+                              collisionGroupsOfDay[weekDayOfEvent].push([]);
+                              collisionGroupsOfDay[weekDayOfEvent][collisionGroupsOfDay[weekDayOfEvent].length-1].push(w);
+                              }else{
+                                for(var t=1;t<collidedRows.length;t++){
+                              collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEvent][collidedRows[t]]);
+                              collisionGroupsOfDay[weekDayOfEvent].splice(collidedRows[t],1);
+
+                                }
+                                collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].push(w);
+                              }
+
+
+
+
+
+            }
+          }
+
+          //the first and last day
+          if(events[w].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+                    var weekDayOfEventFD = events[w].start_date.getDay();
+
+
+                                var collidedRows = new Array();
+                                for(var y =0;y<collisionGroupsOfDay[weekDayOfEventFD].length;y++){
+
+                                  for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventFD][y].length;z++){
+                                    if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventFD][y][z]], events[w])){
+                                      collidedRows.push(y);
+                                      break;
+                                    }
+                                  }
+
+
+                                }
+                                if(collidedRows.length==0){
+                                collisionGroupsOfDay[weekDayOfEventFD].push([]);
+                                collisionGroupsOfDay[weekDayOfEventFD][collisionGroupsOfDay[weekDayOfEventFD].length-1].push(w);
+                                }else{
+                                  for(var t=1;t<collidedRows.length;t++){
+                                collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventFD][collidedRows[t]]);
+                                collisionGroupsOfDay[weekDayOfEventFD].splice(collidedRows[t],1);
+
+                                  }
+                                  collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].push(w);
+                                }
+
+
+
+
+
+
+
+          }
+          if(events[w].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+                    var weekDayOfEventLD = events[w].ending_date.getDay();
+
+
+                                var collidedRows = new Array();
+                                for(var y =0;y<collisionGroupsOfDay[weekDayOfEventLD].length;y++){
+
+                                  for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventLD][y].length;z++){
+                                    if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventLD][y][z]], events[w])){
+                                      collidedRows.push(y);
+                                      break;
+                                    }
+                                  }
+
+
+                                }
+                                if(collidedRows.length==0){
+                                collisionGroupsOfDay[weekDayOfEventLD].push([]);
+                                collisionGroupsOfDay[weekDayOfEventLD][collisionGroupsOfDay[weekDayOfEventLD].length-1].push(w);
+                                }else{
+                                  for(var t=1;t<collidedRows.length;t++){
+                                collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventLD][collidedRows[t]]);
+                                collisionGroupsOfDay[weekDayOfEventLD].splice(collidedRows[t],1);
+
+                                  }
+                                  collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].push(w);
+                                }
+
+
+
+          }
+
+
+
+
+
+  }else{
+//2 days event, no day in middle
+
+
+
+      if(events[w].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+        var weekDayOfEventFD = events[w].start_date.getDay();
+
+
+                          var collidedRows = new Array();
+                          for(var y =0;y<collisionGroupsOfDay[weekDayOfEventFD].length;y++){
+
+                            for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventFD][y].length;z++){
+                              if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventFD][y][z]], events[w])){
+                                collidedRows.push(y);
+                                break;
+                              }
+                            }
+
+
+                          }
+                          if(collidedRows.length==0){
+                          collisionGroupsOfDay[weekDayOfEventFD].push([]);
+                          collisionGroupsOfDay[weekDayOfEventFD][collisionGroupsOfDay[weekDayOfEventFD].length-1].push(w);
+                          }else{
+                            for(var t=1;t<collidedRows.length;t++){
+                          collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventFD][collidedRows[t]]);
+                          collisionGroupsOfDay[weekDayOfEventFD].splice(collidedRows[t],1);
+
+                            }
+                            collisionGroupsOfDay[weekDayOfEventFD][collidedRows[0]].push(w);
+                          }
+
+
+
+
+      }
+      if(events[w].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[w].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+        var weekDayOfEventLD = events[w].ending_date.getDay();
+
+
+
+                    var collidedRows = new Array();
+                    for(var y =0;y<collisionGroupsOfDay[weekDayOfEventLD].length;y++){
+
+                      for(var z = 0;z<collisionGroupsOfDay[weekDayOfEventLD][y].length;z++){
+                        if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEventLD][y][z]], events[w])){
+                          collidedRows.push(y);
+                          break;
+                        }
+                      }
+
+
+                    }
+                    if(collidedRows.length==0){
+                    collisionGroupsOfDay[weekDayOfEventLD].push([]);
+                    collisionGroupsOfDay[weekDayOfEventLD][collisionGroupsOfDay[weekDayOfEventLD].length-1].push(w);
+                    }else{
+                      for(var t=1;t<collidedRows.length;t++){
+                    collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEventLD][collidedRows[t]]);
+                    collisionGroupsOfDay[weekDayOfEventLD].splice(collidedRows[t],1);
+
+                      }
+                      collisionGroupsOfDay[weekDayOfEventLD][collidedRows[0]].push(w);
+                    }
+
+
+
+
+
+
+      }
+
+
+
+
+
+  }
+
+
+
+
+
+
+    }else{
+
+//ONE DAY ONLY
+
+
+      var weekDayOfEvent = events[w].start_date.getDay();
+
+
+                          var collidedRows = new Array();
+                          for(var y =0;y<collisionGroupsOfDay[weekDayOfEvent].length;y++){
+
+                            for(var z = 0;z<collisionGroupsOfDay[weekDayOfEvent][y].length;z++){
+                              if(eventsOverlap(events[collisionGroupsOfDay[weekDayOfEvent][y][z]], events[w])){
+                                collidedRows.push(y);
+                                break;
+                              }
+                            }
+
+
+                          }
+                          if(collidedRows.length==0){
+                          collisionGroupsOfDay[weekDayOfEvent].push([]);
+                          collisionGroupsOfDay[weekDayOfEvent][collisionGroupsOfDay[weekDayOfEvent].length-1].push(w);
+                          }else{
+                            for(var t=1;t<collidedRows.length;t++){
+                          collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]] = collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].concat(collisionGroupsOfDay[weekDayOfEvent][collidedRows[t]]);
+                          collisionGroupsOfDay[weekDayOfEvent].splice(collidedRows[t],1);
+
+                            }
+                            collisionGroupsOfDay[weekDayOfEvent][collidedRows[0]].push(w);
+                          }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+  }
+}
+}
+
+
+console.log(collisionGroupsOfDay);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var alreadyDisplayedEvents = new Array();
+
+
+
+
+//styling from the collision groups=''
+
+for(var q=0;q<collisionGroupsOfDay.length;q++){
+  for(var j=0;j<collisionGroupsOfDay[q].length;j++){
+    for(var g=0;g<collisionGroupsOfDay[q][j].length;g++){
+
+      if(events[collisionGroupsOfDay[q][j][g]].start_date.getDate()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getDate() || events[collisionGroupsOfDay[q][j][g]].start_date.getMonth()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getMonth() || events[collisionGroupsOfDay[q][j][g]].start_date.getFullYear()!=events[collisionGroupsOfDay[q][j][g]].ending_date.getFullYear()){
+        //multiple days
+if(alreadyDisplayedEvents.indexOf(collisionGroupsOfDay[q][j][g])== -1){
+
+
+
+
+
+    var nbDaysSpanningEvent = events[collisionGroupsOfDay[q][j][g]].ending_date.getDate() - events[collisionGroupsOfDay[q][j][g]].start_date.getDate();
+
+        if(nbDaysSpanningEvent > 1){
+
+    //means its at least total 3 days; the days in between first and last; nbDaysSpanningEvent +1 = total days event
+
+//the day in between first and last
+    for(var i=1;i<nbDaysSpanningEvent;i++){
+
+
+        var newDateDay = new Date(monthsName[events[collisionGroupsOfDay[q][j][g]].start_date.getMonth()]+" "+(events[collisionGroupsOfDay[q][j][g]].start_date.getDate()+i)+","+events[collisionGroupsOfDay[q][j][g]].start_date.getFullYear());
+
+    if(newDateDay.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && newDateDay.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime() && ((weekDaysOff.indexOf(newDateDay.getDay()))<0)){
+
+        var nbBlocsNewDate = finishHour - startingHour; //entire day
+
+        var totalHeightDiv = nbBlocsNewDate*cellHeight;
+        var topPosDiv = 0;
+        var eventDiv = document.createElement("div");
+        eventDiv.style.top = topPosDiv+"px";
+        eventDiv.className+=" eventDivWeekView";
+        eventDiv.style.height = totalHeightDiv+"px";
+        eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+
+        eventDiv.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+        var weekDayOfEvent = newDateDay.getDay();
+
+
+        var leftPosOfDiv = ((weekDayNumber.indexOf(weekDayOfEvent))*cellWidth);
+        eventDiv.style.left = "calc(5% + "+leftPosOfDiv+"%)";
+
+      document.getElementById("calMainDiv").appendChild(eventDiv);
+
+    }
+    }
+
+
+
+
+
+
+    //the first day
+          if(events[collisionGroupsOfDay[q][j][g]].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+          var nbBlocsFirstDay = finishHour - timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date);
+
+          var totalHeightDivFD = nbBlocsFirstDay*cellHeight;
+          var topPosDivFD = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*cellHeight);
+          var eventDivFD = document.createElement("div");
+          eventDivFD.style.top = topPosDivFD+"px";
+          eventDivFD.className+=" eventDivWeekView";
+          eventDivFD.style.height = totalHeightDivFD+"px";
+          eventDivFD.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+
+          eventDivFD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+          var weekDayOfEventFD = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+          var leftPosOfDivFD = ((weekDayNumber.indexOf(weekDayOfEventFD))*cellWidth);
+          eventDivFD.style.left = "calc(5% + "+leftPosOfDivFD+"%)";
+
+        document.getElementById("calMainDiv").appendChild(eventDivFD);
+
+
+
+    }
+
+
+//event last day
+    if(events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+
+        var nbBlocsLastDay = timeToDecimal(events[collisionGroupsOfDay[q][j][g]].ending_date) - startingHour;
+
+        var totalHeightDivLD = nbBlocsLastDay*cellHeight;
+        var topPosDivLD = 0;
+        var eventDivLD = document.createElement("div");
+        eventDivLD.style.top = topPosDivLD+"px";
+        eventDivLD.className+=" eventDivWeekView";
+        eventDivLD.style.height = totalHeightDivLD+"px";
+        eventDivLD.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+
+        eventDivLD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+        var weekDayOfEventLD = events[collisionGroupsOfDay[q][j][g]].ending_date.getDay();
+        var leftPosOfDivLD = ((weekDayNumber.indexOf(weekDayOfEventLD))*cellWidth);
+        eventDivLD.style.left = "calc(5% + "+leftPosOfDivLD+"%)";
+
+        document.getElementById("calMainDiv").appendChild(eventDivLD);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }else{
+
+          if(events[collisionGroupsOfDay[q][j][g]].start_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].start_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+          var nbBlocsFirstDay = finishHour - timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date);
+
+          var totalHeightDivFD = nbBlocsFirstDay*cellHeight;
+          var topPosDivFD = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*cellHeight);
+          var eventDivFD = document.createElement("div");
+          eventDivFD.style.top = topPosDivFD+"px";
+          eventDivFD.className+=" eventDivWeekView";
+          eventDivFD.style.height = totalHeightDivFD+"px";
+          eventDivFD.style.width = "calc("+cellWidth+"%)";
+
+          eventDivFD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+          var weekDayOfEventFD = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+          var leftPosOfDivFD = ((weekDayNumber.indexOf(weekDayOfEventFD))*cellWidth);
+          eventDivFD.style.left = "calc(5% + "+leftPosOfDivFD+"%)";
+
+        document.getElementById("calMainDiv").appendChild(eventDivFD);
+
+
+
+    }
+
+
+
+    if(events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()>new Date(weekDateArray[0]+" (UTC)").getTime() && events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()<new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getTime()){
+
+        var nbBlocsLastDay = timeToDecimal(events[collisionGroupsOfDay[q][j][g]].ending_date) - startingHour;
+
+        var totalHeightDivLD = nbBlocsLastDay*cellHeight;
+        var topPosDivLD = 0;
+        var eventDivLD = document.createElement("div");
+        eventDivLD.style.top = topPosDivLD+"px";
+        eventDivLD.className+=" eventDivWeekView";
+        eventDivLD.style.height = totalHeightDivLD+"px";
+        eventDivLD.style.width = "calc("+cellWidth+"%)";
+
+        eventDivLD.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+        var weekDayOfEventLD = events[collisionGroupsOfDay[q][j][g]].ending_date.getDay();
+        var leftPosOfDivLD = ((weekDayNumber.indexOf(weekDayOfEventLD))*cellWidth);
+        eventDivLD.style.left = "calc(5% + "+leftPosOfDivLD+"%)";
+
+        document.getElementById("calMainDiv").appendChild(eventDivLD);
+
+    }
+
+
+
+        }
+
+
+
+
+
+
+
+alreadyDisplayedEvents.push(collisionGroupsOfDay[q][j][g]);
+}//end of check if already displayed
+       }else{
+
+    //ONE DAY ONLY
+
+        var minutesTotalDurationEvent =Math.abs(((events[collisionGroupsOfDay[q][j][g]].start_date.getTime() - events[collisionGroupsOfDay[q][j][g]].ending_date.getTime()) / 1000)/60);
+
+        var nbBlocksOf30min = minutesTotalDurationEvent / 60;
+        var totalHeightDiv = nbBlocksOf30min*cellHeight;
+        var topPosDiv = ((timeToDecimal(events[collisionGroupsOfDay[q][j][g]].start_date) - startingHour)*cellHeight);
+        var eventDiv = document.createElement("div");
+        eventDiv.style.top = topPosDiv+"px";
+        eventDiv.className+=" eventDivWeekView";
+        eventDiv.style.height = totalHeightDiv+"px";
+        eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroupsOfDay[q][j].length+")";
+
+        eventDiv.innerHTML = events[collisionGroupsOfDay[q][j][g]].service;
+
+        var weekDayOfEvent = events[collisionGroupsOfDay[q][j][g]].start_date.getDay();
+
+    eventDiv.style.left = "calc(5% + ("+cellWidth+"%"+" * ("+q+" - 1)) + ("+cellWidth+"%"+" / "+collisionGroupsOfDay[q][j].length+" * "+ g +"))";
+
+
+
+
+
+      document.getElementById("calMainDiv").appendChild(eventDiv);
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //end of 3rd for loop
+    }
+    //end of 2nd for loop
+  }
+
+
+//end firs for loop
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//end of week cal
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getWeekDateArray(myDate){
+
+var weekDateArray = [];
+  //get Dates of specific week set in array
+    for (var i = 0; i <7; i++) {
+      var firstDayWeek = myDate.getDate() - myDate.getDay() + i;
+      var dayOfWeekInArray = new Date(myDate.setDate(firstDayWeek)).toISOString().slice(0, 10);
+      weekDateArray.push(dayOfWeekInArray);
+    }
+    return weekDateArray;
+}
+
+
+function getWeekRangeString(myDate){
+
+var weekDateArray = getWeekDateArray(myDate);
+var dateRangeString = weekDateArray[0].slice(8,10)+" "+monthsName[new Date(weekDateArray[0]+" (UTC)").getMonth()]+" - "+weekDateArray[weekDateArray.length-1].slice(8,10)+" "+monthsName[new Date(weekDateArray[weekDateArray.length-1]+" (UTC)").getMonth()];
+
+return dateRangeString;
+
+}
+
+
+
+
+
+
+function changeWeek(plusOrMinus){
+  myDate.setDate(myDate.getDate()+(7*plusOrMinus));
+  document.getElementById("calMainDiv").innerHTML = "";
+  createWeekCalendar();
+}
+
+function changeMonth(plusOrMinus){
+
+var lastDayOfCurrentMonth = new Date(myDate.getFullYear(), myDate.getMonth()+1, 0).getDate();
+var lastDayOfNextMonth = new Date(myDate.getFullYear(), myDate.getMonth()+2, 0).getDate();
+var lastDayOfPastMonth = new Date(myDate.getFullYear(), myDate.getMonth(), 0).getDate();
+if(plusOrMinus == 1){
+//next Month
+  if(lastDayOfNextMonth<lastDayOfCurrentMonth){
+  myDate.setDate(lastDayOfNextMonth);
+  myDate.setMonth(myDate.getMonth()+1);
+  }else{
+  myDate.setMonth(myDate.getMonth()+1);
+  }
+}else{
+//past month == -1
+  if(lastDayOfPastMonth<lastDayOfCurrentMonth){
+  myDate.setDate(lastDayOfPastMonth);
+  myDate.setMonth(myDate.getMonth()-1);
+  }else{
+  myDate.setMonth(myDate.getMonth()-1);
+
+  }
+}
+
+  document.getElementById("calMainDiv").innerHTML = "";
+    createMonthCalendar();
+}
+
+function timeToDecimal(dateX) {
+  var t = dateX.getHours() +":"+dateX.getMinutes();
+    var arr = t.split(':');
+    var dec = parseInt((arr[1]/6)*10, 10);
+
+    return parseFloat(parseInt(arr[0], 10) + '.' + (dec<10?'0':'') + dec);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createMonthCalendar(){
+  var employeeSelected = $('#employeeSelect').val();
+  var mainDivOfMonth = document.getElementById("calMainDiv");
+  mainDivOfMonth.innerHTML="";
+
+
+
+
+document.getElementById("monthNameRangeDiv").innerHTML = monthsName[myDate.getMonth()] + " "+myDate.getFullYear();
+
+
+var monthNumber = myDate.getMonth();
+var yearNumber = myDate.getFullYear();
+
+var daysInMonth = new Date(yearNumber, monthNumber+1, 0).getDate();
+
+var startDayOfMonth = new Date(yearNumber, monthNumber, 1).getDay();
+var endDayOfMonth = new Date(yearNumber, monthNumber, daysInMonth).getDay();
+
+// Determine the number of blank squares before start of month
+    var squares = [];
+    if (startDayOfMonth != 0) {
+      for (var i=0; i<startDayOfMonth; i++) {
+        squares.push("b");
+      }
+    }
+
+    // Populate the days of the month
+    for (var i=1; i<=daysInMonth; i++) {
+      squares.push(i);
+    }
+
+    // Determine the number of blank squares after end of month
+    if (endDayOfMonth != 6) {
+      var blanks = endDayOfMonth==0 ? 6 : 6-endDayOfMonth;
+      for (var i=0; i<blanks; i++) {
+        squares.push("b");
+      }
+    }
+
+
+var monthTable = document.createElement("table");
+monthTable.id = "monthCalendarTable";
+mainDivOfMonth.appendChild(monthTable);
+
+// First row - Days
+    var monthNameRow = document.createElement("tr");
+    var calendarCell = null;
+    for (var i=0;i<weekDayName.length;i++) {
+      calendarCell = document.createElement("td");
+      calendarCell.innerHTML = weekDayName[i];
+      monthNameRow.appendChild(calendarCell);
+    }
+    monthNameRow.classList.add("monthNameRow");
+    monthTable.appendChild(monthNameRow);
+
+
+
+
+    // Days in Month
+    var totalDays = squares.length;
+    var calendarRow = document.createElement("tr");
+    var monthDateCell = null;
+
+    for (var i=0; i<totalDays; i++) {
+      monthDateCell = document.createElement("td");
+      if (squares[i]=="b") {
+        monthDateCell.classList.add("blankDate");
+      } else {
+        var wrapperInsideTd = document.createElement("div");
+        wrapperInsideTd.innerHTML = "<div class='monthDateCell'>"+squares[i]+"</div>";
+        wrapperInsideTd.classList.add("wrapperInsideMonthCell");
+        monthDateCell.appendChild(wrapperInsideTd);
+        var newMonthNumber = monthNumber+1;
+        monthDateCell.setAttribute("date", yearNumber+","+newMonthNumber+","+squares[i]);
+
+
+  var eventNumberCount = 0;
+for(var t = 0;t<events.length;t++){
+
+if(events[t].employee == employeeSelected && ((events[t].start_date.getFullYear() ==  yearNumber && events[t].start_date.getMonth() == monthNumber && events[t].start_date.getDate() == squares[i])|| (events[t].ending_date.getFullYear() == yearNumber && events[t].ending_date.getMonth() == monthNumber && events[t].ending_date.getDate() == squares[i]))){
+eventNumberCount++;
+}
+if(eventNumberCount!=0){
+  var eventNumberDiv = document.createElement("div");
+  eventNumberDiv.id = "eventNumberDivInMonthCalendar";
+  eventNumberDiv.innerHTML = eventNumberCount;
+  wrapperInsideTd.appendChild(eventNumberDiv);
+}
+}
+
+
+
+
+
+
+          if(!weekDaysOff.includes(new Date(monthDateCell.getAttribute("date")).getDay())){
+
+            monthDateCell.addEventListener("click", function(){
+              myDate = new Date(this.getAttribute("date"));
+              createMonthCalendar();
+            });
+          }
+
+      }
+      calendarRow.appendChild(monthDateCell);
+      if (i!=0 && (i+1)%7==0) {
+        monthTable.appendChild(calendarRow);
+        calendarRow = document.createElement("tr");
+      }
+    }
+
+
+mainDivOfMonth.appendChild(monthTable);
+
+
+
+
+
+
+
+//createtheDaySchedule
+
+var dayScheduleDiv = document.createElement("div");
+dayScheduleDiv.id = "dayScheduleMainDiv";
+mainDivOfMonth.appendChild(dayScheduleDiv);
+
+
+  var cellHeight = 90;
+  var cellWidth = 90;
+
+//script for the title of day
+  var calendarDayTable = document.createElement("table");
+  calendarDayTable.style.borderCollapse = "collapse";
+  calendarDayTable.classList.add("dayTable");
+
+
+  var dateDisplayRow = document.createElement("tr");
+  dateDisplayRow.id="rowWeekDate";
+  dateDisplayRow.style.border = "0px";
+  dateDisplayRow.style.height = cellHeight/2+"px";
+      var tableWeekDayCell = document.createElement("th");
+      tableWeekDayCell.colSpan = "2";
+      // tableWeekDayCell.style.width=cellWidth+"%";
+      tableWeekDayCell.classList.add("thWeek");
+      var textInTh = document.createTextNode(weekDayName[myDate.getDay()]+", "+monthsName[myDate.getMonth()]+" "+myDate.getUTCDate()+" "+myDate.getFullYear());
+      tableWeekDayCell.appendChild(textInTh);
+
+      dateDisplayRow.appendChild(tableWeekDayCell);
+      calendarDayTable.appendChild(dateDisplayRow);
+
+
+
+
+//hour script
+for(var i = 0;i<finishHour - startingHour;i++){
+var rowHour = document.createElement("tr");
+rowHour.style.height = cellHeight+"px";
+
+//hour
+    var cellSpecificHour = document.createElement("td");
+    cellSpecificHour.style.border = "none";
+    cellSpecificHour.classList.add("hourCellDaySchedule");
+    cellSpecificHour.style.verticalAlign = "top";
+    var textHour = document.createTextNode(startingHour+i);
+    cellSpecificHour.appendChild(textHour);
+    rowHour.appendChild(cellSpecificHour);
+
+//actual day cell
+    var cellDay = document.createElement("td");
+    cellDay.style.width = cellWidth+"%";
+    cellDay.classList.add("eventCellDaySchedule");
+    rowHour.appendChild(cellDay);
+
+
+
+calendarDayTable.appendChild(rowHour);
+
+}
+dayScheduleDiv.appendChild(calendarDayTable);
+
+
+
+var collisionGroups = new Array();
+
+
+
+
+// code f = full day, code s = start today, code e = ends today, code p = some part of today
+
+
+//ADD EVENTS AND CHECK FOR OVERLAPPINGs
+for(var w=0;w<events.length;w++){
+
+if(events[w].employee == employeeSelected){
+  if(events[w].start_date.getDate()!=events[w].ending_date.getDate()){
+    if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+                //code s
+
+                var collidedRows = new Array();
+                for(var y =0;y<collisionGroups.length;y++){
+
+                  for(var z = 0;z<collisionGroups[y].length;z++){
+                    if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+                      collidedRows.push(y);
+                      break;
+                    }
+                  }
+
+
+                }
+                if(collidedRows.length==0){
+                collisionGroups.push([]);
+                collisionGroups[collisionGroups.length-1].push(w);
+                }else{
+                  for(var t=1;t<collidedRows.length;t++){
+                collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+                collisionGroups.splice(collidedRows[t],1);
+
+                  }
+                  collisionGroups[collidedRows[0]].push(w);
+                }
+
+
+
+    }else if(events[w].ending_date.getFullYear() == myDate.getFullYear() && events[w].ending_date.getMonth() == myDate.getMonth() && events[w].ending_date.getDate() == myDate.getDate()){
+        //code e
+
+                          var collidedRows = new Array();
+                          for(var y =0;y<collisionGroups.length;y++){
+
+                            for(var z = 0;z<collisionGroups[y].length;z++){
+                              if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+                                collidedRows.push(y);
+                                break;
+                              }
+                            }
+
+
+                          }
+                          if(collidedRows.length==0){
+                          collisionGroups.push([]);
+                          collisionGroups[collisionGroups.length-1].push(w);
+                          }else{
+                            for(var t=1;t<collidedRows.length;t++){
+                          collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+                          collisionGroups.splice(collidedRows[t],1);
+
+                            }
+                            collisionGroups[collidedRows[0]].push(w);
+                          }
+
+
+
+
+    }else if(events[w].start_date.getTime()<= myDate.getTime() && events[w].ending_date.getTime()>= myDate.getTime()){
+//code f
+
+                var collidedRows = new Array();
+                for(var y =0;y<collisionGroups.length;y++){
+
+                  for(var z = 0;z<collisionGroups[y].length;z++){
+                    if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+                      collidedRows.push(y);
+                      break;
+                    }
+                  }
+
+
+                }
+                if(collidedRows.length==0){
+                collisionGroups.push([]);
+                collisionGroups[collisionGroups.length-1].push(w);
+                }else{
+                  for(var t=1;t<collidedRows.length;t++){
+                collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+                collisionGroups.splice(collidedRows[t],1);
+
+                  }
+                  collisionGroups[collidedRows[0]].push(w);
+                }
+
+
+
+    }
+  }else if(events[w].start_date.getFullYear() == myDate.getFullYear() && events[w].start_date.getMonth() == myDate.getMonth() && events[w].start_date.getDate() == myDate.getDate()){
+//code p
+
+
+                var collidedRows = new Array();
+                for(var y =0;y<collisionGroups.length;y++){
+
+                  for(var z = 0;z<collisionGroups[y].length;z++){
+                    if(eventsOverlap(events[collisionGroups[y][z]], events[w])){
+                      collidedRows.push(y);
+                      break;
+                    }
+                  }
+
+
+                }
+                if(collidedRows.length==0){
+                collisionGroups.push([]);
+                collisionGroups[collisionGroups.length-1].push(w);
+                }else{
+                  for(var t=1;t<collidedRows.length;t++){
+                collisionGroups[collidedRows[0]] = collisionGroups[collidedRows[0]].concat(collisionGroups[collidedRows[t]]);
+                collisionGroups.splice(collidedRows[t],1);
+
+                  }
+                  collisionGroups[collidedRows[0]].push(w);
+                }
+
+
+
+  }
+}
+}
+
+
+
+//do the styling css for event blocks
+// code f = full day, code s = start today, code e = ends today, code p = some part of today
+for(var m=0;m<collisionGroups.length;m++){
+  for(var r=0;r<collisionGroups[m].length;r++){
+    if(events[collisionGroups[m][r]].start_date.getFullYear() == myDate.getFullYear() && events[collisionGroups[m][r]].start_date.getMonth() == myDate.getMonth() && events[collisionGroups[m][r]].start_date.getDate() == myDate.getDate()    &&  (events[collisionGroups[m][r]].ending_date.getFullYear() != myDate.getFullYear() || events[collisionGroups[m][r]].ending_date.getMonth() != myDate.getMonth() || events[collisionGroups[m][r]].ending_date.getDate() != myDate.getDate())){
+//code s
+                var minutesTotalDurationEvent = finishHour - timeToDecimal(events[collisionGroups[m][r]].start_date);
+
+                var totalHeightDiv = minutesTotalDurationEvent*cellHeight;
+                var topPosDiv = ((timeToDecimal(events[collisionGroups[m][r]].start_date) - startingHour)*cellHeight)+45;
+                var eventDiv = document.createElement("div");
+                eventDiv.style.top = topPosDiv+"px";
+                eventDiv.className+=" eventDivWeekView";
+                eventDiv.style.height = totalHeightDiv+"px";
+                eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroups[m].length+")";
+                eventDiv.style.right = "calc("+cellWidth+"% / "+collisionGroups[m].length+" * "+r+")";
+
+                eventDiv.innerHTML = events[collisionGroups[m][r]].service;
+
+              dayScheduleDiv.appendChild(eventDiv);
+
+
+            }else if(events[collisionGroups[m][r]].ending_date.getFullYear() == myDate.getFullYear() && events[collisionGroups[m][r]].ending_date.getMonth() == myDate.getMonth() && events[collisionGroups[m][r]].ending_date.getDate() == myDate.getDate()     && (events[collisionGroups[m][r]].start_date.getFullYear() != myDate.getFullYear() || events[collisionGroups[m][r]].start_date.getMonth() != myDate.getMonth() || events[collisionGroups[m][r]].start_date.getDate() != myDate.getDate())){
+//code e
+
+              var nbBlocsDay = timeToDecimal(events[collisionGroups[m][r]].ending_date) - startingHour;
+              var totalHeightDiv = nbBlocsDay*cellHeight;
+              var topPosDiv =45;
+              var eventDiv = document.createElement("div");
+              eventDiv.style.top = topPosDiv+"px";
+              eventDiv.className+=" eventDivWeekView";
+              eventDiv.style.height = totalHeightDiv+"px";
+              eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroups[m].length+")";
+              eventDiv.style.right = "calc("+cellWidth+"% / "+collisionGroups[m].length+" * "+r+")";
+
+              eventDiv.innerHTML = events[collisionGroups[m][r]].service;
+
+              dayScheduleDiv.appendChild(eventDiv);
+
+
+
+            }else if(events[collisionGroups[m][r]].start_date.getTime()<= myDate.getTime() && events[collisionGroups[m][r]].ending_date.getTime()>= myDate.getTime()){
+///code f
+
+                //FULL DAY BETWEEN the multiple days events
+
+                var nbBlocsDay = finishHour - startingHour;
+                var totalHeightDiv = nbBlocsDay*cellHeight;
+                var topPosDiv =45;
+                var eventDiv = document.createElement("div");
+                eventDiv.style.top = topPosDiv+"px";
+
+                eventDiv.className+=" eventDivWeekView";
+                eventDiv.style.height = totalHeightDiv+"px";
+                eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroups[m].length+")";
+                eventDiv.style.right = "calc("+cellWidth+"% / "+collisionGroups[m].length+" * "+r+")";
+
+                eventDiv.innerHTML = events[collisionGroups[m][r]].service;
+
+                dayScheduleDiv.appendChild(eventDiv);
+
+
+            }else if(events[collisionGroups[m][r]].start_date.getFullYear() == myDate.getFullYear() && events[collisionGroups[m][r]].start_date.getMonth() == myDate.getMonth() && events[collisionGroups[m][r]].start_date.getDate() == myDate.getDate()){
+
+//code p
+
+                var minutesTotalDurationEvent = Math.abs(((events[collisionGroups[m][r]].start_date.getTime() - events[collisionGroups[m][r]].ending_date.getTime()) / 1000)/60);
+
+                var nbBlocksOf30min = minutesTotalDurationEvent / 60;
+                var totalHeightDiv = nbBlocksOf30min*cellHeight;
+                var topPosDiv = ((timeToDecimal(events[collisionGroups[m][r]].start_date) - startingHour)*cellHeight)+(cellHeight/2);
+                var eventDiv = document.createElement("div");
+                eventDiv.onclick
+                eventDiv.style.top = topPosDiv+"px";
+                eventDiv.className+=" eventDivWeekView";
+                eventDiv.style.height = totalHeightDiv+"px";
+                eventDiv.style.width = "calc("+cellWidth+"% / "+collisionGroups[m].length+")";
+                eventDiv.style.right = "calc("+cellWidth+"% / "+collisionGroups[m].length+" * "+r+")";
+
+                eventDiv.innerHTML = events[collisionGroups[m][r]].service;
+
+              dayScheduleDiv.appendChild(eventDiv);
+
+}
+
+
+
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+//the end of create month cal
+}
+
+function eventsOverlap(d1, d2){
+
+if(d1.ending_date.getTime()<= d2.start_date.getTime() || d1.start_date.getTime()>= d2.ending_date.getTime() ){
+return false;
+}else{
+  return true;
+}
+
+}
+
+
+
+
+
+
+
+createEmployeeList();
+createWeekCalendar(); // for now is current date);
+
+
+
+
+
+
+
+
+</script>

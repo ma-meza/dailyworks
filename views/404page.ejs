@@ -1,0 +1,75 @@
+<% include partials/regularEmptyHead.ejs %>
+
+<body>
+  <img id="logoImg" src="assets/logos/dwFullLogoBlack.png" alt="">
+  <div id="textContainer">
+    <p id="title404">404</p>
+    <p id="subTitle404"><script>
+      document.write(translateWord("Mmh looks like you are lost."));
+    </script></p>
+    <a id="href404" href="/"><script>
+      document.write(translateWord("Let's go back home"));
+    </script></a>
+  </div>
+</body>
+
+
+<style>
+  body{
+    background-color:#fff4ec;
+  }
+  #textContainer{
+    position:relative;
+    width:100%;
+    top:40%;
+    transform:translateY(-50%);
+    margin:0;
+    left:0;
+  }
+  #logoImg{
+    width:150px;
+    position:relative;
+    margin:0;
+    margin-left:20px;
+    margin-top:20px;
+    left:0;
+    top:0;
+    display:box;
+  }
+  #title404{
+    position:relative;
+    width:100%;
+    left:0;
+    top:0;
+    margin:0;
+    text-align:center;
+    font-size:var(--desktop-font-size-page-title);
+    font-weight:var(--mobile-font-weight-bold);
+    font-color:#000;
+    margin-bottom:70px;
+  }
+  #subTitle404{
+    position:relative;
+    width:100%;
+    left:0;
+    top:0;
+    margin:0;
+    text-align:center;
+    font-size:var(--desktop-font-size-big);
+    font-weight:var(--mobile-font-weight-regular);
+    color:#000;
+    margin-bottom:40px;
+  }
+  #href404{
+    position:relative;
+    left:50%;
+    width:max-content;
+    transform:translateX(-50%);
+    top:0;
+    margin:0;
+    text-align:center;
+    display:block;
+    color:var(--icon-color-active);
+
+  }
+</style>

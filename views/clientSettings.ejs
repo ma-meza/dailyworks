@@ -1,0 +1,575 @@
+<%- include partials/clientTopNavBar.ejs %>
+<%- include partials/clientBottomNavBar.ejs %>
+<link rel="stylesheet" href="/css/styleGuidelines.css">
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgRl2MKw024PModYPvSktDkFbsOird77o&libraries=places"></script>
+
+<body>
+
+
+<div id="mainScreenBody">
+  <% if(!clientObj || clientObj.length == 0){ %>
+
+    <% }else{ %>
+<div id="emailSpecialDiv" class="settingsSpecialDiv">
+  <p class="specialSettingPageTitle">Email</p>
+  <p class="closeSpecialSettingButton">x</p>
+  <input class="settingsTextInputs" id="newEmailInput" type="email" placeholder="New email">
+  <div class="saveDivBottom">
+    <p id="settingsEmailSubmit" class="saveButtonBottom">Save</p>
+  </div>
+</div>
+
+<div id="passwordSpecialDiv" class="settingsSpecialDiv">
+  <p class="specialSettingPageTitle">Password</p>
+  <p class="closeSpecialSettingButton">x</p>
+  <input class="settingsTextInputs" id="currentPasswordInput" type="password" placeholder="Current password">
+  <input class="settingsTextInputs" id="newPasswordInput" type="password" placeholder="New password">
+  <input class="settingsTextInputs" id="confirmNewPasswordInput" type="password" placeholder="Confirm new password">
+  <div class="saveDivBottom">
+    <p id="settingsPasswordSubmit" class="saveButtonBottom">Save</p>
+  </div>
+</div>
+
+<div id="profilePictureSpecialDiv" class="settingsSpecialDiv">
+  <p class="specialSettingPageTitle">Profile Picture</p>
+  <p class="closeSpecialSettingButton">x</p>
+  <input class="settingsTextInputs" id="newPictureFile" type="file" placeholder="Confirm new password">
+  <div class="saveDivBottom">
+    <p id="settingsProfilePicSubmit" class="saveButtonBottom">Save</p>
+  </div>
+</div>
+
+<div id="phoneNumberSpecialDiv" class="settingsSpecialDiv">
+  <p class="specialSettingPageTitle">Phone Number</p>
+  <p class="closeSpecialSettingButton">x</p>
+  <input class="settingsTextInputs" id="newPhoneInput" type="tel" placeholder="New phone number">
+  <div class="saveDivBottom">
+    <p id="settingsPhoneSubmit" class="saveButtonBottom">Save</p>
+  </div>
+</div>
+
+<div id="locationSpecialDiv" class="settingsSpecialDiv">
+  <p class="specialSettingPageTitle">Location</p>
+  <p class="closeSpecialSettingButton">x</p>
+  <input id="newLocationInput" name="autocomplete_search" type="text" class="form-control settingsTextInputs" placeholder="New location" />
+                      <input id="locationLat" type="hidden" name="lat">
+                      <input id="locationLong" type="hidden" name="long">
+</div>
+
+
+
+
+
+
+<div id="settingsTabAroundDiv" class="">
+  <p id="settingsPageTitle">Settings</p>
+  <div id="tab1" class="settingsTabDiv">
+    <p>Email</p>
+  </div>
+  <div id="tab2" class="settingsTabDiv">
+    <p>Password</p>
+  </div>
+  <div id="tab3" class="settingsTabDiv">
+    <p>Profile Picture</p>
+  </div>
+  <div id="tab4" class="settingsTabDiv">
+    <p>Phone Number</p>
+  </div>
+  <div id="tab5" class="settingsTabDiv">
+    <p>Location</p>
+  </div>
+  <div id="logoutDiv" class="">
+    <a id="logoutButton" href="/logout">Logout</a>
+  </div>
+
+</div>
+
+  <% } %>
+</div>
+
+
+
+</body>
+
+
+<style>
+*{
+  box-sizing:border-box;
+}
+#mainScreenBody{
+left:0px;
+position:absolute;
+top:70px;
+width:100%;
+min-height:calc(100% - 140px);
+background-color:#f9f9f9;
+}
+
+
+#settingsTabAroundDiv{
+position:absolute;
+top:0px;
+width:100%;
+min-height:200px;
+
+}
+#settingsPageTitle{
+width:100%;
+position:relative;
+margin-top:20;
+top:0;
+font-size:var(--font-size-page-title);
+font-weight:var(--font-weight-page-title);
+padding-left:20px;
+}
+
+.settingsTabDiv{
+width:calc(100% - 20px);
+position:relative;
+left:20px;
+height:60px;
+border-top:1px solid #000;
+top:0px;
+}
+.settingsTabDiv p{
+  line-height:60px;
+  margin:0px;
+}
+
+#tab5{
+  border-bottom:1px solid #000;
+}
+
+
+
+
+.settingsSpecialDiv{
+  position:absolute;
+  background-color:#fff;
+  top:0px;
+  width:100%;
+  min-height:100%;
+  display:none;
+z-index:1;
+margin-bottom:70px;
+}
+.activeSettingsPage{
+
+display:block !important;
+}
+
+.specialSettingPageTitle{
+  width:100%;
+  position:relative;
+  margin-top:20;
+  top:0;
+  font-size:30px;
+  font-weight:900;
+  padding-left:20px;
+}
+.closeSpecialSettingButton{
+  position:absolute;
+  text-align:right;
+  top:20;
+  right:20;
+  font-size:25px;
+  font-weight:900;
+  margin:0;
+}
+.settingsTextInputs{
+  width:80%;
+  position:relative;
+  top:0px;
+  margin:0;
+  left:50%;
+  transform:translateX(-50%);
+  height:45px;
+  font-size:19px;
+  padding-left:20px;
+  border-radius:5px;
+  border:1px solid #f1f1f1;
+  margin-bottom:20px;
+}
+.saveDivBottom{
+  height:50px;
+  position:absolute;
+  width:100%;
+  left:0px;
+  bottom:0px;
+  border-top:0.3px solid rgba(66, 66, 66, 0.76);
+}
+.saveButtonBottom{
+position:absolute;
+right:0px;
+width:100%;
+padding-right:20px;
+line-height:50px;
+top:0;
+margin:0;
+text-align:right;
+color:rgba(40, 136, 204, 1);
+}
+.smallTopSettingsPopup{
+  position:absolute;
+  top:-100;
+  width:100%;
+  padding:20px;
+  height:auto;
+  min-height:30px;
+  border-bottom:1px solid #000;
+  text-align:center;
+  z-index:3;
+  background-color:#fff;
+}
+#logoutButton{
+  text-decoration:none;
+  color:rgba(40, 136, 204, 1);
+}
+#logoutDiv{
+  text-align:center;
+  width:100%;
+  position:relative;
+  left:0px;
+  height:auto;
+  margin-top:40px;
+}
+</style>
+
+
+
+<script>
+
+
+function closeAllSpecialSettingsPages(){
+  var allPages = document.getElementsByClassName('settingsSpecialDiv');
+  for(var i=0;i<allPages.length;i++){
+    allPages[i].classList.remove('activeSettingsPage');
+  }
+}
+
+
+function createTopSmallPopup(textInside){
+  clearAllPopups();
+  var secondsSinceStarted = 0;
+  var mainPopup = document.createElement("div");
+  mainPopup.innerText = textInside;
+  mainPopup.classList.add("smallTopSettingsPopup");
+  mainScreenBody.appendChild(mainPopup);
+  var posOfPopup = -100;
+
+
+  var id = setInterval(popupMove, 5);
+  function popupMove() {
+    if (posOfPopup == 0) {
+      clearInterval(id);
+    } else {
+      posOfPopup++;
+      mainPopup.style.top = posOfPopup;
+    }
+  }
+
+
+
+
+      var x = setInterval(function() {
+        if(secondsSinceStarted == 5){
+          clearInterval(x);
+          mainPopup.remove();
+        }else{
+          secondsSinceStarted++;
+        }
+      }, 1000);
+
+
+}
+
+function clearAllPopups(){
+var allPopupsSettings = document.getElementsByClassName('smallTopSettingsPopup');
+while(allPopupsSettings.length>0){
+allPopupsSettings[0].remove();
+}
+}
+
+
+
+  document.getElementById('tab1').onclick = function(){
+    closeAllSpecialSettingsPages();
+    document.getElementById("emailSpecialDiv").classList.add('activeSettingsPage');
+  }
+
+  document.getElementById('tab2').onclick = function(){
+    closeAllSpecialSettingsPages();
+    document.getElementById("passwordSpecialDiv").classList.add('activeSettingsPage');
+  }
+
+  document.getElementById('tab3').onclick = function(){
+    closeAllSpecialSettingsPages();
+    document.getElementById("profilePictureSpecialDiv").classList.add('activeSettingsPage');
+  }
+
+  document.getElementById('tab4').onclick = function(){
+    closeAllSpecialSettingsPages();
+    document.getElementById("phoneNumberSpecialDiv").classList.add('activeSettingsPage');
+  }
+
+  document.getElementById('tab5').onclick = function(){
+    closeAllSpecialSettingsPages();
+    document.getElementById("locationSpecialDiv").classList.add('activeSettingsPage');
+  }
+
+
+
+var xButtonsClose = document.getElementsByClassName('closeSpecialSettingButton');
+for(var i=0;i<xButtonsClose.length;i++){
+  xButtonsClose[i].onclick = function(){
+    closeAllSpecialSettingsPages();
+  }
+}
+
+
+
+
+
+
+
+
+
+//scripts for submit
+
+
+
+//for password
+document.getElementById('settingsPasswordSubmit').onclick = function(){
+  var currentPass = document.getElementById('currentPasswordInput').value;
+  var newPass = document.getElementById('newPasswordInput').value;
+  var confirmNewPass = document.getElementById('confirmNewPasswordInput').value;
+
+  if(currentPass!="" && newPass!="" && confirmNewPass!="" ){
+    //all fields are full
+    if(newPass.length>=5){
+      //ALL FIElds have good length
+      if(confirmNewPass == newPass){
+        //both password match
+        if(currentPass != newPass){
+          $.ajax({
+                url: '/updateClientInfo',
+                type: 'post',
+                data: {currentPassword:currentPass, newPassword:newPass},
+                success: function( data, textStatus){
+                  if(data == "ok"){
+                    document.getElementById('currentPasswordInput').value = "";
+                    document.getElementById('newPasswordInput').value = "";
+                    document.getElementById('confirmNewPasswordInput').value = "";
+                    closeAllSpecialSettingsPages();
+                    createTopSmallPopup('Your password has been changed!');
+                  }else if(data=="samePass"){
+                    createTopSmallPopup('Your new password is the same as the actual one');
+                  }else if(data=="err"){
+                    createTopSmallPopup('An unexpected server error occured please try again');
+                  }else if(data=="noGoodCurrentPass"){
+                    createTopSmallPopup('It looks like it is not the right current password');
+                  }else{
+                    createTopSmallPopup('An unexpected error occured please try again');
+                  }
+                },
+                error: function( textStatus, errorThrown ){
+                  createTopSmallPopup('An unexpected error occured please try again');
+                }
+            });
+        }else{
+          //old and new pass are same
+          createTopSmallPopup('Your new password is the same as your current password');
+        }
+      }else{
+        //passw dont match
+        createTopSmallPopup('Your passwords do not match');
+
+      }
+    }else{
+      //not all fields have good length
+      if(password.length<5 || name.length<5){
+        createTopSmallPopup('Your name and password must be at least 5 characters');
+      }
+    }
+
+  }else{
+    createTopSmallPopup('Please fill all the fields');
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//for email
+document.getElementById('settingsEmailSubmit').onclick = function(){
+  var newEmail = document.getElementById('newEmailInput').value;
+
+  if(newEmail!=""){
+    //all fields are full
+        if(validateEmailAddress(newEmail)){
+          $.ajax({
+                url: '/updateClientInfo',
+                type: 'post',
+                data: {email:newEmail},
+                success: function( data, textStatus){
+                  if(data == "ok"){
+                    document.getElementById('newEmailInput').value = "";
+                    closeAllSpecialSettingsPages();
+                    createTopSmallPopup('Your email address has been changed!');
+                  }else if(data=="err"){
+                    createTopSmallPopup('An unexpected server error occured please try again');
+                  }else if(data=="notValid"){
+                      createTopSmallPopup("It does not look like valid email. Check that again please");
+                  }else{
+                    createTopSmallPopup('An unexpected error occured please try again');
+                  }
+                },
+                error: function( textStatus, errorThrown ){
+                  createTopSmallPopup('An unexpected error occured please try again');
+                }
+            });
+        }else{
+          //old and new pass are same
+          createTopSmallPopup('It does not look like valid email. Check that again please');
+        }
+    }else{
+    createTopSmallPopup('Please fill the field');
+  }
+
+}
+
+
+
+
+
+
+//for phone
+document.getElementById('settingsPhoneSubmit').onclick = function(){
+  var newPhone = document.getElementById('newPhoneInput').value;
+
+  if(newPhone!=""){
+    //all fields are full
+        if(validatePhoneNumber(newPhone)){
+          $.ajax({
+                url: '/updateClientInfo',
+                type: 'post',
+                data: {phone:newPhone},
+                success: function( data, textStatus){
+                  if(data == "ok"){
+                    document.getElementById('newPhoneInput').value = "";
+                    closeAllSpecialSettingsPages();
+                    createTopSmallPopup('Your phone number has been changed!');
+                  }else if(data=="err"){
+                    createTopSmallPopup('An unexpected server error occured please try again');
+                  }else if(data=="notValid"){
+                      createTopSmallPopup("It does not look like a valid phone number. Check that again please");
+                  }else{
+                    createTopSmallPopup('An unexpected error occured please try again');
+                  }
+                },
+                error: function( textStatus, errorThrown ){
+                  createTopSmallPopup('An unexpected error occured please try again');
+                }
+            });
+        }else{
+          //old and new pass are same
+          createTopSmallPopup('It does not look like a valid phone number. Check that again please');
+        }
+    }else{
+    createTopSmallPopup('Please fill the field');
+  }
+
+}
+
+
+
+
+//for location
+function submitNewLocationSettigns(){
+  var newLocation = document.getElementById('newLocationInput').value;
+  var locationLong = document.getElementById('locationLong').value;
+  var locationLat = document.getElementById('locationLat').value;
+
+  if(newLocation!=""){
+    //all fields are full
+          $.ajax({
+                url: '/updateClientInfo',
+                type: 'post',
+                data: {location:newLocation, long:locationLong, lat:locationLat},
+                success: function( data, textStatus){
+                  if(data == "ok"){
+                    document.getElementById('newLocationInput').value = "";
+                    closeAllSpecialSettingsPages();
+                    createTopSmallPopup('Your location has been changed!');
+                  }else if(data=="err"){
+                    createTopSmallPopup('An unexpected server error occured please try again');
+                  }else if(data=="notValid"){
+                      createTopSmallPopup("It does not look like a valid location. Check that again please");
+                  }else{
+                    createTopSmallPopup('An unexpected error occured please try again');
+                  }
+                },
+                error: function( textStatus, errorThrown ){
+                  createTopSmallPopup('An unexpected error occured please try again');
+                }
+            });
+    }else{
+    createTopSmallPopup('Please fill the field');
+  }
+
+}
+
+
+
+
+
+function validatePhoneNumber(phoneNumberParam){
+  if(phoneNumberParam.length == 10){
+  return true;
+  }else if(phoneNumberParam.length == 11 && phoneNumberParam.charAt(0)=="1"){
+  return true;
+  }else{
+    return false;
+  }
+}
+
+function validateEmailAddress(emailParam){
+if(emailParam.charAt(0) != "@" && emailParam.indexOf("@")!=-1 && emailParam.charAt(emailParam.length-1)!="@"){
+return true;
+}else{
+  return false;
+}
+
+}
+</script>
+
+
+
+
+
+
+
+<script>
+  google.maps.event.addDomListener(window, 'load', initialize);
+    function initialize() {
+      var input = document.getElementById('newLocationInput');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.addListener('place_changed', function () {
+      var place = autocomplete.getPlace();
+      // place variable will have all the information you are looking for.
+      $('#locationLong').val(place.geometry['location'].lat());
+      $('#locationLat').val(place.geometry['location'].lng());
+      submitNewLocationSettigns();
+    });
+  }
+</script>

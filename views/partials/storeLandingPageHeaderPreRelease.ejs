@@ -1,0 +1,74 @@
+<div id="topNavBar">
+  <a href="/" id="logoHrefTopNavbar"></a>
+  <!-- <a class="topNavLink" href="/faq"><script>document.write(translateWord("FAQ"));</script></a>
+  <a class="topNavLink" href="/"><script>document.write(translateWord("HOME"));</script></a> -->
+</div>
+
+<style media="screen">
+  #logoHrefTopNavbar:hover{
+    background-image:url(assets/logos/dwFullLogoActive.png);
+  }
+  @media screen and (min-width:780px){
+    #topNavBar{
+      width:100%;
+      position:absolute;
+      top:0;
+      left:0;
+    }
+    .topNavLink{
+      float: right;
+          margin: 32px 80px 0px 0px;
+          text-decoration: none;
+          position: relative;
+          color: #000;
+          font-size: 20px;
+          cursor: pointer;
+    }
+    #logoHrefTopNavbar{
+        height: 60px;
+        width:160px;
+        border:none;
+        margin: 30px 0 0 30px;
+        background-size: contain;
+        position: relative;
+        float: left;
+        background-repeat: no-repeat;
+        background-image: url(assets/logos/dwFullLogoBlack.png);
+    }
+  }
+
+
+
+
+
+  @media screen and (max-width:780px){
+    #topNavBar{
+      width:100%;
+      position:absolute;
+      top:0;
+      left:0;
+      height:80px;
+      background-color:#fff4ec;
+    }
+    .topNavLink{
+      float: right;
+          margin: 20px 15px 0px 20px;
+          text-decoration: none;
+          position: relative;
+          color: #000;
+          font-size: 20px;
+          cursor: pointer;
+    }
+    #logoHrefTopNavbar{
+        height: 50px;
+        margin: 20px 0 0 20px;
+        width: 140px;
+        border:none;
+        background-size: contain;
+        position: relative;
+        float: left;
+        background-repeat: no-repeat;
+        background-image: url(assets/logos/dwFullLogoBlack.png);
+    }
+  }
+</style>

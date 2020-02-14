@@ -1,0 +1,357 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+
+<div id="topHeader">
+  <a class="topNavLinks" href="#">Sign In</a>
+  <a class="topNavLinks" href="#">Sign Up</a>
+  <a class="topNavLinks" href="#">For Businesses</a>
+</div>
+
+<div class="" id="headlineTopContainer">
+
+  <div class="" id="headlineInnerTextContainer">
+    <img src="assets/logos/dwFullLogoBlack.png" id="topLogoImg" alt="logo">
+    <p id="headlineP">Quickly book appointments with services near you.</p>
+  </div>
+
+
+  <div class="" id="searchContainerTopHeadline">
+    <div class="" id="searchInputsContainer">
+      <input type="text" name="" value="" id="searchInput" placeholder="Yo">
+      <input type="submit" name="" value="Search" id="searchButton" placeholder="Search">
+    </div>
+    <!-- <div class="" id="filtersDivContainer">
+      <div class="" id="filtersDivInnerContainer">
+        <div class="filterSpecificContainer">
+          <span class="filterDivContent">Date/Time &#9660;</span>
+        </div>
+        <div class="filterSpecificContainer">
+          <span class="filterDivContent">Location &#9660;</span>
+        </div>
+        <div class="filterSpecificContainer">
+          <span class="filterDivContent">Service &#9660;</span>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+
+<div class="" id="forBusinessBarContainer">
+  <p id="centeredMessage">Dailyworks for businesses ></p>
+</div>
+
+
+
+<div class="" id="signInFooterBar">
+  <a href="#" id="signInFooterLink">Sign In ></a>
+</div>
+
+</body>
+
+
+<script>
+
+</script>
+
+
+<style media="screen">
+  *{
+    box-sizing:border-box;
+  }
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+}
+  @media screen and (min-width:780px){
+    #topHeader{
+      z-index:2;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:60px;
+      background-color:transparent;
+    }
+    .topNavLinks{
+      position:relative;
+      display:inline-block;
+      float:right;
+      margin:0;
+      margin-left:-30px;
+      margin-right:70px;
+      color:#fff;
+      top:25%;
+      text-decoration:none;
+    }
+    #headlineTopContainer{
+      position:relative;
+      top:0;
+      left:0;
+      width:100%;
+      height:800px;
+      margin:0px 0 0 0;
+      filter:brigthness(50%);
+      background-image:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ),url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/small-town-jobs-1542647755.jpg?crop=1.00xw:0.756xh;0,0.217xh&resize=980:*");
+      background-size:cover;
+      background-repeat:no-repeat;
+      padding-top:200px;
+    }
+    #headlineP{
+      margin:0;
+      color:#fff;
+      font-weight:900;
+      width:calc(100% - 30%);
+      text-align:left;
+      font-size:40px;
+      left:15%;
+      position:relative;
+    }
+    #topLogoImg{
+      position:relative;
+      display:block;
+      left:15%;
+      height:40px;
+      margin-bottom:50px;
+    }
+    #searchContainerTopHeadline{
+      position:absolute;
+      bottom:80;
+      width:100%;
+      height:150px;
+      left:0;
+      background-color:transparent;
+      border-bottom:1px solid #000;
+    }
+    #searchInputsContainer{
+      width:80%;
+      height:35%;
+      position:absolute;
+      top:0;
+      left:50%;
+      max-width:700px;
+      transform:translateX(-50%);
+    }
+    #searchInput{
+      padding-left:20px;
+      width:85%;
+      height:100%;
+      position:absolute;
+      top:0;
+      left:0;
+      border:1px solid #000;
+      border-top-left-radius:10px;
+      border-bottom-left-radius:10px;
+    }
+    #searchButton{
+      width:15%;
+      height:100%;
+      position:absolute;
+      top:0;
+      right:0;
+      border:1px solid #000;
+      color:#f9f9f9;
+      border-top-right-radius:10px;
+      border-bottom-right-radius:10px;
+    }
+    #filtersDivInnerContainer{
+      /* position:relative; */
+      margin:0;
+      height:100%;
+      /* width:fit-content; */
+      /* min-width:50px; */
+      left:50%;
+      transform:translateX(-50%);
+      background-color:transparent;
+      white-space:nowrap;
+      width:80%;
+      position:absolute;
+      max-width:900px;
+      overflow-x:auto;
+    }
+    #signInFooterBar{
+      display:none;
+    }
+  }
+  @media screen and (max-width:780px){
+    #topHeader{
+      z-index:2;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:60px;
+      background-color:#fff;
+      border-bottom:1px solid #000;
+    }
+    .topNavLinks{
+      position:relative;
+      display:inline-block;
+      float:right;
+      margin:0;
+      margin-left:-30px;
+      margin-right:70px;
+      color:#fff;
+      top:25%;
+      text-decoration:none;
+      display:none;
+    }
+    #headlineTopContainer{
+      position:relative;
+      top:0;
+      left:0;
+      width:100%;
+      height:650px;
+      margin:60px 0 0 0;
+      filter:brigthness(50%);
+      background-image:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ),url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/small-town-jobs-1542647755.jpg?crop=1.00xw:0.756xh;0,0.217xh&resize=980:*");
+      background-size:cover;
+      background-repeat:no-repeat;
+      padding-top:70px;
+    }
+    #headlineP{
+      margin:0;
+      color:#fff;
+      padding-left:20px;
+      padding-right:20px;
+      font-weight:900;
+      width:100%;
+      left:0;
+      text-align:left;
+      font-size:40px;
+    }
+    #topLogoImg{
+      position:relative;
+      display:block;
+      margin-left:20px;
+      height:40px;
+      margin-bottom:20px;
+    }
+    #searchContainerTopHeadline{
+      position:absolute;
+      bottom:110;
+      width:100%;
+      height:150px;
+      left:0;
+      background-color:transparent;
+      border-bottom:1px solid #000;
+    }
+
+    #searchInput{
+      padding-left:20px;
+      width:80%;
+      height:100%;
+      position:absolute;
+      top:0;
+      left:0;
+      border-top-left-radius:10px;
+      border-bottom-left-radius:10px;
+      border:1px solid #000;
+    }
+    #searchInputsContainer{
+      width:90%;
+      height:35%;
+      position:absolute;
+      top:0;
+      left:5%;
+    }
+    #searchButton{
+      width:20%;
+      height:100%;
+      position:absolute;
+      top:0;
+      right:0;
+      border:1px solid #000;
+      border-top-right-radius:10px;
+      border-bottom-right-radius:10px;
+    }
+
+
+
+    #filtersDivInnerContainer{
+      margin:0;
+      height:100%;
+      left:5%;
+      background-color:transparent;
+      width:90%;
+      position:absolute;
+      overflow-x:auto;
+      white-space:nowrap;
+    }
+    #signInFooterBar{
+      position:fixed;
+      bottom:0;
+      width:100%;
+      left:0;
+      height:50px;
+      background-color:#fff;
+    }
+  }
+
+
+
+
+#filtersDivContainer{
+  height: calc(65% - 55px);
+  top:calc(35% + 30px);
+  position:absolute;
+  background-color:transparent;
+  width:100%;
+  left:0;
+}
+.filterSpecificContainer{
+  display:inline-block;
+  position:relative;
+  height:100%;
+  width:fit-content;
+  margin:0 10px 0 0;
+  min-width:50px;
+  background-color:#f9f9f9;
+  border-radius:0px;
+}
+.filterDivContent{
+  margin: 0 20px 0 20px;
+position: relative;
+top: 25%;
+}
+#signInFooterLink{
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  text-decoration:none;
+}
+
+#forBusinessBarContainer{
+  position:relative;
+  top:0;
+  margin:0;
+  width:100%;
+  left:0;
+  height:fit-content;
+  margin-bottom:200px;
+}
+#centeredMessage{
+  text-align:center;
+  width:100%;
+  left:0;
+  top:0;
+  color:#000;
+  font-size:20px
+}
+#headlineInnerTextContainer{
+  position:relative;
+  top:0;
+  left:0;
+  height:fit-content;
+  width:100%;background-color:#f9f9f9;
+}
+
+
+
+</style>

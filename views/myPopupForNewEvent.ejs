@@ -1,0 +1,749 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+
+<input type="text" class="datePickerInputZone" name="" value="" placeholder="Date">
+<input type="text" class="timePickerInputZone" name="" value="" placeholder="Time">
+
+
+<div id="pageOverlay"></div>
+
+
+<style>
+  #pageOverlay{
+display:none;
+left:0px;
+top:0;
+width:100%;
+height:100%;
+background-color:transparent;
+  }
+.calendarPopupMainDiv{
+width:300px;
+height:340px;
+background-color:#fff;
+border:1px solid #000;
+position:fixed;
+left:40px;
+top:40px;
+}
+
+.rightArrowSwitchMonth{
+width:20px;
+height:20px;
+position:absolute;
+right:0px;
+text-align:right;
+padding-right:15px;
+top:10;
+}
+.leftArrowSwitchMonth{
+width:20px;
+height:20px;
+position:absolute;
+left:0px;
+top:10;
+padding-left:15px;
+}
+.monthNameRangeDiv{
+width:auto;
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+top:10;
+}
+.monthRangeContainerClass{
+border-bottom:1px solid #000;
+height:40px;
+position:absolute;
+left: 0;
+width:100%;
+top:0px;
+}
+
+.monthCalendarTable{
+height:calc(100% - 80px);
+width:100%;
+position:absolute;
+top:40px;
+left:0px;
+}
+.cancelMainDiv{
+position:absolute;
+left:5%;
+width:90%;
+bottom:0px;
+height:40px;
+border-top:1px solid #000;
+}
+.cancelInsideDiv{
+width:100%;
+height:100%;
+left:0;
+padding-top:3%;
+text-align:center;
+cursor:pointer;
+}
+
+
+
+.timePickerPopupMainDiv{
+  width:300px;
+  height:340px;
+  background-color:#fff;
+  border:1px solid #000;
+  position:fixed;
+  left:40px;
+  top:40px;
+}
+
+.hoursTable{
+  width:100%;
+  position:absolute;
+  top:0px;
+  left:0px;
+  border:1px solid #000;
+}
+.minutesTable{
+  width:100%;
+  position:absolute;
+  bottom:40px;
+  left:0px;
+  border:1px solid #000;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+<script>
+
+//check to destroy popups if clicked outside them
+document.getElementById('pageOverlay').onclick = function(){
+var clickInsideOneTimePopup = false;
+var clickInsideOneDatePopup = false;
+function forLoopCheck(){
+
+  for(var i=0;i<document.getElementsByClassName('calendarPopupMainDiv').length;i++){
+  if(document.getElementsByClassName('calendarPopupMainDiv')[i].contains(event.target)){
+    clickInsideOneDatePopup = true;
+    return;
+  }
+  }
+  for(var i=0;i<document.getElementsByClassName('timePickerPopupMainDiv').length;i++){
+  if(document.getElementsByClassName('timePickerPopupMainDiv')[i].contains(event.target)){
+    clickInsideOneTimePopup = true;
+    return;
+  }
+  }
+}
+
+
+forLoopCheck();
+
+
+if(!clickInsideOneDatePopup && !clickInsideOneTimePopup){
+  destroyAllOtherPopups();
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+  var startingHour = 08;
+  var finishHour = 17;
+  var weekDaysOff = [0,6];
+
+  var weekDayName = ["Sun","Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+
+  var monthsName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+
+
+  var dateInputAllElements = document.getElementsByClassName('datePickerInputZone');
+for(var i=0;i<dateInputAllElements.length;i++){
+var dataDateInput = dateInputAllElements[i];
+
+dataDateInput.onclick = function(){
+destroyAllOtherPopups();
+
+//get todays date
+var todaysDate = new Date();
+var todaysRealDate = new Date();
+
+
+
+
+
+
+var calendarPopup = document.createElement("div");
+calendarPopup.classList+= "calendarPopupMainDiv";
+
+
+
+
+
+//create elements in top div for month change
+var monthRangeContainer = document.createElement('div');
+monthRangeContainer.classList+= "monthRangeContainerClass";
+
+var leftArrowSwitchMonth = document.createElement('div');
+leftArrowSwitchMonth.classList+= "leftArrowSwitchMonth";
+leftArrowSwitchMonth.innerHTML = "&#9664;";
+
+var monthNameRangeDiv = document.createElement('div');
+monthNameRangeDiv.classList+= "monthNameRangeDiv";
+
+var rightArrowSwitchMonth = document.createElement('div');
+rightArrowSwitchMonth.classList+= "rightArrowSwitchMonth";
+rightArrowSwitchMonth.innerHTML = "&#9654;";
+
+
+
+
+//onclick functs for arrows switch months
+leftArrowSwitchMonth.onclick = function(){changeMonth(-1)};
+rightArrowSwitchMonth.onclick = function(){changeMonth(1)};
+
+//append arrows to top tab
+monthRangeContainer.appendChild(leftArrowSwitchMonth);
+monthRangeContainer.appendChild(monthNameRangeDiv);
+monthRangeContainer.appendChild(rightArrowSwitchMonth);
+
+calendarPopup.appendChild(monthRangeContainer);
+
+
+
+
+
+
+
+//create cancel button
+var cancelMainDiv = document.createElement('div');
+cancelMainDiv.classList+="cancelMainDiv";
+var cancelTextInsideDiv = document.createElement('div');
+cancelTextInsideDiv.classList+='cancelInsideDiv';
+cancelTextInsideDiv.innerHTML = "Cancel";
+cancelMainDiv.appendChild(cancelTextInsideDiv);
+calendarPopup.appendChild(cancelMainDiv);
+
+cancelTextInsideDiv.onclick = function(){
+  calendarPopup.remove();
+  closePageOverlay();
+}
+
+
+
+
+
+
+
+
+//create calendar table
+var monthTable = document.createElement("table");
+monthTable.classList += "monthCalendarTable";
+calendarPopup.appendChild(monthTable);
+
+
+
+function createCalendarTable(){
+
+  var dayNumberDatePicker = todaysDate.getDay();
+  var monthNumberDatePicker = todaysDate.getMonth();
+  var yearNumberDatePicker = todaysDate.getFullYear();
+
+
+  //set inside text arrows to todays date
+  monthNameRangeDiv.innerHTML = monthsName[monthNumberDatePicker] + " "+yearNumberDatePicker;
+
+
+monthTable.innerHTML = "";
+
+  var daysInMonth = new Date(yearNumberDatePicker, monthNumberDatePicker+1, 0).getDate();
+  var startDayOfMonth = new Date(yearNumberDatePicker, monthNumberDatePicker, 1).getDay();
+  var endDayOfMonth = new Date(yearNumberDatePicker, monthNumberDatePicker, daysInMonth).getDay();
+
+
+
+
+
+  // Determine the number of blank squares before start of month
+      var squares = [];
+      if (startDayOfMonth != 0) {
+        for (var i=0; i<startDayOfMonth; i++) {
+          squares.push("b");
+        }
+      }
+
+      // Populate the days of the month
+      for (var i=1; i<=daysInMonth; i++) {
+        squares.push(i);
+      }
+
+      // Determine the number of blank squares after end of month
+      if (endDayOfMonth != 6) {
+        var blanks = endDayOfMonth==0 ? 6 : 6-endDayOfMonth;
+        for (var i=0; i<blanks; i++) {
+          squares.push("b");
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // First row - name of Days sat sund mon tues wed thurs frid
+      var monthNameRow = document.createElement("tr");
+      var calendarCell = null;
+      for (var i=0;i<weekDayName.length;i++) {
+        calendarCell = document.createElement("td");
+        calendarCell.innerHTML = weekDayName[i];
+        calendarCell.style.textAlign = "center";
+        monthNameRow.appendChild(calendarCell);
+      }
+      monthNameRow.classList.add("monthNameRow");
+      monthTable.appendChild(monthNameRow);
+
+
+
+
+
+
+
+
+      // Days in Month put in table
+      var totalDays = squares.length;
+      var calendarRow = document.createElement("tr");
+      var monthDateCell = null;
+
+      for (var i=0; i<totalDays; i++) {
+        monthDateCell = document.createElement("td");
+        monthDateCell.style.textAlign = "center";
+        if (squares[i]=="b") {
+          monthDateCell.classList.add("blankDate");
+        } else {
+          var wrapperInsideTd = document.createElement("div");
+          wrapperInsideTd.innerHTML = "<div class='monthDateCell'>"+squares[i]+"</div>";
+          wrapperInsideTd.classList.add("wrapperInsideMonthCell");
+          monthDateCell.appendChild(wrapperInsideTd);
+          var newMonthNumber = monthNumberDatePicker+1;
+          monthDateCell.setAttribute("date", squares[i]+"/"+newMonthNumber+"/"+yearNumberDatePicker);
+
+
+//check if currently in past year
+if(todaysRealDate.getFullYear() > yearNumberDatePicker){
+  wrapperInsideTd.style.color = "#b5b5b5";
+monthDateCell.style.cursor = "not-allowed";
+}else if(todaysRealDate.getFullYear() == yearNumberDatePicker){
+  //check if currently in past month
+            if(todaysRealDate.getMonth()>monthNumberDatePicker){
+              wrapperInsideTd.style.color = "#b5b5b5";
+            monthDateCell.style.cursor = "not-allowed";
+
+
+  //check if in the same month as now
+            }else if(todaysRealDate.getMonth() == monthNumberDatePicker){
+
+  //check for anterior days in same month
+
+              if(todaysRealDate.getDate()== squares[i]){
+                wrapperInsideTd.style.backgroundColor =  "#99b8d1";
+                wrapperInsideTd.style.borderRadius = "20%";
+                wrapperInsideTd.style.paddingTop = "3px";
+                wrapperInsideTd.style.paddingBottom = "3px";
+
+              }
+
+              if(todaysRealDate.getDate()> squares[i]){
+                wrapperInsideTd.style.color = "#b5b5b5";
+                monthDateCell.style.cursor = "not-allowed";
+              }else{
+                monthDateCell.style.cursor = "default";
+                monthDateCell.addEventListener("click", function(){
+                  dataDateInput.value = this.getAttribute("date");
+                  calendarPopup.remove();
+                  closePageOverlay();
+                });
+
+              }
+
+            }
+
+}else{
+            monthDateCell.style.cursor = "default";
+            monthDateCell.addEventListener("click", function(){
+              dataDateInput.value = this.getAttribute("date");
+              calendarPopup.remove();
+              closePageOverlay();
+            });
+          }
+
+
+
+
+            // // if(!weekDaysOff.includes(new Date(monthDateCell.getAttribute("date")).getDay())){
+            //
+            //   monthDateCell.addEventListener("click", function(){
+            //     dataInput.value = this.getAttribute("date");
+            //     calendarPopup.remove();
+            //   });
+            // // }
+
+        }
+
+
+
+
+        calendarRow.appendChild(monthDateCell);
+        if (i!=0 && (i+1)%7==0) {
+          monthTable.appendChild(calendarRow);
+          calendarRow = document.createElement("tr");
+        }
+      }
+
+
+}
+
+
+
+createCalendarTable();
+document.getElementById("pageOverlay").appendChild(calendarPopup);
+makePageOverlayVisible();
+
+
+
+
+function changeMonth(plusOrMinus){
+
+var lastDayOfCurrentMonth = new Date(todaysDate.getFullYear(), todaysDate.getMonth()+1, 0).getDate();
+var lastDayOfNextMonth = new Date(todaysDate.getFullYear(), todaysDate.getMonth()+2, 0).getDate();
+var lastDayOfPastMonth = new Date(todaysDate.getFullYear(), todaysDate.getMonth(), 0).getDate();
+
+if(plusOrMinus == 1){
+//next Month
+  if(lastDayOfNextMonth<lastDayOfCurrentMonth){
+  todaysDate.setDate(lastDayOfNextMonth);
+  todaysDate.setMonth(todaysDate.getMonth()+1);
+  }else{
+  todaysDate.setMonth(todaysDate.getMonth()+1);
+  }
+}else{
+//past month == -1
+  if(lastDayOfPastMonth<lastDayOfCurrentMonth){
+  todaysDate.setDate(lastDayOfPastMonth);
+  todaysDate.setMonth(todaysDate.getMonth()-1);
+  }else{
+  todaysDate.setMonth(todaysDate.getMonth()-1);
+
+  }
+}
+
+    createCalendarTable();
+}
+
+
+
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+var timeInputAllElements = document.getElementsByClassName('timePickerInputZone');
+for(var i=0;i<timeInputAllElements.length;i++){
+
+
+var hourPicked = false;
+var minutePicked = false;
+
+var timeString = "";
+
+  var dataInput = timeInputAllElements[i];
+
+  dataInput.onclick = function(){
+    destroyAllOtherPopups();
+
+
+  //get todays date
+  var todaysDate = new Date();
+
+
+
+
+
+
+  var timePickerPopup = document.createElement("div");
+  timePickerPopup.classList+= "timePickerPopupMainDiv";
+
+
+
+  //create cancel button
+  var cancelMainDiv = document.createElement('div');
+  cancelMainDiv.classList+="cancelMainDiv";
+  var cancelTextInsideDiv = document.createElement('div');
+  cancelTextInsideDiv.classList+='cancelInsideDiv';
+  cancelTextInsideDiv.innerHTML = "Cancel";
+  cancelMainDiv.appendChild(cancelTextInsideDiv);
+  timePickerPopup.appendChild(cancelMainDiv);
+
+  cancelTextInsideDiv.onclick = function(){
+    timePickerPopup.remove();
+    closePageOverlay();
+  }
+
+
+//find nb rows for hours table
+var hoursBreakPoint = 4;
+var nbRowsHours = Math.ceil((finishHour - startingHour)/hoursBreakPoint);
+var nbTotalRowsHours = nbRowsHours+1;
+
+  //create hours table
+  var hoursTable = document.createElement("table");
+  hoursTable.classList += "hoursTable";
+  hoursTable.style.height = "calc((100% - 40px) / "+nbTotalRowsHours+" * "+nbRowsHours+")";
+  hoursTable.style.borderCollapse = "collapse";
+
+
+  timePickerPopup.appendChild(hoursTable);
+
+  //create minutes table
+  //create times table
+  var minutesTable = document.createElement("table");
+  minutesTable.classList += "minutesTable";
+  minutesTable.style.height = "calc((100% - 40px) / "+nbTotalRowsHours+")";
+  timePickerPopup.appendChild(minutesTable);
+
+
+  function createTimesTable(){
+
+
+//create hours rows
+      var hoursRow = document.createElement("tr");
+      var hoursCell = null;
+
+
+      for(var i = startingHour, counter = 1;i<finishHour+1;i++, counter++){
+console.log(i);
+        hoursCell = document.createElement('td');
+        hoursCell.style.textAlign = "center";
+        hoursCell.style.border = "1px solid #000";
+        hoursCell.setAttribute("time", i);
+        if(i<12){
+          hoursCell.innerText= i+"AM";
+        }else{
+          hoursCell.innerText= i+"PM";
+        }
+
+
+        hoursCell.onclick = function(){
+          setHours(this.getAttribute('time'));
+          hourPicked = true;
+          if(hourPicked && minutePicked){
+            destroyTimePopup();
+          }
+        }
+
+        hoursRow.appendChild(hoursCell);
+
+        if (counter == hoursBreakPoint && i!=finishHour) {
+          console.log('stop');
+          counter = 0;
+          hoursTable.appendChild(hoursRow);
+          hoursRow = document.createElement("tr");
+        }
+      }
+      hoursTable.appendChild(hoursRow);
+
+
+
+
+
+//create minutes rows
+      var minutesRow = document.createElement("tr");
+      var minutesCell = null;
+      for(var i = 0; i< 60; i+=5){
+        minutesCell = document.createElement('td');
+        minutesCell.style.textAlign = "center";
+        minutesCell.setAttribute("time", i);
+        if(i == 0 || i== 30 || i== 55){
+          minutesCell.innerText = ":"+i;
+
+        }else{
+        minutesCell.innerText = i;
+        }
+
+        minutesCell.onclick = function(){
+          setMinutes(this.getAttribute('time'));
+          minutePicked = true;
+          if(hourPicked && minutePicked){
+            destroyTimePopup();
+          }
+        }
+
+        minutesRow.appendChild(minutesCell);
+
+      }
+minutesTable.appendChild(minutesRow);
+
+  }
+
+
+
+function setMinutes(minuteVar){
+var fullMinuteString = minuteVar;
+  if(minuteVar<10){
+    fullMinuteString = "0"+minuteVar;
+  }
+
+var twoPointsFound = false;
+var positionTwoPoints = timeString.indexOf(":");
+//no tow points
+if(positionTwoPoints == -1){
+  timeString = "00:"+fullMinuteString;
+
+
+  //yes two points
+}else{
+var arrayTime = timeString.split(":");
+if(arrayTime[0]<12){
+timeString = arrayTime[0]+":"+fullMinuteString+"AM";
+
+}else{
+timeString = arrayTime[0]+":"+fullMinuteString+"PM";
+}
+}
+dataInput.value = timeString;
+}
+
+
+
+
+
+
+
+
+function setHours(hourVar){
+  var fullHourString = hourVar;
+  var amPmString = "";
+    if(hourVar<12){
+      amPmString = "AM";
+    }else{
+      amPmString = "PM";
+    }
+
+  var positionTwoPoints = timeString.indexOf(":");
+  //no tow points
+  if(positionTwoPoints == -1){
+    timeString = fullHourString+":00"+amPmString;
+
+
+    //yes two points
+  }else{
+  var arrayTime = timeString.split(":");
+  var realMinuteString = "";
+  //it was am
+  if(arrayTime[1].indexOf("A")!=-1){
+realMinuteString = (arrayTime[1].split("A"))[0];
+//it was pm
+  }else if(arrayTime[1].indexOf("P")!=-1){
+realMinuteString = (arrayTime[1].split("P"))[0]
+}else{
+  realMinuteString = arrayTime[1];
+}
+
+
+
+timeString = fullHourString+":"+realMinuteString+amPmString;
+  }
+  dataInput.value = timeString;
+}
+
+
+
+
+
+
+
+function destroyTimePopup(){
+timePickerPopup.remove();
+closePageOverlay();
+hourPicked = false;
+minutePicked = false;
+
+}
+
+
+    createTimesTable();
+    document.getElementById("pageOverlay").appendChild(timePickerPopup);
+    makePageOverlayVisible();
+  }
+}
+
+
+
+
+
+
+
+
+function destroyAllOtherPopups(){
+
+while(document.getElementsByClassName('timePickerPopupMainDiv').length > 0){
+  document.getElementsByClassName('timePickerPopupMainDiv')[0].remove();
+}
+
+while(document.getElementsByClassName('calendarPopupMainDiv').length > 0){
+  document.getElementsByClassName('calendarPopupMainDiv')[0].remove();
+}
+
+}
+
+
+
+
+
+function makePageOverlayVisible(){
+document.getElementById("pageOverlay").style.display = "block";
+
+}
+function closePageOverlay(){
+document.getElementById("pageOverlay").style.display = "none";
+
+}
+</script>

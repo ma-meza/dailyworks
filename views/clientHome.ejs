@@ -1,0 +1,144 @@
+<%- include partials/clientTopNavBar.ejs %>
+<%- include partials/clientBottomNavBar.ejs %>
+
+<body>
+
+
+<div id="mainScreenBody">
+  <div id="todayEventsMainDiv" class="">
+
+    <% if(!eventsObj || eventsObj.length == 0){ %>
+      <p>Hi <%= clientObj.clientName %>, <br>it looks like you have no events for today.</p>
+      <% }else{ %>
+        <p>Hi id:<%= userId %>, here are your next appointments.</p>
+        <div id="todayEventsAroundDiv" class="">
+
+        </div>
+    <% } %>
+
+
+
+  </div>
+
+
+
+  <% if(!clientObj.location || clientObj.location.length == 0){ %>
+    <div id="noLocationDiv" class="">
+      <img src="assets/emptyStatePictures/polarBearBinocular.png" alt="">
+      <p id="noLocationP">Please share us your location so we can make you discover the best stores in town.</p>
+      <div id="noLocationInputDiv" class="">
+        <input type="text" id="noLocationInput" name="" value="" placeholder="Your location">
+        <input type="submit" id="noLocationSubmit" name="" value="" placeholder="Your location">
+      </div>
+    </div>
+
+
+    <% }else{ %>
+
+      <div id="locationRelatedDiv" class="">
+
+      </div>
+
+
+  <% } %>
+
+</div>
+</body>
+
+
+<style>
+*{
+  box-sizing:border-box;
+}
+#mainScreenBody{
+  left:0px;
+position:absolute;
+top:70px;
+width:100%;
+min-height:calc(100% - 70px);
+background-color:var(--background-page-color);
+
+}
+#todayEventsMainDiv{
+  height:auto;
+  position:relative;
+  width:100%;
+  left:0px;
+  top:0px;
+  background-color:#fff;
+  -webkit-box-shadow: inset 0px -11px 32px -40px rgba(0,0,0,0.75);
+-moz-box-shadow: inset 0px -11px 32px -40px rgba(0,0,0,0.75);
+box-shadow: inset 0px -11px 32px -40px rgba(0,0,0,0.75);
+padding-bottom:40px;
+}
+#todayEventsMainDiv p{
+  padding-left:20px;
+  padding-right:20px;
+  position:relative;
+  width:100%;
+  top:20px;
+  margin-top:0px;
+  margin-bottom:0px;
+}
+#todayEventsAroundDiv{
+  margin-top:20px;
+
+}
+
+#locationRelatedDiv{
+  background-color:transparent;
+  padding-top:20px;
+  padding-bottom:20px;
+  position:relative;
+  top:0px;
+  width:100%;
+  left:0px;
+  min-height:10px;
+}
+#noLocationP{
+  margin-top:50px;
+  width:100%;
+  position:relative;
+  top:0px;
+  padding-left:20px;
+  padding-right:20px;
+}
+#noLocationInputDiv{
+width:80%;
+position:relative;
+left:10%;
+height:50px;
+margin-top:30px;
+border:1px solid #000;
+}
+#noLocationInput{
+position:absolute;
+height:100%;
+width:80%;
+left:0;
+}
+#noLocationSubmit{
+position:absolute;
+width:20%;
+height:100%;
+right:0;
+}
+
+
+#noLocationDiv{
+  text-align:center;
+  width:100%;
+  position:relative;
+  top:0;
+  min-height:100px;
+  margin-bottom:100px;
+}
+#noLocationDiv img{
+height:250px;
+position:relative;
+left:25%;
+top:30px;
+transform:translateX(-50%);
+
+}
+</style>
