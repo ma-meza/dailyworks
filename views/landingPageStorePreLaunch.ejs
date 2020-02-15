@@ -9,18 +9,18 @@
   <div id="rightHalfDiv">
     <div id="textContainer">
       <p id="comingSoonP"><script>document.write(translateWord("LAUNCHING MARCH 2020"));</script></p>
-      <p id="headlineP"><script>document.write(translateWord("Manage your business appointments more effectively than ever."));</script></p>
+      <p id="headlineP"><script>document.write(translateWord("You can't accept appointments 24/7, we can help with that."));</script></p>
       <!-- <p class="subHeadlineP">Simplifie la facon dont ton équipe organise, modifie et accéde aux rendez-vous de ton entreprise</p> -->
 
         <div id="inputsContainer">
         <% if(locals.countUsers){%>
-          <p class="subHeadlineP"><script>document.write(translateWord("Join the "));</script><span class="boldedSPan"><%=countUsers%></span><script>document.write(translateWord(" others on our vip list."));</script></p>
+          <p class="subHeadlineP"><script>document.write(translateWord("No more phone calls, let your customers make appointments online."));</script></p>
         <% } %>
         <input id="emailInput" type="email" name="" value="" placeholder="">
         <script>document.getElementById("emailInput").placeholder = translateWord("Your email");</script>
         <p id="errorTextUnderEmail"></p>
-        <button id="submitButton" type="button" name="button"><script>document.write(translateWord("Join the vip pre-launch list"));</script></button>
-        <p class="subHeadlineP"><script>document.write(translateWord("Sign up now to be notified when we launch and receive 3 MONTHS FOR FREE."));</script></p>
+        <button id="submitButton" type="button" name="button"><script>document.write(translateWord("Get notified when we launch"));</script></button>
+        <p class="subHeadlineP"><script>document.write(translateWord("Submit your email and get 3 months for free."));</script></p>
       </div>
     </div>
   </div>
@@ -29,35 +29,20 @@
 
   <div id="benefitsDiv" class="">
     <div class="" id="benefitsChildDiv">
-        <p class="secondContainerTitleP"><script>document.write(translateWord("Why you need Dailyworks"));</script></p>
+        <p class="secondContainerTitleP"><script>document.write(translateWord("What can Dailyworks do for you?"));</script></p>
 
         <div class="valuesAddedParentContainer">
           <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("Your phone keeps ringing to book appointments"));</script></p>
+            <p class="valueAddedTextP"><script>document.write(translateWord("Do more work in less time by letting your customers make appointments by themselves online."));</script></p>
           </div>
-          <!-- <p class="valueAddedEmojiIcon">&#128224</p> -->
         </div>
 
         <div class="valuesAddedParentContainer">
           <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("Finding an available time slot requires hardcore university maths"));</script></p>
+            <p class="valueAddedTextP"><script>document.write(translateWord("Show to customers that you have an available spot right now, when their favorite business doesn't."));</script></p>
           </div>
-          <!-- <p class="valueAddedEmojiIcon">&#129327</p> -->
         </div>
 
-        <div class="valuesAddedParentContainer">
-          <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("You can't book appointments when your business is closed"));</script></p>
-          </div>
-          <!-- <p class="valueAddedEmojiIcon">🌙</p> -->
-        </div>
-
-        <div class="valuesAddedParentContainer">
-          <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("You spend too much time and money planning, and not enough time working"));</script></p>
-          </div>
-          <!-- <p class="valueAddedEmojiIcon">&#128295</p> -->
-      </div>
     </div>
     <div class="" id="siteFooter">
       <script type="text/javascript">
@@ -111,29 +96,11 @@
   background-color:#fff;
 }
 
-@media screen and (min-width:1290px){
-  #benefitsChildDiv{
-    position:relative;
-    width:76%;
-    left:12%;
-    margin-bottom:300px;
-    height:auto;
-  }
-}
-@media screen and (min-width:780px) and (max-width:1290px){
-  #benefitsChildDiv{
-    position:relative;
-    width:90%;
-    left:5%;
-    margin-bottom:300px;
-    height:auto;
-  }
-}
 @media screen and (min-width:780px){
 
   .valuesAddedParentContainer{
     position: relative;
-    width: calc((100% - 12px) / 4);
+    width: calc((100% - 20px) / 2);
     left: 0;
     margin: 0;
     padding: 20px;
@@ -153,7 +120,7 @@
     transform: translateY(-50%);
     left: 0;
     text-align: center;
-    padding: 20 10 20 10;
+    padding: 20px 55px 20px 55px;
     line-height:22px;
   }
   .valuesAddedChildContainer{
@@ -311,6 +278,15 @@
     bottom:20px;
     position:absolute;
   }
+  #benefitsChildDiv{
+    position: relative;
+  width: 90%;
+  left: 50%;
+  margin-bottom: 300px;
+  height: auto;
+  max-width: 900px;
+  transform: translateX(-50%);
+  }
 }
 
 
@@ -350,8 +326,11 @@
     background-color:#fff;
   }
   #benefitsChildDiv{
-    width:100%;
-    margin-bottom:100px;
+    position: relative;
+  width: 100%;
+  left: 0;
+  margin-bottom: 300px;
+  height: auto;
   }
   .secondContainerTitleP{
     font-size:var(--mobile-font-size-page-title);
@@ -448,6 +427,7 @@
     margin:0px 0px 20px 0px;
     border:none;
     color:#fff;
+    padding:10px;
     background-color:rgba(58, 122, 182, 1);
     border-radius:5px;
     font-size:20px;
