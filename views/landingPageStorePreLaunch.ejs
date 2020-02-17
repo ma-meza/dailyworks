@@ -9,23 +9,23 @@
   <div id="rightHalfDiv">
     <div id="textContainer">
       <p id="comingSoonP"><script>document.write(translateWord("LAUNCHING MARCH 2020"));</script></p>
-      <p id="headlineP"><script>document.write(translateWord("You can't accept appointments 24/7, we can help with that."));</script></p>
+      <p id="headlineP"><script>document.write(translateWord("You cannot book appointments while you sleep. We can help with that."));</script></p>
       <!-- <p class="subHeadlineP">Simplifie la facon dont ton équipe organise, modifie et accéde aux rendez-vous de ton entreprise</p> -->
 
         <div id="inputsContainer">
         <% if(locals.countUsers){%>
-          <p class="subHeadlineP"><script>document.write(translateWord("No more phone calls, let your customers make appointments online."));</script></p>
+          <p class="subHeadlineP"><script>document.write(translateWord("No more phone calls, let your customers book their own appointments online."));</script></p>
         <% } %>
         <input id="emailInput" type="email" name="" value="" placeholder="">
         <script>document.getElementById("emailInput").placeholder = translateWord("Your email");</script>
         <p id="errorTextUnderEmail"></p>
         <button id="submitButton" type="button" name="button"><script>document.write(translateWord("Get notified when we launch"));</script></button>
-        <p class="subHeadlineP"><script>document.write(translateWord("Submit your email and get 3 months for free."));</script></p>
+        <p class="subHeadlineP"><script>document.write(translateWord("Submit your email to get a 3 month free trial."));</script></p>
       </div>
     </div>
   </div>
 
-  <% include partials/storeLandingPageHeaderPreRelease.ejs%>
+  <% include partials/storeLandingPageHeaderPreRelease.ejs %>
 
   <div id="benefitsDiv" class="">
     <div class="" id="benefitsChildDiv">
@@ -33,13 +33,18 @@
 
         <div class="valuesAddedParentContainer">
           <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("Do more work in less time by letting your customers make appointments by themselves online."));</script></p>
+            <p class="valueAddedTextP"><script>document.write(translateWord("Let customers fill your agenda online while you focus on running your business."));</script></p>
+            <!-- spend more time serving your customers and less managing your schedule.
+            let your customers build your agenda while you serve them. -->
           </div>
         </div>
 
         <div class="valuesAddedParentContainer">
           <div class="valuesAddedChildContainer">
-            <p class="valueAddedTextP"><script>document.write(translateWord("Show to customers that you have an available spot right now, when their favorite business doesn't."));</script></p>
+            <p class="valueAddedTextP"><script>document.write(translateWord("We let potential customers know you have a schedule opening when their favorite business doesn't."));</script></p>
+            <!-- show potentials you can serve them when yiur competitors can't.
+            let your customers know you can serve them now, when their fave business can't.
+            if a customer's favorite business can't serve them now, -->
           </div>
         </div>
 
