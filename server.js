@@ -79,8 +79,8 @@ var emailTransporterAdmin = nodemailer.createTransport({
 
 // mongoose connect to MONGODB
 
-// mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
-mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+// mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
 
 
 
