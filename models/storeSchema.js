@@ -15,7 +15,7 @@ var storeSchema = new Schema({
   password:{type:String, required:true},
   phoneNumber:{type:String, required:false},
   location:{type:String, required:false},
-  type:{type:Number, required:true},
+  type:{type:Number, required:false}, //maybe change this to true
   ownerName:{type:String, required:false},
   newNotifications:{type:Boolean, default:false},
   newMessageNotifications:{type:Boolean, default:false},

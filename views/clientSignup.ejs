@@ -1,172 +1,298 @@
-<html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  </head>
-  <body>
+<%- include partials/regularEmptyHead.ejs %>
+<body>
+  <div id="mainFormContainer">
+    <a href="/"><img src="assets/logos/dwFullLogoBlack.png" id="logoImg" alt=""></a>
+    <p id="formTitle">Sign up</p>
+    <input type="text" class="textInput" id="nameInput" name="" placeholder="name" value="">
+    <input type="email" class="textInput" id="emailInput" name="" placeholder="youremail@email.com" value="">
+    <input type="password" class="textInput" id="passwordInput" name="" placeholder="password" value="">
+    <p id="messageP"></p>
+    <input type="submit" id="inputSubmit" name="" value="Sign up">
+    <!-- <p class="optionsP">Forgot your password? <a class="optionsLink" href="#">Recover your password</a></p> -->
+    <p class="optionsP">Already have an account? <a class="optionsLink" href="/login">Sign in now</a></p>
 
+    <a href="/googleAuth"><img id="signupGoogleButton" src="assets/socialIcons/googleIconLogin.png"></href>
+    <a href="/facebookAuth"><img id="signupFacebookButton" src="assets/socialIcons/fbIcon.jpg"></href>
 
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="email">Email:</label>
-    <input id="clientSignupEmail" name="email" equired class="signupInputs" type="email" placeholder="Email"></input>
-</div>
-<label class="inputUnderText" id="emailUnderText" for="email"></label>
-
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="password">Password:</label>
-    <input id="clientSignupPassword" name="password" minlength = '5' required class="signupInputs" type="password" placeholder="Password"></input>
-</div>
-<label class="inputUnderText" id="passwordUnderText" for="password"></label>
-
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="password2">Re-type password:</label>
-    <input id="clientSignupRetypePassword" name="password2" minlength = '5' required class="signupInputs" type="password" placeholder="re-type Password"></input>
-</div>
-<label class="inputUnderText" id="password2UnderText" for="password2"></label>
-
-
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="name">Your name:</label>
-    <input id="clientSignupName" minlength = '3' name="name" required class="signupInputs" type="text" placeholder="Your name"></input>
-</div>
-<label class="inputUnderText" id="nameUnderText" for="name"></label>
+  </div>
+</body>
 
 
 
-    <input id="clientSignupSubmit" class="signupButton" type="submit" placeholder="Sign Up"></input>
+<style media="screen">
+  body{
+    background-color:#fff4ec;
+  }
+    @media screen and (min-width:780px){
+      #logoImg{
+        position:relative;
+        margin:0 0 30px 60px;
+        width:30%;
+        left:0;
+      }
+      #mainFormContainer{
+        width:80%;
+        position:relative;
+        max-width:550px;
+        left:50%;
+        margin:0;
+        transform:translateX(-50%);
+        height:auto;
+        top:100px;
+        background-color:#fff;
+        border:none;
+        box-shadow:var(--box-shadow-card);
+        border-radius:var(--official-border-radius);
+        padding:40px 0 40px 0;
+      }
+      #formTitle{
+        margin:0 0 30px 0;
+        width:100%;
+        padding:0 60px 0 60px;
+        font-size:var(--desktop-font-size-page-title);
+        position:relative;
+        font-weight:var(--mobile-font-weight-bold);
+        text-align:left;
+
+        }
+        .textInput{
+          background-color:#fff;
+          padding:0 20px 0 20px;
+          width:calc(100% - 120px);
+          position:relative;
+          margin:0 60px 15px 60px;
+          font-size:var(--desktop-font-size-regular);
+          border:1px solid #000;
+          border-radius:var(--official-border-radius);
+          height:50px;
+        }
+        #inputSubmit{
+          width:calc(100% - 120px);
+          position:relative;
+          margin:0 60px 30px 60px;
+          border-radius:var(--official-border-radius);
+          border:none;
+          height:50px;
+          background-color:var(--icon-color-active);
+          color:#fff;
+          font-weight:var(--mobile-font-weight-bold);
+          font-size:var(--desktop-font-size-regular);
+        }
+        #messageP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 60px 0 60px;
+          font-size:var(--desktop-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:var(--font-color-red);
+        }
+        .optionsP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 60px 0 60px;
+          font-size:var(--desktop-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:#000;
+        }
+        .optionsLink{
+          width:100%;
+          font-size:var(--desktop-font-size-regular);
+          font-weight:var(--mobile-font-weight-regular);
+          color:var(--icon-color-active);
+          text-decoration:none;
+        }
+        #signupGoogleButton{
+          position:relative;
+          margin:0 0 0 60px;
+        height:40px;
+    display:block;
+        }
+
+        #signupFacebookButton{
+          position:relative;
+          margin:0 0 0 60px;
+        height:40px;
+        display:block;
+        }
+    }
+
+    @media screen and (max-width:780px){
+      #logoImg{
+        position:relative;
+        margin:0 0 30px 20px;
+        width:50%;
+        left:0;
+      }
+      #mainFormContainer{
+        width:96%;
+        position:relative;
+        left:2%;
+        margin:0;
+        top:50%;
+        transform:translateY(-50%);
+        height:auto;
+        background-color:#fff;
+        border:none;
+        box-shadow:var(--box-shadow-card);
+        border-radius:var(--official-border-radius);
+        padding:40px 0 40px 0;
+      }
+      #formTitle{
+        margin:0 0 30px 0;
+        width:100%;
+        padding:0 20px 0 20px;
+        font-size:var(--mobile-font-size-page-title);
+        position:relative;
+        font-weight:var(--mobile-font-weight-bold);
+        text-align:left;
+
+        }
+        .textInput{
+          background-color:#fff;
+          padding:0 20px 0 20px;
+          width:calc(100% - 40px);
+          position:relative;
+          margin:0 20px 15px 20px;
+          font-size:var(--mobile-font-size-regular);
+          border:1px solid #000;
+          border-radius:var(--official-border-radius);
+          height:50px;
+        }
+        #inputSubmit{
+          width:calc(100% - 40px);
+          position:relative;
+          margin:0 20px 30px 20px;
+          border-radius:var(--official-border-radius);
+          border:none;
+          height:50px;
+          background-color:var(--icon-color-active);
+          color:#fff;
+          font-weight:var(--mobile-font-weight-bold);
+          font-size:var(--mobile-font-size-regular);
+        }
+        #messageP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 20px 0 20px;
+          font-size:var(--mobile-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:var(--font-color-red);
+        }
+        .optionsP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 20px 0 20px;
+          font-size:var(--mobile-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:#000;
+        }
+        .optionsLink{
+          width:100%;
+          font-size:var(--mobile-font-size-regular);
+          font-weight:var(--mobile-font-weight-regular);
+          color:var(--icon-color-active);
+          text-decoration:none;
+        }
+        #signupGoogleButton{
+          position:relative;
+          margin:0 0 0 20px;
+        height:40px;
+    display:block;
+        }
+
+        #signupFacebookButton{
+          position:relative;
+          margin:0 0 0 20px;
+        height:40px;
+        display:block;
+        }
+    }
 
 
-
-
-<a href="/googleAuth">Signup with google</a>
-<a href="/facebookAuth">Signup with facebook</a>
-
-  </body>
-</html>
-
-<style>
-.js-hide-label {
-    opacity: 0 !important;
-    top: 1.5em
-}
-.labelInput{
-opacity:1;
--webkit-transition: .333s ease top, .333s ease opacity;
-    transition: .333s ease top, .333s ease opacity;
-}
-
-
-.inputAround{
-  width:500px;
-  background-color:#fff;
-  border:1px solid #000;
-}
-
-
-.signupInputs{
-font-size: 25px;
-bottom:0px;
-border:0px;
-background-color:#fff;
-width:100%;
-}
 </style>
 
+
+
 <script>
-var inputs = document.getElementsByClassName('signupInputs');
-for(var i =0;i<inputs.length;i++){
 
 
-  $( inputs[i] ).keyup(function() {
-    if(this.value==""){
-      this.previousElementSibling.classList.add('js-hide-label');
-    }else{
-      this.previousElementSibling.classList.remove('js-hide-label');
-    }
-  });
-}
+  document.getElementById("inputSubmit").onclick = function(){
+    submitLoginForm();
+  };
 
 
+  function submitLoginForm(){
+    document.getElementById('messageP').innerText = "";
 
-
-document.getElementById("clientSignupSubmit").onclick = function(){
-
-var labelsUnderInput = document.getElementsByClassName('inputUnderText');
-for(var i=0;i<labelsUnderInput.length;i++){
-  labelsUnderInput[i].innerText = "";
-}
+    var name = $("#nameInput").val();
+    var email = $("#emailInput").val();
+    var password = $("#passwordInput").val();
 
 
 
+    if(email != "" && password != "" && name != ""){
+      //all fields are full
+      if(name.length >=5 && email.length>6 && password.length>=6){
+        //fields have good length
 
-  var emailSignup = $("#clientSignupEmail").val();
-  var password = $("#clientSignupPassword").val();
-  var name = $("#clientSignupName").val();
-  var password2 = $("#clientSignupRetypePassword").val();
-
-
-
-  if(emailSignup!="" && password!="" && name!="" && password2!=""){
-    //all fields are full
-    if(password.length>=5 && password2.length>=5 && name.length>=3){
-      //ALL FIElds have good length
-      if(password == password2){
-        //both password match
-        $.ajax({
-              url: '/postLocalClientSignup',
-              type: 'post',
-              data: {email:emailSignup, password:password, name:name},
-              success: function( data, textStatus){
-                if(data == "ok"){
-                  location.href = "/login";
-                }else if(data=="alreadyExist"){
-                  alert("Client already exists");
-
-                }else if(data=="err"){
-
-                }else{
-
-                }
-              },
-              error: function( textStatus, errorThrown ){
-                  if(textStatus=="alreadyExist"){
-
-                  }else if(textStatus=="err"){
-
-                  }else{
-
-                  }
+      $.ajax({
+            url: '/postLocalClientSignup',
+            type: 'post',
+            data: {email:email, password:password, name:name},
+            success: function( data, textStatus){
+              if(data == "ok"){
+                location.href = "/login";
+              }else if(data=="alreadyExist"){
+                document.getElementById("messageP").innerText = "Looks like this email is already registered";
+              }else if(data=="err"){
+                document.getElementById("messageP").innerText = "Looks like there is an error, it's not you it's us";
+              }else{
+                document.getElementById("messageP").innerText = "Looks like there is an error, it's not you it's us";
               }
-          });
+            },
+            error: function( textStatus, errorThrown ){
+              if(textStatus=="alreadyExist"){
+                document.getElementById("messageP").innerText = "Looks like there is an error, it's not you it's us";
+              }else if(textStatus=="err"){
+                document.getElementById("messageP").innerText = "Looks like there is an error, it's not you it's us";
+              }else{
+                document.getElementById("messageP").innerText = "Looks like there is an error, it's not you it's us";
+              }
+            }
+        });
       }else{
-        //passw dont match
-        document.getElementById("password2UnderText").innerText = "Your passwords do not match";
+        //not all fields have good length
+        if(password.length<6){
+          document.getElementById("messageP").innerText = "Your password must be at least 6 characters";
+        }
+        if(name.length<5){
+          document.getElementById("nameUnderText").innerText = "Your name must be at least 5 characters";
+        }
+        if(email.length<6){
+          document.getElementById("nameUnderText").innerText = "Your email must be at least 6 characters";
+        }
 
       }
     }else{
-      //not all fields have good length
-      if(password.length<5){
-        document.getElementById("passwordUnderText").innerText = "Your password must be at least 5 characters";
+      //one or more field is empty
+      if(email ==""){
+        document.getElementById('messageP').innerText = "Please write your email";
       }
-      if(name.length<5){
-        document.getElementById("nameUnderText").innerText = "Your name must be at least 5 characters";
+      if(password ==""){
+        document.getElementById('messageP').innerText = "Please write your password";
       }
-    }
-
-  }else{
-    //one or more field is empty
-    if(emailSignup ==""){
-      document.getElementById("emailUnderText").innerText = "Please write your email";
-    }
-    if(password ==""){
-      document.getElementById("passwordUnderText").innerText = "Please write your password";
-    }
-    if(password2 ==""){
-      document.getElementById("password2UnderText").innerText = "Please re-type your password";
-    }
-    if(name ==""){
-      document.getElementById("nameUnderText").innerText = "Please write your name";
+      if(name == ""){
+        document.getElementById('messageP').innerText = "Please write your name"
+      }
     }
   }
-}
 
 </script>

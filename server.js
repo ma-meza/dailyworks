@@ -30,14 +30,14 @@ app.use(cookieParser());
 
 
 
-// const express_enforces_ssl = require('express-enforces-ssl');
-// const helmet = require('helmet');
-// const sixtyDaysInSeconds = 5184000
-// app.use(helmet.hsts({
-//   maxAge: sixtyDaysInSeconds
-// }));
-// app.use(express_enforces_ssl());
-// app.set('trust proxy', true);
+const express_enforces_ssl = require('express-enforces-ssl');
+const helmet = require('helmet');
+const sixtyDaysInSeconds = 5184000
+app.use(helmet.hsts({
+  maxAge: sixtyDaysInSeconds
+}));
+app.use(express_enforces_ssl());
+app.set('trust proxy', true);
 
 
 app.use(express.static(__dirname + '/public')); // configure express to use public folder for all img srcs and other files
@@ -144,6 +144,10 @@ app.get('/', function(req, res){
   })
 
 });
+
+app.get('/signupTestStore', function(req,res){
+res.render('signupTestStore');
+})
 
 app.post('/setlangCookie', function(req, res){
   var languageChosen = req.body.lang;

@@ -121,26 +121,72 @@ var password = req.body.password;
 
 
 
+// router.post('/postLocalStoreSignup', sessionMiddlewares.loggedInCheckForNonProtectedRoutes, function(req, res){
+//   console.log(req.body.planId);
+//   var email = req.body.email;
+//   var password = req.body.password;
+//   var storeName = req.body.storeName;
+//   var storeType = req.body.storeType;
+//
+//   var product = {
+//           // name: req.body.productName
+//         };
+//   var plan = {
+//     id: req.body.planId,
+//     // name: req.body.planName,
+//     // amount: req.body.planAmount,
+//     // interval: req.body.planInterval,
+//     // interval_count: req.body.planIntervalCount
+//   }
+//
+//
+//
+//
+//
+//   Store.findOne({email:email}).then(function(currentUser){
+//          if(currentUser){
+//            //user exists
+//            res.send('alreadyExist');
+//          }else{
+//            bcrypt.hash(password, saltRoundsBcrypt, function(err, hash) {
+//              if(err){
+//                console.log(err);
+//                res.send('err');
+//              }else{
+//
+//                STRIPE_API.createCustomerAndSubscription(req.body).then(function(stripeSubscriptionObj){
+//                  var subscriptionId = stripeSubscriptionObj.id;
+//                  var tasksArray = [0,1];
+//                        Store.create({ storeName: storeName, email:email, password:hash, type:storeType, stripeSubscriptionId: subscriptionId, registrationTasks:tasksArray}, function (err, storeObj) {
+//                        if (err){
+//                          console.log(err);
+//                          res.send('err');
+//                        }else{
+//                          res.send('ok');
+//                        }
+//                      });
+//
+//                }).catch(err => {
+//                  console.log(err);
+//                  res.send("err");
+//                });
+//
+//
+//              }
+//          });
+//          }
+//     });
+// });
+
+
+
+
+
+
 router.post('/postLocalStoreSignup', sessionMiddlewares.loggedInCheckForNonProtectedRoutes, function(req, res){
-  console.log(req.body.planId);
   var email = req.body.email;
   var password = req.body.password;
   var storeName = req.body.storeName;
-  var storeType = req.body.storeType;
-
-  var product = {
-          // name: req.body.productName
-        };
-  var plan = {
-    id: req.body.planId,
-    // name: req.body.planName,
-    // amount: req.body.planAmount,
-    // interval: req.body.planInterval,
-    // interval_count: req.body.planIntervalCount
-  }
-
-
-
 
 
   Store.findOne({email:email}).then(function(currentUser){
@@ -153,11 +199,8 @@ router.post('/postLocalStoreSignup', sessionMiddlewares.loggedInCheckForNonProte
                console.log(err);
                res.send('err');
              }else{
-
-               STRIPE_API.createCustomerAndSubscription(req.body).then(function(stripeSubscriptionObj){
-                 var subscriptionId = stripeSubscriptionObj.id;
                  var tasksArray = [0,1];
-                       Store.create({ storeName: storeName, email:email, password:hash, type:storeType, stripeSubscriptionId: subscriptionId, registrationTasks:tasksArray}, function (err, storeObj) {
+                       Store.create({ storeName: storeName, email:email, password:hash, registrationTasks:tasksArray}, function (err, storeObj) {
                        if (err){
                          console.log(err);
                          res.send('err');
@@ -165,13 +208,6 @@ router.post('/postLocalStoreSignup', sessionMiddlewares.loggedInCheckForNonProte
                          res.send('ok');
                        }
                      });
-
-               }).catch(err => {
-                 console.log(err);
-                 res.send("err");
-               });
-
-
              }
          });
          }

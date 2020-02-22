@@ -1,157 +1,268 @@
-<html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  </head>
-  <body>
+<%- include partials/regularEmptyHead.ejs %>
+<body>
+  <div id="mainFormContainer">
+    <a href="/"><img src="assets/logos/dwFullLogoBlack.png" id="logoImg" alt=""></a>
+    <p id="formTitle">Sign in</p>
+    <input type="email" class="textInput" id="emailInput" name="" placeholder="youremail@email.com" value="">
+    <input type="password" class="textInput" id="passwordInput" name="" placeholder="password" value="">
+    <p id="messageP"></p>
+    <input type="submit" id="inputSubmit" name="" value="Sign in">
+    <!-- <p class="optionsP">Forgot your password? <a class="optionsLink" href="#">Recover your password</a></p> -->
+    <p class="optionsP">Don't have an account? <a class="optionsLink" href="/signup">Create an account now</a></p>
+
+    <a href="/googleAuth"><img id="loginGoogleButton" src="assets/socialIcons/googleIconLogin.png"></href>
+    <a href="/facebookAuth"><img id="loginFacebookButton" src="assets/socialIcons/fbIcon.jpg"></href>
+  </div>
+</body>
 
 
 
+<style media="screen">
+  body{
+    background-color:#fff4ec;
+  }
+    @media screen and (min-width:780px){
+      #logoImg{
+        position:relative;
+        margin:0 0 30px 60px;
+        width:30%;
+        left:0;
+      }
+      #mainFormContainer{
+        width:80%;
+        position:relative;
+        max-width:550px;
+        left:50%;
+        margin:0;
+        transform:translateX(-50%);
+        height:auto;
+        top:100px;
+        background-color:#fff;
+        border:none;
+        box-shadow:var(--box-shadow-card);
+        border-radius:var(--official-border-radius);
+        padding:40px 0 40px 0;
+      }
+      #formTitle{
+        margin:0 0 30px 0;
+        width:100%;
+        padding:0 60px 0 60px;
+        font-size:var(--desktop-font-size-page-title);
+        position:relative;
+        font-weight:var(--mobile-font-weight-bold);
+        text-align:left;
 
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="email">Email:</label>
-  <input id="clientLoginEmail" name="email" class="loginInputs" type="email" placeholder="Email"></input>
-</div>
-<label class="inputUnderText" id="emailUnderText" for="email"></label>
+        }
+        .textInput{
+          background-color:#fff;
+          padding:0 20px 0 20px;
+          width:calc(100% - 120px);
+          position:relative;
+          margin:0 60px 15px 60px;
+          font-size:var(--desktop-font-size-regular);
+          border:1px solid #000;
+          border-radius:var(--official-border-radius);
+          height:50px;
+        }
+        #inputSubmit{
+          width:calc(100% - 120px);
+          position:relative;
+          margin:0 60px 30px 60px;
+          border-radius:var(--official-border-radius);
+          border:none;
+          height:50px;
+          background-color:var(--icon-color-active);
+          color:#fff;
+          font-weight:var(--mobile-font-weight-bold);
+          font-size:var(--desktop-font-size-regular);
+        }
+        #messageP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 60px 0 60px;
+          font-size:var(--desktop-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:var(--font-color-red);
+        }
+        .optionsP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 60px 0 60px;
+          font-size:var(--desktop-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:#000;
+        }
+        .optionsLink{
+          width:100%;
+          font-size:var(--desktop-font-size-regular);
+          font-weight:var(--mobile-font-weight-regular);
+          color:var(--icon-color-active);
+          text-decoration:none;
+        }
+        #loginGoogleButton{
+          position:relative;
+          margin:0 0 0 60px;
+        height:40px;
+    display:block;
+        }
 
+        #loginFacebookButton{
+          position:relative;
+          margin:0 0 0 60px;
+        height:40px;
+        display:block;
+        }
+    }
 
-<div class="inputAround">
-  <label class="labelInput js-hide-label" for="password">Password:</label>
-  <input id="clientLoginPassword" name="password" class="loginInputs" type="password" placeholder="Password"></input>
-</div>
-<label class="inputUnderText" id="passwordUnderText" for="password"></label>
+    @media screen and (max-width:780px){
+      #logoImg{
+        position:relative;
+        margin:0 0 30px 20px;
+        width:50%;
+        left:0;
+      }
+      #mainFormContainer{
+        width:96%;
+        position:relative;
+        left:2%;
+        margin:0;
+        top:50%;
+        transform:translateY(-50%);
+        height:auto;
+        background-color:#fff;
+        border:none;
+        box-shadow:var(--box-shadow-card);
+        border-radius:var(--official-border-radius);
+        padding:40px 0 40px 0;
+      }
+      #formTitle{
+        margin:0 0 30px 0;
+        width:100%;
+        padding:0 20px 0 20px;
+        font-size:var(--mobile-font-size-page-title);
+        position:relative;
+        font-weight:var(--mobile-font-weight-bold);
+        text-align:left;
 
+        }
+        .textInput{
+          background-color:#fff;
+          padding:0 20px 0 20px;
+          width:calc(100% - 40px);
+          position:relative;
+          margin:0 20px 15px 20px;
+          font-size:var(--mobile-font-size-regular);
+          border:1px solid #000;
+          border-radius:var(--official-border-radius);
+          height:50px;
+        }
+        #inputSubmit{
+          width:calc(100% - 40px);
+          position:relative;
+          margin:0 20px 30px 20px;
+          border-radius:var(--official-border-radius);
+          border:none;
+          height:50px;
+          background-color:var(--icon-color-active);
+          color:#fff;
+          font-weight:var(--mobile-font-weight-bold);
+          font-size:var(--mobile-font-size-regular);
+        }
+        #messageP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 20px 0 20px;
+          font-size:var(--mobile-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:var(--font-color-red);
+        }
+        .optionsP{
+          margin:0 0 20px 0;
+          width:100%;
+          padding:0 20px 0 20px;
+          font-size:var(--mobile-font-size-regular);
+          position:relative;
+          font-weight:var(--mobile-font-weight-regular);
+          text-align:left;
+          color:#000;
+        }
+        .optionsLink{
+          width:100%;
+          font-size:var(--mobile-font-size-regular);
+          font-weight:var(--mobile-font-weight-regular);
+          color:var(--icon-color-active);
+          text-decoration:none;
+        }
+        #loginGoogleButton{
+          position:relative;
+          margin:0 0 0 20px;
+        height:40px;
+    display:block;
+        }
 
-
-    <input id="clientLoginSubmit" class="loginButton" type="submit" placeholder="Log In"></input>
-
-
-
-<a href="/googleAuth"><img id="loginGoogleButton" src="assets/socialIcons/googleIconLogin.png"></href>
-<a href="/facebookAuth"><img id="loginFacebookButton" src="assets/socialIcons/fbIcon.jpg"></href>
-  </body>
-</html>
-
-
-<style>
-.js-hide-label {
-    opacity: 0 !important;
-    top: 1.5em
-}
-.labelInput{
-opacity:1;
--webkit-transition: .333s ease top, .333s ease opacity;
-    transition: .333s ease top, .333s ease opacity;
-}
-
-
-.inputAround{
-  width:500px;
-  background-color:#fff;
-  border:1px solid #000;
-}
-
-
-.loginInputs{
-font-size: 25px;
-bottom:0px;
-border:0px;
-background-color:#fff;
-width:100%;
-}
-
-#loginGoogleButton{
-  position:absolute;
-  left:10px;
-  top:200px;
-height:40px;
-
-}
-
-#loginFacebookButton{
-  position:absolute;
-  left:80px;
-  top:200px;
-height:40px;
-}
+        #loginFacebookButton{
+          position:relative;
+          margin:0 0 0 20px;
+        height:40px;
+        display:block;
+        }
+    }
 
 
 </style>
 
 
 
-
-
-
-
 <script>
 
 
+  document.getElementById("inputSubmit").onclick = function(){
+    submitLoginForm();
+  };
 
 
-var inputs = document.getElementsByClassName('loginInputs');
-for(var i =0;i<inputs.length;i++){
+  function submitLoginForm(){
+    document.getElementById('messageP').innerText = "";
 
-
-  $( inputs[i] ).keyup(function() {
-    if(this.value==""){
-      this.previousElementSibling.classList.add('js-hide-label');
-    }else{
-      this.previousElementSibling.classList.remove('js-hide-label');
-    }
-  });
-}
+    var email = $("#emailInput").val();
+    var password = $("#passwordInput").val();
 
 
 
+    if(email != "" && password != ""){
+      //all fields are full
+      $.ajax({
+            url: '/postLocalClientLogin',
+            type: 'post',
+            data: {email:email, password:password},
+            success: function( data, textStatus){
+              if(data=="ok"){
+                location.href = "/home"
+              }else if(data=="userNoExist"){
 
+              }else if(data=="passwordNoMatch"){
 
-
-document.getElementById("clientLoginSubmit").onclick = function(){
-
-
-  var labelsUnderInput = document.getElementsByClassName('inputUnderText');
-  for(var i=0;i<labelsUnderInput.length;i++){
-    labelsUnderInput[i].innerText = "";
-  }
-
-
-  var email = $("#clientLoginEmail").val();
-  var password = $("#clientLoginPassword").val();
-
-
-
-
-
-  if(email != "" && password != ""){
-    //all fields are full
-    $.ajax({
-          url: '/postLocalClientLogin',
-          type: 'post',
-          data: {email:email, password:password},
-          success: function( data, textStatus){
-            if(data=="ok"){
-              location.href = "/home"
-            }else if(data=="userNoExist"){
-
-            }else if(data=="passwordNoMatch"){
-
+              }
+            },
+            error: function( textStatus, errorThrown ){
+                console.log( errorThrown );
             }
-          },
-          error: function( textStatus, errorThrown ){
-              console.log( errorThrown );
-          }
-      });
-  }else{
-    if(email ==""){
-      document.getElementById("emailUnderText").innerText = "Please write your email";
+        });
+    }else{
+      //one or more field is empty
+      if(email ==""){
+        document.getElementById('messageP').innerText = "Please write your email";
+      }
+      if(password ==""){
+        document.getElementById('messageP').innerText = "Please write your password";
+      }
     }
-    if(password ==""){
-      document.getElementById("passwordUnderText").innerText = "Please write your password";
-    }
-    //one or more field is empty
   }
-};
-
-
 
 </script>
