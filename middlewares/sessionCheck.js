@@ -1,11 +1,10 @@
-const keys = require('../keys');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 app.use(cookieParser());
 
-
+require('dotenv').config();
 
 
 exports.loggedInCheckForNonProtectedRoutes = function(req, res, next){
@@ -14,7 +13,7 @@ exports.loggedInCheckForNonProtectedRoutes = function(req, res, next){
     next();
   }else{
     var theCookie = req.cookies.appointmentApp;
-    jwt.verify(theCookie, keys.myKeys.jwtSecretKey, function(err,decryptedToken){
+    jwt.verify(theCookie, process.env.JWT_SECRET_KEY, function(err,decryptedToken){
       if(err){
         res.redirect('/logout');
       }else{
@@ -39,7 +38,7 @@ if(!req.cookies.appointmentApp){
   res.redirect('/login');
 }else{
   var theCookie = req.cookies.appointmentApp;
-  jwt.verify(theCookie, keys.myKeys.jwtSecretKey, function(err,decryptedToken){
+  jwt.verify(theCookie, process.env.JWT_SECRET_KEY, function(err,decryptedToken){
     if(err){
       res.redirect('logout');
     }else{
