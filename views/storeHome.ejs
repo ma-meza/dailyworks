@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 var serverStoreObj = <%- serverStoreObj %>;
-
+var localGuestClientsObj = serverStoreObj.localGuestClients;
 </script>
 
 <% eventsObj = JSON.parse(eventsObj);%>
@@ -19,7 +19,9 @@ var serverStoreObj = <%- serverStoreObj %>;
 
 
 <% if(!locals.eventsObj || eventsObj.length == 0 || !locals.storeObj || storeObj.length == 0){ %>
-
+  <script>
+    var noEventsFoud = true;
+  </script>
   <div id="noEventsMainDiv" class="">
     <img src="assets/emptyStatePictures/polarBearParty.png" alt="">
     <p><script>document.write(translateWord("Looks like you have no appointments yet. Let's get to work"));</script></p>
@@ -34,7 +36,9 @@ var serverStoreObj = <%- serverStoreObj %>;
 
 
 
-
+<script>
+  var noEventsFoud = false;
+</script>
 
 
 
@@ -400,7 +404,9 @@ function hideMonthWeekDateRangeContainer(){
       bottom:30px;
       right:45px;
       z-index:5;
+      cursor:pointer;
     }
+
     #filtersDivContainer{
       position:absolute;
       left:50%;
@@ -531,6 +537,7 @@ function hideMonthWeekDateRangeContainer(){
       bottom:80px;
       right:20px;
       z-index:5;
+      cursor:pointer;
     }
     #filtersDivContainer{
       position:absolute;
@@ -1099,63 +1106,63 @@ filterMainDiv.innerHTML = filterHtmlString;
 
 
 
-
-
-      document.getElementById('rightArrowWeekView').onclick = function(){
-        dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() + 7));
-        createWeekViewCalendar(getEmployeeDropdownValue());
-
-      }
-      document.getElementById('leftArrowWeekView').onclick = function(){
-        dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() - 7));
-        createWeekViewCalendar(getEmployeeDropdownValue());
-
-      }
-      document.getElementById('rightArrowDayView').onclick = function(){
-        dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() + 1));
-        createDayViewCalendar(getEmployeeDropdownValue());
-
-      }
-      document.getElementById('leftArrowDayView').onclick = function(){
-        dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() - 1));
-        createDayViewCalendar(getEmployeeDropdownValue());
-
-      }
-      document.getElementById('todayButton').onclick= function(){
-        dateSelected = new Date();
-        if(weekViewBool){
+      if(!noEventsFoud){
+        document.getElementById('rightArrowWeekView').onclick = function(){
+          dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() + 7));
           createWeekViewCalendar(getEmployeeDropdownValue());
-        // }else if(listViewBool){
-        //   document.getElementById('listScheduleTableDiv').scrollTop = 0;
-        }else if(dayViewBool){
+
+        }
+        document.getElementById('leftArrowWeekView').onclick = function(){
+          dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() - 7));
+          createWeekViewCalendar(getEmployeeDropdownValue());
+
+        }
+        document.getElementById('rightArrowDayView').onclick = function(){
+          dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() + 1));
           createDayViewCalendar(getEmployeeDropdownValue());
+
         }
-      }
+        document.getElementById('leftArrowDayView').onclick = function(){
+          dateSelected = new Date(dateSelected.setDate(dateSelected.getDate() - 1));
+          createDayViewCalendar(getEmployeeDropdownValue());
 
-
-
-
-
-
-      document.getElementById('calendarIconImg').onclick = function(){
-        createTheCalendarPopup(consoleDate);
-
-        function consoleDate(theDateFromFunction){
+        }
+        document.getElementById('todayButton').onclick= function(){
+          dateSelected = new Date();
           if(weekViewBool){
-            dateSelected = new Date(theDateFromFunction);
             createWeekViewCalendar(getEmployeeDropdownValue());
-
+          // }else if(listViewBool){
+          //   document.getElementById('listScheduleTableDiv').scrollTop = 0;
           }else if(dayViewBool){
-            dateSelected = new Date(theDateFromFunction);
             createDayViewCalendar(getEmployeeDropdownValue());
-
           }
-          // else if(listViewBool){
-          //   scrollToRightDateListView(getEmployeeDropdownValue());
-          // }
         }
 
-      };
+
+
+
+
+
+        document.getElementById('calendarIconImg').onclick = function(){
+          createTheCalendarPopup(consoleDate);
+
+          function consoleDate(theDateFromFunction){
+            if(weekViewBool){
+              dateSelected = new Date(theDateFromFunction);
+              createWeekViewCalendar(getEmployeeDropdownValue());
+
+            }else if(dayViewBool){
+              dateSelected = new Date(theDateFromFunction);
+              createDayViewCalendar(getEmployeeDropdownValue());
+
+            }
+            // else if(listViewBool){
+            //   scrollToRightDateListView(getEmployeeDropdownValue());
+            // }
+          }
+
+        };
+      }
 });
 
 </script>

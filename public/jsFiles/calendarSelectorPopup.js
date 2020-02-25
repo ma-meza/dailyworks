@@ -1,6 +1,16 @@
 function createTheCalendarPopup(callback){
-var calendarPickerDate = dateSelected;
 
+
+var calendarPickerDate = new Date();
+if(typeof dateSelected != "undefined"){
+  calendarPickerDate = dateSelected;
+}
+
+
+var dateNow = new Date();
+if(typeof dateNow != "undefined"){
+  dateNow = dateNow;
+}
 
 var calendarMainDivSelectorDate = document.createElement('div');
 calendarMainDivSelectorDate.classList.add("calendarPopupDatePicker");
@@ -143,13 +153,13 @@ divAroundTable.innerHTML = "";
 
 
 
-                   if(theDateToday.getDate() > squares[i] && theDateToday.getMonth() == newMonthNumber && theDateToday.getFullYear() == yearNumber){
+                   if(dateNow.getDate() > squares[i] && dateNow.getMonth() == newMonthNumber && dateNow.getFullYear() == yearNumber){
 
                    wrapperInsideTd.classList.add('calendarTextBlocked');
-                 }else if(theDateToday.getMonth() >newMonthNumber && theDateToday.getFullYear() == yearNumber){
+                 }else if(dateNow.getMonth() >newMonthNumber && dateNow.getFullYear() == yearNumber){
                    //later month but same year
                      wrapperInsideTd.classList.add('calendarTextBlocked');
-                   }else if(theDateToday.getFullYear() > yearNumber){
+                   }else if(dateNow.getFullYear() > yearNumber){
                  //later year
                  wrapperInsideTd.classList.add('calendarTextBlocked');
                }else{

@@ -1,7 +1,19 @@
 var newAppointmentInfos = {
     servicesName:[],
     servicesEmployee:[],
-    servicesObj:[]
+    servicesObj:[],
+    startDate:null,
+    endDate:null,
+    addNote:null
+}
+
+var newAppointmentClientInfos = {
+  name:null,
+  email:null,
+  phoneNumber:null,
+  addNote:null,
+  newClient:false,
+  clientId:null
 }
 
 
@@ -74,9 +86,12 @@ newAppointmentBottomNavigationBar.id = 'newAppointmentBottomNavigationBar';
           newGuestClientButton.classList.add('newAppointmentCreateNewClient');
           newGuestClientButton.innerText = translateWord('Create new client');
           newGuestClientButton.onclick = function(){
-            newAppointmentScrollableDivCreateClient.style.left = "0";
+
+            resetClientProfilePlaceholders();
+            emptyClientProfileInputs();
+            newAppointmentClientInfos.newClient = true;
+            newAppointmentScrollableDivClientProfile.style.left = "0";
             newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-            choiceNewOrExistingClient = 0;
             moveNext();
           }
 
@@ -134,28 +149,111 @@ function removeClientResultDiv(){
 
 
 
-
-
-function createDivOfFoundClient(clientObj){
-    newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-
-    newAppointmentScrollableDivClientProfile.style.left = "0";
-    choiceNewOrExistingClient = 1;
-    moveNext();
-    setTimeout(function() { removeClientResultDiv(); }, 3000);
-}
-
-
-
-
           var newAppointmentScrollableDivClientProfile = document.createElement('div');
           newAppointmentScrollableDivClientProfile.classList.add('newAppointmentScrollableDiv');
           var popupTitleClientProfile = document.createElement('p');
           popupTitleClientProfile.classList.add('popupTitle');
-          popupTitleClientProfile.innerText = translateWord('Client profile');
+          popupTitleClientProfile.id = "clientProfileTitle";
+          popupTitleClientProfile.innerText = translateWord('New client profile');
           newAppointmentScrollableDivClientProfile.appendChild(popupTitleClientProfile);
           newAppointmentScrollableDivClientProfile.style.left = "100%";
 
+          var newClientNameInput = document.createElement('input');
+          newClientNameInput.type = "text";
+          newClientNameInput.id="clientProfileNameInput";
+          newClientNameInput.placeholder = translateWord("Client name");
+          newClientNameInput.classList.add('newClientInput');
+          newClientNameLabelUnder = document.createElement('p');
+          newClientNameLabelUnder.classList.add('newClientInputErrorLabel');
+          var newClientEmailInput = document.createElement('input');
+          newClientEmailInput.id="clientProfileEmailInput";
+          newClientEmailInput.placeholder = translateWord("Client email");
+          newClientEmailInput.type = "text";
+          newClientEmailInput.classList.add('newClientInput');
+          var newClientPhoneInput = document.createElement('input');
+          newClientPhoneInput.id="clientProfilePhoneInput";
+          newClientPhoneInput.placeholder = translateWord("Client phone number");
+          newClientPhoneInput.type = "text";
+          newClientPhoneInput.classList.add('newClientInput');
+          newClientPhoneLabelUnder = document.createElement('p');
+          newClientPhoneLabelUnder.classList.add('newClientInputErrorLabel');
+          var newClientNoteInput = document.createElement('textarea');
+          newClientNoteInput.placeholder = translateWord("Note on client...");
+          newClientNoteInput.id="clientProfileNoteInput";
+          newClientNoteInput.classList.add('newClientInput');
+
+          newAppointmentScrollableDivClientProfile.appendChild(newClientNameInput);
+          newAppointmentScrollableDivClientProfile.appendChild(newClientNameLabelUnder);
+          newAppointmentScrollableDivClientProfile.appendChild(newClientEmailInput);
+          newAppointmentScrollableDivClientProfile.appendChild(newClientPhoneInput);
+          newAppointmentScrollableDivClientProfile.appendChild(newClientPhoneLabelUnder);
+          newAppointmentScrollableDivClientProfile.appendChild(newClientNoteInput);
+
+
+          function createDivOfFoundClient(clientObj){
+            emptyClientProfileInputs();
+            resetClientProfilePlaceholders();
+              newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
+              newAppointmentClientInfos.newClient = false;
+              newAppointmentClientInfos.clientId = clientObj._id;
+              console.log(clientObj);
+              if(clientObj){
+                if(clientObj.fullName != "" && clientObj.fullName){
+                  newClientNameInput.placeholder = clientObj.fullName;
+                  newAppointmentClientInfos.name = clientObj.fullName;
+                  popupTitleClientProfile.innerText = "Client's profile ("+clientObj.fullName+")";
+                }else{
+                  popupTitleClientProfile.innerText = "Existing client profile";
+                }
+                if(clientObj.email != "" && clientObj.email){
+                  newClientEmailInput.placeholder = clientObj.email;
+                  newAppointmentClientInfos.email = clientObj.email;
+                }
+                if(clientObj.phoneNumber != "" && clientObj.phoneNumber){
+                  newClientPhoneInput.placeholder = clientObj.phoneNumber;
+                  newAppointmentClientInfos.phoneNumber = clientObj.phoneNumber;
+                }
+              }
+
+
+              newAppointmentScrollableDivClientProfile.style.left = "0";
+
+              moveNext();
+              setTimeout(function() { removeClientResultDiv(); }, 1000);
+          }
+
+
+          function resetClientProfilePlaceholders(){
+            resetClientObj();
+              newClientNameInput.placeholder = "Client name";
+              newClientEmailInput.placeholder = "Client email";
+              newClientPhoneInput.placeholder = "Client phone number";
+              newClientNoteInput.placeholder = "Note on client...";
+          }
+          function emptyClientProfileInputs(){
+            resetClientObj();
+            newClientNameInput.value = "";
+            newClientEmailInput.value = "";
+            newClientPhoneInput.value = "";
+            newClientNoteInput.value = "";
+            popupTitleClientProfile.innerText = translateWord("New client profile");
+          }
+
+          function resetClientObj(){
+            newAppointmentClientInfos.name = null;
+            newAppointmentClientInfos.email = null;
+            newAppointmentClientInfos.phoneNumber = null;
+            newAppointmentClientInfos.addNote = null;
+            newAppointmentClientInfos.newClient = false;
+            newAppointmentClientInfos.clientId = null;
+
+            resetErrorLabelClientProfile();
+          }
+
+          function resetErrorLabelClientProfile(){
+            newClientNameLabelUnder.innerText = "";
+            newClientPhoneLabelUnder.innerText = "";
+          }
 
 
 
@@ -163,13 +261,8 @@ function createDivOfFoundClient(clientObj){
 
 
 
-          var newAppointmentScrollableDivCreateClient = document.createElement('div');
-          newAppointmentScrollableDivCreateClient.classList.add('newAppointmentScrollableDiv');
-          var popupTitleCreateClient = document.createElement('p');
-          popupTitleCreateClient.classList.add('popupTitle');
-          popupTitleCreateClient.innerText = translateWord('New client');
-          newAppointmentScrollableDivCreateClient.appendChild(popupTitleCreateClient);
-          newAppointmentScrollableDivCreateClient.style.left = "100%";
+
+
 
 
 
@@ -218,7 +311,7 @@ function createDivOfFoundClient(clientObj){
                 newAppointmentScrollableDivServiceSelector.appendChild(serviceContainerMainDiv);
               })(i);
             }else{
-              newAppointmentScrollableDivServiceSelector.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
+              newAppointmentScrollableDivServiceSelector.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no services yet')+"</p>";
               var createClient = document.createElement('button');
               createClient.classList.add('emptyScreenButton');
               createClient.innerText = "Create services now";
@@ -228,7 +321,7 @@ function createDivOfFoundClient(clientObj){
               newAppointmentScrollableDivServiceSelector.appendChild(createClient);
             }
           }else{
-            newAppointmentScrollableDivServiceSelector.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
+            newAppointmentScrollableDivServiceSelector.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no services yet')+"</p>";
             var createClient = document.createElement('button');
             createClient.classList.add('emptyScreenButton');
             createClient.innerText = "Create services now";
@@ -264,7 +357,6 @@ function createDivOfFoundClient(clientObj){
             popupTitleAddNote.classList.add('popupTitle');
             popupTitleAddNote.innerText = translateWord('Add a note');
             newAppointmentScrollableDivAddNote.appendChild(popupTitleAddNote);
-
             var addNoteTextarea = document.createElement('textarea');
             addNoteTextarea.classList.add('newAppointmentTextarea');
             addNoteTextarea.placeholder = "Add a note, message or request";
@@ -272,24 +364,49 @@ function createDivOfFoundClient(clientObj){
             newAppointmentScrollableDivAddNote.style.left = "100%";
 
 
+            var newAppointmentScrollableDivSummary = document.createElement('div');
+            newAppointmentScrollableDivSummary.classList.add('newAppointmentScrollableDiv');
+            var popupTitleSummary = document.createElement('p');
+            popupTitleSummary.classList.add('popupTitle');
+            popupTitleSummary.innerText = translateWord('Appointment summary');
+            newAppointmentScrollableDivSummary.style.left = "100%";
+            newAppointmentScrollableDivSummary.appendChild(popupTitleSummary);
+            var appointmentSummaryP = document.createElement('p');
+            appointmentSummaryP.classList.add('appointmentSummaryP');
+            appointmentSummaryP.id= "appointmentSummaryP";
+            newAppointmentScrollableDivSummary.appendChild(appointmentSummaryP);
 
 
-          newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivCreateClient);
+            var newAppointmentScrollableDivConfirmation = document.createElement('div');
+            newAppointmentScrollableDivConfirmation.classList.add('newAppointmentScrollableDiv');
+            var popupTitleConfirmation = document.createElement('p');
+            popupTitleConfirmation.classList.add('popupTitle');
+            popupTitleConfirmation.innerText = translateWord('Congratulations!');
+            newAppointmentScrollableDivConfirmation.style.left = "100%";
+            newAppointmentScrollableDivConfirmation.style.height = "100%";
+            newAppointmentScrollableDivConfirmation.appendChild(popupTitleConfirmation);
+
+
+
+
+
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivClientProfile);
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivEmailPhoneName);
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceSelector);
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceEmployeeSelector);
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivServiceDateTimeSelector);
           newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivAddNote);
+          newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivSummary);
+          newAppointmentMainDivContainer.appendChild(newAppointmentScrollableDivConfirmation);
           document.getElementById('mainScreenBody').appendChild(newAppointmentMainDivContainer);
 
 
 
           var currentDiv = 0;
-          var choiceNewOrExistingClient = 0;
 
           function moveNext(){
             console.log(newAppointmentInfos);
+            console.log(newAppointmentClientInfos);
             switch(currentDiv){
               case 0:
               document.getElementById("newAppointmentBottomNavigationBar").style.left = "0";
@@ -297,17 +414,38 @@ function createDivOfFoundClient(clientObj){
               currentDiv++;
               break;
               case 1:
-              newAppointmentScrollableDivServiceSelector.style.left = "0";
+              resetErrorLabelClientProfile();
+              if(newAppointmentClientInfos.newClient == true){
+                console.log('yo');
+                if(newClientNameInput.value == ""){
+                  newClientNameLabelUnder.innerText = translateWord("Please enter the client's name");
+                }else{
+                  if(newClientPhoneInput.value == "" && newClientEmailInput.value == ""){
+                    newClientPhoneLabelUnder.innerText = translateWord("Please enter either a phone number or email address");
+                  }else{
 
-              if(choiceNewOrExistingClient == 1){
-                newAppointmentScrollableDivClientProfile.style.left = "-100%";
+                    if(newClientPhoneInput.value != ""){
+                      newAppointmentClientInfos.phoneNumber = newClientPhoneInput.value;
+                    }
+                    if(newClientEmailInput.value != ""){
+                      newAppointmentClientInfos.email = newClientEmailInput.value;
+                    }
+                    if(newClientNoteInput.value != ""){
+                      newAppointmentClientInfos.addNote = newClientNoteInput.value;
+                    }
+                    newAppointmentClientInfos.name = newClientNameInput.value;
+
+                    newAppointmentScrollableDivServiceSelector.style.left = "0";
+                    newAppointmentScrollableDivClientProfile.style.left = "-100%";
+                    currentDiv++;
+                  }
+                }
               }else{
-                newAppointmentScrollableDivCreateClient.style.left = "-100%";
+                newAppointmentScrollableDivServiceSelector.style.left = "0";
+                newAppointmentScrollableDivClientProfile.style.left = "-100%";
+                currentDiv++;
               }
-
-              currentDiv++;
               break;
-
               case 2:
 
               var serviceCheckboxLabelClass = document.getElementsByClassName('serviceCheckboxLabel');
@@ -315,7 +453,7 @@ function createDivOfFoundClient(clientObj){
               for(var n=0;n<serviceCheckboxLabelClass.length;n++){
                 if(serviceCheckboxLabelClass[n].getElementsByTagName('input')[0].checked){
                   newAppointmentInfos.servicesName.push(serviceCheckboxLabelClass[n].innerText);
-                  var theFullStoreObjService = JSON.stringify(serverStoreObj.services);
+                  var theFullStoreObjService = serverStoreObj.services;
                   newAppointmentInfos.servicesObj.push(theFullStoreObjService[serviceCheckboxLabelClass[n].getAttribute('serviceId')]);
                 }
               }
@@ -323,14 +461,8 @@ function createDivOfFoundClient(clientObj){
 
 
 
-              newAppointmentInfos.servicesEmployee.name = "yo";
+              newAppointmentInfos.servicesEmployee.name = "null";
               newAppointmentInfos.servicesEmployee.id = 'null';
-
-              currentDiv++;
-              moveNext();
-              break;
-
-
 
               if(newAppointmentInfos.servicesName.length>0){
 
@@ -436,24 +568,13 @@ function createDivOfFoundClient(clientObj){
                                                                     newAppointmentScrollableDivServiceEmployeeSelector.appendChild(mainParentEmployeePickerDiv);
                                                                 })(w);
 
-
-
-
-
                                             }else{
-
-                                                currentDiv++;
-                                                moveNext();
-                                                return;
+                                              currentDiv++;
+                                              moveNext();
+                                              break;
                                             }
-                            currentDiv++;
-                            break;
-              }else{
-                break;
-              }
-
-
-
+                                            currentDiv++;
+                                    }
               break;
                 case 3:
 
@@ -465,28 +586,22 @@ function createDivOfFoundClient(clientObj){
         var serviceEmployeeCheckboxLabelClass = document.getElementsByClassName('employeeServiceCheckboxLabel');
 
 
-        // for(var n=0;n<serviceEmployeeCheckboxLabelClass.length;n++){
-        //   var radioEmployeeSelect = serviceEmployeeCheckboxLabelClass[n].getElementsByClassName('checkboxServiceEmployeeSelector')[0];
-        //     if(radioEmployeeSelect.checked){
-        //     newAppointmentInfos.servicesEmployee.id = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeId');
-        //     newAppointmentInfos.servicesEmployee.name = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeValue');
-        //
-        //     }
-        // }
+        for(var n=0;n<serviceEmployeeCheckboxLabelClass.length;n++){
+          var radioEmployeeSelect = serviceEmployeeCheckboxLabelClass[n].getElementsByClassName('checkboxServiceEmployeeSelector')[0];
+            if(radioEmployeeSelect.checked){
+            newAppointmentInfos.servicesEmployee.id = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeId');
+            newAppointmentInfos.servicesEmployee.name = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeValue');
+
+            }
+        }
 
 
 
             if(newAppointmentInfos.servicesName.length>0 && newAppointmentInfos.servicesEmployee.name && newAppointmentInfos.servicesEmployee.id){
-
-            newAppointmentInfos.servicesStartDate = null;
-            newAppointmentInfos.servicesEndDate = null;
-
             var allServicesEmployeeNoPreference = true;
-            // for(var g=0;g<newAppointmentInfos.servicesEmployee.length;g++){
-            //   if(newAppointmentInfos.servicesEmployee.id != "null"){
-            //     allServicesEmployeeNoPreference = false;
-            //   }
-            // }
+            if(newAppointmentInfos.servicesEmployee.id != 'null'){
+              allServicesEmployeeNoPreference = false;
+            }
 
 
             //ajax to get events from store that are later or today (rangeDesired  = 1)
@@ -535,6 +650,7 @@ function createDivOfFoundClient(clientObj){
                                           selectDateP.onclick = function(){
                                                     createTheCalendarPopup(setDateSelectorP);
                                                     function setDateSelectorP(theDateFromFunction){
+
                                                           var splittedDateArray = theDateFromFunction.split('/');
                                                           var dateObjFromFunction = new Date(splittedDateArray[0]+"-"+(parseInt(splittedDateArray[1]))+"-"+(parseInt(splittedDateArray[2])));
 
@@ -591,6 +707,15 @@ function createDivOfFoundClient(clientObj){
                                                                                                                                   var timePickerCheckboxInput = document.createElement('input');
                                                                                                                                   timePickerCheckboxInput.type = "radio";
                                                                                                                                   timePickerCheckboxInput.name = "serviceTimeRadioPicker";
+
+
+
+                                                                                                                                  var fullDateStringStart = dateToDateString(requestedDate)+" "+millisecondsToTime(currentTimeDisplay);
+                                                                                                                                  var fullDateStringEnd = dateToDateString(requestedDate)+" "+millisecondsToTime(endTimeDisplay);
+
+                                                                                                                                  timePickerCheckboxInput.setAttribute('startDate',fullDateStringStart);
+                                                                                                                                  timePickerCheckboxInput.setAttribute('endDate',fullDateStringEnd);
+
                                                                                                                                   timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
                                                                                                                                   timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
@@ -638,6 +763,18 @@ function createDivOfFoundClient(clientObj){
                                                                                                                 var timePickerCheckboxInput = document.createElement('input');
                                                                                                                 timePickerCheckboxInput.type = "radio";
                                                                                                                 timePickerCheckboxInput.name = "serviceTimeRadioPicker";
+
+
+
+
+                                                                                                                var fullDateStringStart = dateToDateString(requestedDate)+" "+millisecondsToTime(startTimesArray[s]);
+                                                                                                                var fullDateStringEnd = dateToDateString(requestedDate)+" "+millisecondsToTime(endTimeDisplay);
+
+
+                                                                                                                timePickerCheckboxInput.setAttribute('startDate',fullDateStringStart);
+                                                                                                                timePickerCheckboxInput.setAttribute('endDate',fullDateStringEnd);
+
+
                                                                                                                 timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
                                                                                                                 timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
@@ -648,8 +785,8 @@ function createDivOfFoundClient(clientObj){
                                                                                                               }
                                                                                                             }
                                                                                                     }else{
-
                                                                                                       //there is some data
+
                                                                                                       if(allServicesEmployeeNoPreference == true){
                                                                                                         var availableIntervalStart = [decimalHourToMilliseconds(dayStartTime)];
                                                                                                         var availableIntervalEnd = [decimalHourToMilliseconds(dayEndTime)];
@@ -703,12 +840,7 @@ function createDivOfFoundClient(clientObj){
                                                                                                             timePickerCheckboxSpan.classList.add('servicesTimePickerCheckboxSpan');
                                                                                                             timePickerCheckboxSpan.innerText = translateWord('No available times for that day');
 
-                                                                                                            var timePickerCheckboxInput = document.createElement('input');
-                                                                                                            timePickerCheckboxInput.type = "radio";
-                                                                                                            timePickerCheckboxInput.name = "serviceTimeRadioPicker";
-                                                                                                            timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
-                                                                                                            timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
                                                                                                             timePickerCheckboxLabel.appendChild(timePickerCheckboxSpan);
                                                                                                             timeDisplayChoiceContainerDiv.appendChild(timePickerCheckboxLabel);
 
@@ -733,6 +865,16 @@ function createDivOfFoundClient(clientObj){
                                                                                                                         var timePickerCheckboxInput = document.createElement('input');
                                                                                                                         timePickerCheckboxInput.type = "radio";
                                                                                                                         timePickerCheckboxInput.name = "serviceTimeRadioPicker";
+
+
+
+                                                                                                                        var fullDateStringStart = dateToDateString(requestedDate)+" "+millisecondsToTime(currentTimeDisplay);
+                                                                                                                        var fullDateStringEnd = dateToDateString(requestedDate)+" "+millisecondsToTime(endTimeDisplay);
+
+
+                                                                                                                        timePickerCheckboxInput.setAttribute('startDate',fullDateStringStart);
+                                                                                                                        timePickerCheckboxInput.setAttribute('endDate',fullDateStringEnd);
+
                                                                                                                         timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
                                                                                                                         timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
@@ -747,7 +889,7 @@ function createDivOfFoundClient(clientObj){
                                                                                                         }
                                                                                                       }else{
                                                                                                         //there is an employee choice
-                                                                                                        console.log('employee chosen');
+
                                                                                                         var availableIntervalStart = [];
                                                                                                         var availableIntervalEnd = [];
 
@@ -825,12 +967,8 @@ function createDivOfFoundClient(clientObj){
                                                                                                               timePickerCheckboxSpan.classList.add('servicesTimePickerCheckboxSpan');
                                                                                                               timePickerCheckboxSpan.innerText = translateWord('No available times for that day');
 
-                                                                                                              var timePickerCheckboxInput = document.createElement('input');
-                                                                                                              timePickerCheckboxInput.type = "radio";
-                                                                                                              timePickerCheckboxInput.name = "serviceTimeRadioPicker";
-                                                                                                              timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
-                                                                                                              timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
+
                                                                                                               timePickerCheckboxLabel.appendChild(timePickerCheckboxSpan);
                                                                                                               timeDisplayChoiceContainerDiv.appendChild(timePickerCheckboxLabel);
 
@@ -855,6 +993,15 @@ function createDivOfFoundClient(clientObj){
                                                                                                                           var timePickerCheckboxInput = document.createElement('input');
                                                                                                                           timePickerCheckboxInput.type = "radio";
                                                                                                                           timePickerCheckboxInput.name = "serviceTimeRadioPicker";
+
+
+
+                                                                                                                          var fullDateStringStart = dateToDateString(requestedDate)+" "+millisecondsToTime(currentTimeDisplay);
+                                                                                                                          var fullDateStringEnd = dateToDateString(requestedDate)+" "+millisecondsToTime(endTimeDisplay);
+
+                                                                                                                          timePickerCheckboxInput.setAttribute('startDate',fullDateStringStart);
+                                                                                                                          timePickerCheckboxInput.setAttribute('endDate',fullDateStringEnd);
+
                                                                                                                           timePickerCheckboxInput.classList.add('servicesTimePickerCheckboxSelector');
 
                                                                                                                           timePickerCheckboxLabel.appendChild(timePickerCheckboxInput);
@@ -899,39 +1046,76 @@ function createDivOfFoundClient(clientObj){
 
                         }
             },
-
-
             error: function( textStatus, errorThrown ){
 
             }
             });
             }
-
-
-
-
-                break;
+            break;
                 case 4:
                 var dateTimeIsSelected = false;
-                for(var y=0;y<document.getElementsByClassName('servicesTimePickerCheckboxSelector').length;y++){
-                  if(document.getElementsByClassName('servicesTimePickerCheckboxSelector')[y].checked == true ){
+                var allCheckboxesDateTime = document.getElementsByClassName('servicesTimePickerCheckboxSelector');
+                for(var y=0;y<allCheckboxesDateTime.length;y++){
+                  if(allCheckboxesDateTime[y].checked == true ){
+
+                    var startDate = allCheckboxesDateTime[y].getAttribute('startDate');
+                    var endDate = allCheckboxesDateTime[y].getAttribute('endDate');
+                    newAppointmentInfos.startDate = startDate;
+                    newAppointmentInfos.endDate = endDate;
                     dateTimeIsSelected = true;
-                    console.log('yes selected');
+                    newAppointmentScrollableDivAddNote.style.left ="0";
+                    newAppointmentScrollableDivServiceDateTimeSelector.style.left = "-100%";
+                    currentDiv++;
                     break;
                   }
                 }
-                if(!dateTimeIsSelected){
-                  console.log('nothing is salaected');
-
+                break;
+                case 5:
+                var appointmentSummaryString = "Client: "+newAppointmentClientInfos.name+" (";
+                if(newAppointmentClientInfos.email != null){
+                  if(newAppointmentClientInfos.phoneNumber != null){
+                    appointmentSummaryString+=newAppointmentClientInfos.email+", "+newAppointmentClientInfos.phoneNumber+") ";
+                  }else{
+                    appointmentSummaryString+=newAppointmentClientInfos.email+") ";
+                  }
+                }else if(newAppointmentClientInfos.phoneNumber != null){
+                  appointmentSummaryString+= newAppointmentClientInfos.phoneNumber+") ";
                 }else{
-
-                  newAppointmentScrollableDivAddNote.style.left ="0";
-                  newAppointmentScrollableDivServiceDateTimeSelector.style.left = "-100%";
+                  appointmentSummaryString+=")";
                 }
 
 
+                appointmentSummaryString+="<br>Services requested: ";
+                for(var f=0;f<newAppointmentInfos.servicesName.length;f++){
+                  appointmentSummaryString+=newAppointmentInfos.servicesName[f]+", ";
+                }
+                appointmentSummaryString = appointmentSummaryString.substring(0, appointmentSummaryString.length -2)+"<br>";
 
 
+
+                if(newAppointmentInfos.servicesEmployee.id == 'null'){
+                  appointmentSummaryString+="Employee: no preferance<br>";
+                }else{
+                  appointmentSummaryString+="Employee: "+newAppointmentInfos.servicesEmployee.name+"<br>";
+                }
+
+                appointmentSummaryString+="Date: "+dateToClientString(newAppointmentInfos.startDate)+" - "+dateToClientString(newAppointmentInfos.endDate);
+
+                appointmentSummaryP.innerHTML = appointmentSummaryString;
+                newAppointmentScrollableDivAddNote.style.left ="-100%";
+                newAppointmentScrollableDivSummary.style.left = "0";
+                newAppointmentInfos.addNote = addNoteTextarea.value;
+
+                newAppointmentNextButton.innerText = translateWord('Submit');
+
+                currentDiv++;
+                break;
+                case 6:
+                document.getElementById("newAppointmentBottomNavigationBar").style.left = "100%";
+                document.getElementById("newAppointmentBottomNavigationBar").style.display = "none";
+                newAppointmentScrollableDivSummary.style.left = "-100%";
+                newAppointmentScrollableDivConfirmation.style.left = "0";
+                currentDiv++;
                 break;
             }
           }
@@ -940,51 +1124,54 @@ function createDivOfFoundClient(clientObj){
 
 
           function moveBack(){
-            console.log('back'+currentDiv);
+            console.log(newAppointmentInfos);
             switch(currentDiv){
               case 1:
-              // newAppointmentScrollableDivEmailPhoneName.id = "newClientOrSearchClientDiv";
-                // newAppointmentScrollableDivEmailPhoneName.getElementsByClassName('clientProfileNewAppointmentContainer')[0].remove();
-                // document.getElementsByClassName('newAppointmentBackButton')[0].style.display = "none";
-                // document.getElementsByClassName('newAppointmentNextButton')[0].style.display = "none";
 
                 newAppointmentScrollableDivEmailPhoneName.style.left = "0";
+                newAppointmentScrollableDivClientProfile.style.left = "100%";
                 document.getElementById("newAppointmentBottomNavigationBar").style.left = "100%";
                 document.getElementById("newAppointmentBottomNavigationBar").style.display = "none";
+                newAppointmentInfos.addNote = null;
+                addNoteTextarea.value = "";
                 currentDiv--;
               break;
               case 2:
-              unselectAllServicesDiv();
+                newAppointmentInfos.servicesName = [];
+                newAppointmentInfos.servicesObj = [];
+                unselectAllServicesDiv();
                 newAppointmentScrollableDivServiceSelector.style.left = "100%";
-                  if(choiceNewOrExistingClient == 1){
-                    newAppointmentScrollableDivClientProfile.style.left = "0";
-                  }else{
-                    newAppointmentScrollableDivCreateClient.style.left = "0";
-                  }
+                newAppointmentScrollableDivClientProfile.style.left = "0";
               currentDiv--;
               break;
               case 3:
-              newAppointmentInfos.servicesName = [];
-              newAppointmentInfos.servicesObj = [];
               unselectAllServicesEmployeeDiv();
-                newAppointmentScrollableDivServiceEmployeeSelector.style.left = "100%";
-                newAppointmentScrollableDivServiceSelector.style.left = "0";
+              newAppointmentScrollableDivServiceEmployeeSelector.style.left = "100%";
+              newAppointmentScrollableDivServiceSelector.style.left = "0";
               currentDiv--;
               break;
               case 4:
-
-              currentDiv--;
-              moveBack();
-              newAppointmentScrollableDivServiceDateTimeSelector.style.left = "100%";
-              break;
-
+              newAppointmentInfos.startDate = null;
+              newAppointmentInfos.endDate = null;
               if(serverStoreObj.clientCanPickEmployee == true && serverStoreObj.employees.length>0){
-              newAppointmentScrollableDivServiceEmployeeSelector.style.left = "0";
-              newAppointmentScrollableDivServiceDateTimeSelector.style.left = "100%";
+                newAppointmentScrollableDivServiceEmployeeSelector.style.left = "0";
+                newAppointmentScrollableDivServiceDateTimeSelector.style.left = "100%";
+                currentDiv--;
               }else{
-                newAppointmentScrollableDivServiceSelector.style.left = "100%";
+                newAppointmentScrollableDivServiceDateTimeSelector.style.left = "100%";
                   currentDiv--;
+                  moveBack();
               }
+              break;
+              case 5:
+              newAppointmentScrollableDivServiceDateTimeSelector.style.left = "0";
+              newAppointmentScrollableDivAddNote.style.left = "100%";
+              currentDiv--;
+              break;
+              case 6:
+              newAppointmentNextButton.innerText = translateWord("Next");
+              newAppointmentScrollableDivAddNote.style.left = "0";
+              newAppointmentScrollableDivSummary.style.left = "100%";
               currentDiv--;
               break;
             }
@@ -993,7 +1180,6 @@ function createDivOfFoundClient(clientObj){
 
 
           function slideToNewClientFromSearch(){
-            console.log('yo');
             moveNext();
           }
 
@@ -1028,38 +1214,41 @@ function createDivOfFoundClient(clientObj){
 
               cancelButton.style.display = "block";
             }
-
+            createExistingClientSearchContainerDiv.innerHTML = "";
 
                 var searchQuery = existingClientSearchInput.value;
 
 
                 //search for users that already took appointments with the store
-            if(typeof serverStoreObj.localGuestClients != 'undefined'){
-                  if(serverStoreObj.localGuestClients.length !=0){
-                        for(var i=0;i<serverStoreObj.localGuestClients.length;i++){
-                              if(serverStoreObj.localGuestClients[i].fullName.toLowerCase().includes(searchQuery.toLowerCase())){
+            if(typeof localGuestClientsObj != 'undefined'){
+                  if(localGuestClientsObj.length !=0){
+                        for(var i=0;i<localGuestClientsObj.length;i++){
+
+                              if(localGuestClientsObj[i].fullName.toLowerCase().includes(searchQuery.toLowerCase())){
                                     var clientEachResultDiv = document.createElement('div');
                                     clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(serverStoreObj.localGuestClients[i]);
+                                        createDivOfFoundClient(localGuestClientsObj[--i]);
+
+
                                     }
                                     clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = serverStoreObj.localGuestClients[i].fullName+" ("+serverStoreObj.localGuestClients[i].phoneNumber+")";
+                                    clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
                                     createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
-                              }else if(serverStoreObj.localGuestClients[i].phoneNumber.includes(searchQuery)){
+                              }else if(localGuestClientsObj[i].phoneNumber.includes(searchQuery)){
                                     var clientEachResultDiv = document.createElement('div');
                                     clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(serverStoreObj.localGuestClients[i]);
+                                        createDivOfFoundClient(localGuestClientsObj[--i]);
                                     }
                                     clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = serverStoreObj.localGuestClients[i].fullName+" ("+serverStoreObj.localGuestClients[i].phoneNumber+")";
+                                    clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
                                     createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
-                              }else if(serverStoreObj.localGuestClients[i].email.includes(searchQuery)){
+                              }else if(localGuestClientsObj[i].email.includes(searchQuery)){
                                     var clientEachResultDiv = document.createElement('div');
                                     clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(serverStoreObj.localGuestClients[i]);
+                                        createDivOfFoundClient(localGuestClientsObj[--i]);
                                     }
                                     clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = serverStoreObj.localGuestClients[i].fullName+" ("+serverStoreObj.localGuestClients[i].phoneNumber+")";
+                                    clientEachResultDiv.innerText = localGuestClientsObj[--i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
                                     createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
                               }
                         }
@@ -1068,9 +1257,8 @@ function createDivOfFoundClient(clientObj){
                      createClient.classList.add('emptyScreenButton');
                      createClient.innerText = "Create a client now";
                      createClient.onclick = function(){
-                       newAppointmentScrollableDivCreateClient.style.left = "0";
+                       newAppointmentScrollableDivClientProfile.style.left = "0";
                        newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-                       choiceNewOrExistingClient = 0;
                        moveNext();
                      }
                         createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
@@ -1081,9 +1269,8 @@ function createDivOfFoundClient(clientObj){
               createClient.classList.add('emptyScreenButton');
               createClient.innerText = "Create a client now";
               createClient.onclick = function(){
-                newAppointmentScrollableDivCreateClient.style.left = "0";
+                newAppointmentScrollableDivClientProfile.style.left = "0";
                 newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-                choiceNewOrExistingClient = 0;
                 moveNext();
 
               }

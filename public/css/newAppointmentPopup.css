@@ -1,3 +1,44 @@
+.appointmentSummaryP{
+  width:100%;
+  left:0;
+  top:0;
+  margin:0;
+  padding:30px 20px 0 20px;
+  color:#000;
+  font-size:var(--mobile-font-size-regular);
+  line-height:40px;
+}
+
+.newClientInputErrorLabel{
+  position:relative;
+  width:100%;
+  top:0;
+  left:0;
+  margin:0;
+  margin-bottom:0px;
+  font-size:var(--mobile-font-size-regular);
+  color:red;
+  padding:0 20px 0 20px;
+}
+.newClientInput{
+  width:calc(100% - 40px);
+  position:relative;
+  top:0;
+  left:20px;
+  margin-top:30px;
+  margin-bottom:5px;
+  padding:0 20px 0 20px;
+  height:40px;
+  border-radius:var(--official-border-radius);
+  border:1px solid #000;
+}
+#newClientNoteInput{
+  height:120px;
+}
+#clientProfileNoteInput{
+  height:120px;
+  resize:none;
+}
 .emptyScreenText{
   position:relative;
   top:0;

@@ -1337,3 +1337,31 @@ return false;
       fullScreenTransparentContainer.style.display = 'none';
 
   }
+
+
+
+function dateToDateString(dateX){
+  var day = dateX.getDate();
+  var month = dateX.getMonth()+1;
+  var year = dateX.getFullYear();
+  var dateString = year+"/"+month+"/"+day;
+return dateString;
+}
+
+
+function dateToClientString(dateX){
+  dateX = new Date(dateX);
+  var day = dateX.getDate();
+  var month = dateX.getMonth();
+  var year = dateX.getFullYear();
+  var hour = dateX.getHours();
+  var minutes = dateX.getMinutes();
+  if(hour<10){
+    hour = 0+""+hour;
+  }
+  if(minutes<10){
+    minutes = 0+""+minutes;
+  }
+
+return fullMonthsName[month]+" "+day+", "+year+" @ "+hour+":"+minutes;
+}
