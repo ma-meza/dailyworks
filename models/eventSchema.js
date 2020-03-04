@@ -4,26 +4,25 @@ var Schema = mongoose.Schema;
 // create a schema
 var eventSchema = new Schema({
   storeId:{type:mongoose.Schema.Types.ObjectId, required:true},
-  storeName:{type:String, required:true},
-  backendDateObjStart:{type:Date, required:true},
-  backendDateObjEnd:{type:Date, required:true},
+  storeName:{type:String, required:false},
+  startDate:{type:Date, required:true},
+  endDate:{type:Date, required:true},
   clientId:{type:mongoose.Schema.Types.ObjectId, required:true},
-  clientName:{type:String, required:true},
+  clientName:{type:String, required:false},
   employeeId:{type:mongoose.Schema.Types.ObjectId, required:true},
-  employeeName:{type:String, required:true},
-  recurring:{type:Boolean, required:true},
+  employeeName:{type:String, required:false},
+  recurring:{type:Boolean, default:false},
   fullDay:{type:Boolean, default:false},
   frequencyRecurring:{type:Number, default:null},
     //(0 = everyDay, 1 = once a week, 2 = once a month, 3 = once a year)
   services:[{
-    serviceName:{type:String, required:true},
-    serviceDescription:{type:String, required:true},
+    serviceId:{type:mongoose.Schema.Types.ObjectId, required:true},
+    serviceName:{type:String, required:false},
     price:{type:mongoose.Schema.Types.Decimal128, required:true},
-    durationDays:{type:Number, default:0},
-    durationHours:{type:Number, default:0},
-    durationMinutes:{type:Number, default:0}
+    duration:{type:Number, default:0}
   }],
-  numberTimesMissedOrMoved:{type:Number, default:0}
+  numberTimesMissedOrMoved:{type:Number, default:0},
+  addNote:{type:String, required:false}
 });
 
 

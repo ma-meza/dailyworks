@@ -8,7 +8,6 @@ var serverStoreObj = <%- serverStoreObj %>;
 var localGuestClientsObj = serverStoreObj.localGuestClients;
 </script>
 
-<% eventsObj = JSON.parse(eventsObj);%>
 <body>
   <div id="mainScreenBody">
     <div id="newAppointmentButton">
@@ -29,8 +28,6 @@ var localGuestClientsObj = serverStoreObj.localGuestClients;
 
   <% }else{ %>
     <%- include jsFiles/storeHomeJsListViewScript.ejs %>
-
-
     <%- include jsFiles/storeHomeJsWeekViewScript.ejs %>
     <%- include jsFiles/storeHomeJsDayViewScript.ejs %>
 
@@ -66,9 +63,6 @@ var localGuestClientsObj = serverStoreObj.localGuestClients;
           <img class="arrowDateRange rightArrowDateRange" id="rightArrowDayView" src="assets/icons/octiconsSvg/chevron-right.svg" alt="">
         </div>
 
-        <!-- <div id="listViewMonthNameContainer" class="monthWeekDateRangeContainer">
-          <p class="dateRangeP" id="listViewMonthNameP"></p>
-        </div> -->
 
         <div id="weekViewWeekRangeContainer" class="monthWeekDateRangeContainer">
           <img class="arrowDateRange leftArrowDateRange" id="leftArrowWeekView" src="assets/icons/octiconsSvg/chevron-left.svg" alt="">

@@ -30,14 +30,14 @@ app.use(cookieParser());
 
 
 
-const express_enforces_ssl = require('express-enforces-ssl');
-const helmet = require('helmet');
-const sixtyDaysInSeconds = 5184000
-app.use(helmet.hsts({
-  maxAge: sixtyDaysInSeconds
-}));
-app.use(express_enforces_ssl());
-app.set('trust proxy', true);
+// const express_enforces_ssl = require('express-enforces-ssl');
+// const helmet = require('helmet');
+// const sixtyDaysInSeconds = 5184000
+// app.use(helmet.hsts({
+//   maxAge: sixtyDaysInSeconds
+// }));
+// app.use(express_enforces_ssl());
+// app.set('trust proxy', true);
 
 
 app.use(express.static(__dirname + '/public')); // configure express to use public folder for all img srcs and other files
@@ -79,8 +79,8 @@ var emailTransporterAdmin = nodemailer.createTransport({
 
 // mongoose connect to MONGODB
 
-mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
-// mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+// mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
 
 
 
@@ -89,10 +89,35 @@ var Store = require('./models/storeSchema');
 var Conversation = require('./models/conversationSchema');
 var Event = require('./models/eventSchema');
 var Client = require('./models/userSchema');
+var GuestClient = require('./models/guestUserSchema');
+var LocalGuestClient = require('./models/LocalGuestClientSchema');
 var B2bPrelaunchClient = require('./models/b2bPrelaunchSchema');
 
-function getLanguageCookieValue(req){
-return req.cookies.lang;
+function getLanguageCookieValue(req, res){
+  var cookieLang = req.cookies.lang;
+  if(!cookieLang){
+    var localeString = req.headers['accept-language'];
+    var splittedLangString = localeString.split(';');
+    for(var i=0;i<splittedLangString.length;i++){
+      var twiceSplittedString = splittedLangString[i].split(',');
+      for(var j=0;j<twiceSplittedString.length;j++){
+        if(twiceSplittedString[j] == 'en' || twiceSplittedString[j] == 'en-US'){
+          res.cookie('lang', 'en', { maxAge: 60*60*24*3000, httpOnly: true });
+          return 'en';
+        }else if(twiceSplittedString[j] == 'fr' || twiceSplittedString[j] == 'fr-FR'){
+          res.cookie('lang', 'fr', { maxAge: 60*60*24*3000, httpOnly: true });
+          return 'fr';
+        }else{
+          res.cookie('lang', 'en', { maxAge: 60*60*24*3000, httpOnly: true });
+          return 'en';
+        }
+      }
+    }
+    res.cookie('lang', 'en', { maxAge: 60*60*24*3000, httpOnly: true });
+    return 'en';
+  }else{
+    return req.cookies.lang;
+  }
 }
 
 app.get('/error', function(req,res){
@@ -131,18 +156,8 @@ return req.headers["x-forwarded-for"] || "unknown ip";
 }
 
 app.get('/', function(req, res){
-  B2bPrelaunchClient.estimatedDocumentCount({}, function(err, resultCount){
-
-    if(err){
-      console.log("error");
-      res.render('404page.ejs');
-    }else{
-      var countUsers = 12832 + resultCount;
-      res.render('landingPageStorePreLaunch', {languageCookie:getLanguageCookieValue(req), countUsers:countUsers});
+      res.render('landingPageStorePreLaunch', {languageCookie:getLanguageCookieValue(req, res)});
       sendNotice(1, getIpClient(req));
-    }
-  })
-
 });
 
 app.get('/signupTestStore', function(req,res){
@@ -172,7 +187,7 @@ res.send('ok');
 //       // object of the store
 //       console.log(resultObj);
 //       res.render('storePageForClientsGuest', {
-//           storeObj:resultObj, languageCookie:getLanguageCookieValue(req)
+//           storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)
 //       });
 //     }
 //   });
@@ -184,38 +199,39 @@ res.send('ok');
 
 
 // app.get('/faq', function(req, res){
-//   res.render('storeFaq', {languageCookie:getLanguageCookieValue(req)});
+//   res.render('storeFaq', {languageCookie:getLanguageCookieValue(req, res)});
 // });
 
 app.get('/welcomeBusiness', function(req, res){
-  res.render('indexStoreLandingPage', {languageCookie:getLanguageCookieValue(req)});
+  res.render('indexStoreLandingPage', {languageCookie:getLanguageCookieValue(req, res)});
 });
 
 
 //MAIN HOme PAGE loggedin FOR CLIENT AND STORE
 app.get('/home', sessionMiddlewares.loggedInCheck, function(req, res){
+
 if(res.locals.userType == "store"){
 
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, function(err, eventsObj){
+  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {_id:1, clientName:1, startDate:1, endDate:1, fullDay:1, services:1}, function(err, eventsObj){
     if(err){
       console.log(err);
       res.redirect('/error');
     }else{
-      Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {_id:0,password:0},function(error, resultObj){
+      Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {_id:0, storeName:1, newNotifications:1, notifications:1, services:1, employees:1, storeSchedule:1, storeAbsences:1},function(error, resultObj){
         if(error){
           console.log('error');
           res.redirect('/error');
         }else{
           // object of the store
           console.log(resultObj.employees);
-          res.render('storeHome',{eventsObj:JSON.stringify(eventsObj), storeNotifications:JSON.stringify(resultObj.notifications), employeeObj:JSON.stringify(resultObj.employees), serverStoreObj:JSON.stringify(resultObj),storeObj:resultObj, languageCookie:getLanguageCookieValue(req)});
+          res.render('storeHome',{eventsObj:JSON.stringify(eventsObj), storeNotifications:JSON.stringify(resultObj.notifications), employeeObj:JSON.stringify(resultObj.employees), serverStoreObj:JSON.stringify(resultObj),storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
         }
       });
     }
 
   });
 }else{
-  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'backendDateObjStart': 1}, limit: 3}, function(err, eventsObj){
+  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId)}, {_id:1, storeName:1, employeeName:1, startDate:1, endDate:1, fullDay:1, services:1},{sort: {'startDate': 1}, limit: 3}, function(err, eventsObj){
     if(err){
       console.log(err);
       res.redirect('/error');
@@ -227,7 +243,7 @@ if(error){
   res.redirect('/error');
 }else{
 
-  res.render('clientHome',{eventsObj:eventsObj, userId:res.locals.userId, clientObj:clientObj, languageCookie:getLanguageCookieValue(req)});
+  res.render('clientHome',{eventsObj:eventsObj, userId:res.locals.userId, clientObj:clientObj, languageCookie:getLanguageCookieValue(req, res)});
 }
       });
 
@@ -243,12 +259,12 @@ if(error){
 app.get('/settings', sessionMiddlewares.loggedInCheck, function(req, res){
 
 if(res.locals.userType == "store"){
-  Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {password:0}, function(err, resultObj){
+  Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {_id:0, storeName:1, newNotifications:1, notifications:1, services:1, employees:1, storeSchedule:1, storeAbsences:1, facebookLink:1, instagramLink:1, websiteLink:1,clientCanPickEmployee:1,location:1, phoneNumber:1, email:1}, function(err, resultObj){
     if(err){
       console.log(err);
       res.redirect('/error');
     }else{
-      res.render('storeSettings',{storeObj:resultObj, languageCookie:getLanguageCookieValue(req)});
+      res.render('storeSettings',{storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
     }
 
   });
@@ -270,7 +286,7 @@ app.get('/profile', sessionMiddlewares.loggedInCheck, function(req, res){
         console.log(err);
         res.redirect('/error');
       }else{
-    res.render('clientProfile', {clientObj:clientInfoObject, languageCookie:getLanguageCookieValue(req)});
+    res.render('clientProfile', {clientObj:clientInfoObject, languageCookie:getLanguageCookieValue(req, res)});
 
       }
 
@@ -282,19 +298,19 @@ app.get('/profile', sessionMiddlewares.loggedInCheck, function(req, res){
 });
 
 
-app.get('/newConvo', sessionMiddlewares.loggedInCheck, function(req,res){
-  var currentDate = new Date();
-  Conversation.create({ storeId: "5d6d52f3e7d9db1a4441e748", storeName:"Marco Barber", clientId:"5d77b74647b471418c6afa21" , clientName:"Marc-André Meza", messages:[{message:"YO MATE", messageType:0,senderIsStore:false}]}, function (err, storeObj) {
-                 if (err){
-                   console.log(err);
-                   res.send('err');
-                 }else{
-                   res.redirect('/messages');
-                 }
-               });
-
-
-});
+// app.get('/newConvo', sessionMiddlewares.loggedInCheck, function(req,res){
+//   var currentDate = new Date();
+//   Conversation.create({ storeId: "5d6d52f3e7d9db1a4441e748", storeName:"Marco Barber", clientId:"5d77b74647b471418c6afa21" , clientName:"Marc-André Meza", messages:[{message:"YO MATE", messageType:0,senderIsStore:false}]}, function (err, storeObj) {
+//                  if (err){
+//                    console.log(err);
+//                    res.send('err');
+//                  }else{
+//                    res.redirect('/messages');
+//                  }
+//                });
+//
+//
+// });
 
 
 
@@ -305,12 +321,12 @@ app.get('/agenda', sessionMiddlewares.loggedInCheck,function(req, res){
 if(res.locals.userType == "store"){
 res.redirect('/home');
 }else{
-  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$gte":new Date()}}, {},{sort: {'backendDateObjStart': 1}, limit: 20},function(err, resultObj){
+  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$gte":new Date()}}, {},{sort: {'startDate': 1}, limit: 20},function(err, resultObj){
     if(err){
       console.log(err);
       res.redirect('/error');
     }else{
-      res.render('clientAgenda',{eventsObj:resultObj, languageCookie:getLanguageCookieValue(req)});
+      res.render('clientAgenda',{eventsObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
     }
 
   });
@@ -327,144 +343,127 @@ res.redirect('/home');
 
 
 
-app.get('/messages', sessionMiddlewares.loggedInCheck, function(req, res){
-if(res.locals.userType == "store"){
-
-              Store.updateOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {newMessageNotifications: false}, function(errorUpdate, responseObj){
-                if(errorUpdate){
-                  console.log('error');
-                  console.log(errorUpdate);
-              res.send('err');
-              }else{
-
-                Conversation.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: 20}, function(err, resultObj){
-                  if(err){
-                    console.log(err);
-                    res.redirect('/error');
-                  }else{
-                    res.render('storeMessenger',{conversation:resultObj, languageCookie:getLanguageCookieValue(req)});
-                  }
-
-                });
-              }
-
-              });
-
-}else{
-  Conversation.find({clientId:mongoose.Types.ObjectId(res.locals.userId)},{}, {sort: {'timestampLastMessage': 1}, limit: 20}, function(err, resultObj){
-    if(err){
-      console.log(err);
-      res.redirect('/error');
-    }else{
-      res.render('clientMessenger',{conversation:resultObj, languageCookie:getLanguageCookieValue(req)});
-    }
-
-  });
-}
-});
-
-
+// app.get('/messages', sessionMiddlewares.loggedInCheck, function(req, res){
+// if(res.locals.userType == "store"){
+//
+//               Store.updateOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {newMessageNotifications: false}, function(errorUpdate, responseObj){
+//                 if(errorUpdate){
+//                   console.log('error');
+//                   console.log(errorUpdate);
+//               res.send('err');
+//               }else{
+//
+//                 Conversation.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: 20}, function(err, resultObj){
+//                   if(err){
+//                     console.log(err);
+//                     res.redirect('/error');
+//                   }else{
+//                     res.render('storeMessenger',{conversation:resultObj, languageCookie:getLanguageCookieValue(req, res)});
+//                   }
+//
+//                 });
+//               }
+//
+//               });
+//
+// }else{
+//   Conversation.find({clientId:mongoose.Types.ObjectId(res.locals.userId)},{}, {sort: {'timestampLastMessage': 1}, limit: 20}, function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//       res.redirect('/error');
+//     }else{
+//       res.render('clientMessenger',{conversation:resultObj, languageCookie:getLanguageCookieValue(req, res)});
+//     }
+//
+//   });
+// }
+// });
 
 
 
 
-app.get('/analytics', sessionMiddlewares.loggedInCheck, function(req, res){
-if(res.locals.userType == "store"){
-  Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {password:0}, function(err, resultObj){
-    if(err){
-      console.log(err);
-      res.redirect('/error');
-    }else{
-      console.log(resultObj);
-      res.render('storeAnalytics', {storeObj:resultObj, languageCookie:getLanguageCookieValue(req)});
-    }
 
-  });
-}else{
-  res.redirect('/home');
-}
-});
+
+// app.get('/analytics', sessionMiddlewares.loggedInCheck, function(req, res){
+// if(res.locals.userType == "store"){
+//   Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {password:0}, function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//       res.redirect('/error');
+//     }else{
+//       console.log(resultObj);
+//       res.render('storeAnalytics', {storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
+//     }
+//
+//   });
+// }else{
+//   res.redirect('/home');
+// }
+// });
 
 
 app.get('/warZone4', function(req, res) {
-    res.render('myCalendarView', {languageCookie:getLanguageCookieValue(req)});
+    res.render('myCalendarView', {languageCookie:getLanguageCookieValue(req, res)});
 
 });
 
 
 
 
-app.post('/addEvent', function(req, res) {
-
-    if (req.body) {
-
-        var title = req.body.title;
-        var startDate = req.body.startDate;
-        var endDate = req.body.endDate;
-        var startTime = req.body.startTime;
-        var endTime = req.body.endTime;
-
-
-
-
-        var startString = functionsFile.formatFullDayDate(startDate, startTime);
-        var endString = functionsFile.formatFullDayDate(endDate, endTime);
-
-
-
-
-        console.log(startString);
-        console.log(endString);
-
-        res.send({
-            title: title,
-            startString: startString,
-            endString: endString
-        });
-
-
-
-
-
+// app.post('/addEvent', function(req, res) {
+//
+//     if (req.body) {
+//
+//         var title = req.body.title;
+//         var startDate = req.body.startDate;
+//         var endDate = req.body.endDate;
+//         var startTime = req.body.startTime;
+//         var endTime = req.body.endTime;
+//
+//
+//
+//
+//         var startString = functionsFile.formatFullDayDate(startDate, startTime);
+//         var endString = functionsFile.formatFullDayDate(endDate, endTime);
+//         console.log(startString);
+//         console.log(endString);
+//
+//         res.send({
+//             title: title,
+//             startString: startString,
+//             endString: endString
+//         });
+//     } else {
+//         console.log('error');
+//
+//         res.status(500).send('error');
+//     }
+//
+// });
 
 
 
 
-
-
-
-
-    } else {
-        console.log('error');
-
-        res.status(500).send('error');
-    }
-
-});
-
-
-
-
-app.post('/modifyEvent', function(req, res) {
-
-    if (req.body) {
-
-        var title = req.body.title;
-        var startDate = req.body.startDate;
-        var endDate = req.body.endDate;
-
-        console.log(endDate);
-        console.log(startDate);
-
-        res.send("ok");
-
-    } else {
-        console.log('error');
-
-        res.status(500).send('error');
-    }
-
-});
+// app.post('/modifyEvent', function(req, res) {
+//
+//     if (req.body) {
+//
+//         var title = req.body.title;
+//         var startDate = req.body.startDate;
+//         var endDate = req.body.endDate;
+//
+//         console.log(endDate);
+//         console.log(startDate);
+//
+//         res.send("ok");
+//
+//     } else {
+//         console.log('error');
+//
+//         res.status(500).send('error');
+//     }
+//
+// });
 
 
 
@@ -483,7 +482,7 @@ if(req.query.limitNumber){
   nbEventsQueryLimit = req.query.limitNumber;
 }
 if(res.locals.userType == "store"){
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$gte":new Date()}}, {},{sort: {'backendDateObjStart': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
+  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$gte":new Date()}}, {_id:1, clientName:1, startDate:1, endDate:1, fullDay:1, services:1},{sort: {'startDate': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
     if(err){
       console.log(err);
     }else{
@@ -492,7 +491,7 @@ if(res.locals.userType == "store"){
 
   });
 }else{
-  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$gte":new Date()}}, {},{sort: {'backendDateObjStart': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
+  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$gte":new Date()}}, {},{sort: {'startDate': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
     if(err){
       console.log(err);
     }else{
@@ -511,7 +510,7 @@ if(res.locals.userType == "store"){
 
   var dateInLocal = moment().toDate();
 
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$gte":dateInLocal}}, {},{sort: {'backendDateObjStart': 1}},function(err, resultObj){
+  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$gte":dateInLocal}}, {_id:1, clientName:1, startDate:1, endDate:1, fullDay:1, services:1},{sort: {'startDate': 1}},function(err, resultObj){
     if(err){
       res.send('error');
     }else{
@@ -530,7 +529,7 @@ if(res.locals.userType == "store"){
 
   var dateInLocal = moment().toDate();
 
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$gte":dateInLocal}}, {},{sort: {'backendDateObjStart': 1}},function(err, resultObj){
+  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$gte":dateInLocal}}, {_id:1, clientName:1, startDate:1, endDate:1, fullDay:1, services:1},{sort: {'startDate': 1}},function(err, resultObj){
     if(err){
       res.send('error');
     }else{
@@ -547,37 +546,35 @@ res.send('error');
 
 
 
-app.get('/getMoreEventsBefore', sessionMiddlewares.loggedInCheck, function(req, res){
-var nbEventsAlreadyFetched = 0;
-var nbEventsQueryLimit = 10;
-if(req.query.lastEventId){
-  nbEventsAlreadyFetched = req.query.lastEventId;
-}
-if(req.query.limitNumber){
-  nbEventsQueryLimit = req.query.limitNumber;
-}
-if(res.locals.userType == "store"){
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$lte":new Date()}}, {},{sort: {'backendDateObjStart': -1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
-    if(err){
-      console.log(err);
-    }else{
-      console.log(resultObj);
-    }
-
-  });
-}else{
-  Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), backendDateObjStart:{"$lte":new Date()}}, {},{sort: {'backendDateObjStart': -1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
-    if(err){
-      console.log(err);
-    }else{
-      console.log(resultObj);
-    }
-
-  });
-}
-});
-
-
+// app.get('/getMoreEventsBefore', sessionMiddlewares.loggedInCheck, function(req, res){
+// var nbEventsAlreadyFetched = 0;
+// var nbEventsQueryLimit = 10;
+// if(req.query.lastEventId){
+//   nbEventsAlreadyFetched = req.query.lastEventId;
+// }
+// if(req.query.limitNumber){
+//   nbEventsQueryLimit = req.query.limitNumber;
+// }
+// if(res.locals.userType == "store"){
+//   Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$lte":new Date()}}, {},{sort: {'startDate': -1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//     }else{
+//       console.log(resultObj);
+//     }
+//
+//   });
+// }else{
+//   Event.find({clientId:mongoose.Types.ObjectId(res.locals.userId), startDate:{"$lte":new Date()}}, {},{sort: {'startDate': -1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched},function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//     }else{
+//       console.log(resultObj);
+//     }
+//
+//   });
+// }
+// });
 
 
 
@@ -585,40 +582,42 @@ if(res.locals.userType == "store"){
 
 
 
-app.get('/getMoreConversations', sessionMiddlewares.loggedInCheck, function(req, res){
-  var nbEventsAlreadyFetched = 0;
-  var nbEventsQueryLimit = 10;
-  if(req.query.lastEventId){
-    nbEventsAlreadyFetched = req.query.lastEventId;
-  }
-  if(req.query.limitNumber){
-    nbEventsQueryLimit = req.query.limitNumber;
-  }
-if(res.locals.userType == "store"){
-  Conversation.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched}, function(err, resultObj){
-    if(err){
-      console.log(err);
-    }else{
-      console.log(resultObj);
-    }
-
-  });
-}else{
-  Conversation.find({clientId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched}, function(err, resultObj){
-    if(err){
-      console.log(err);
-    }else{
-      console.log(resultObj);
-    }
-
-  });
-}
-});
 
 
+// app.get('/getMoreConversations', sessionMiddlewares.loggedInCheck, function(req, res){
+//   var nbEventsAlreadyFetched = 0;
+//   var nbEventsQueryLimit = 10;
+//   if(req.query.lastEventId){
+//     nbEventsAlreadyFetched = req.query.lastEventId;
+//   }
+//   if(req.query.limitNumber){
+//     nbEventsQueryLimit = req.query.limitNumber;
+//   }
+// if(res.locals.userType == "store"){
+//   Conversation.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched}, function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//     }else{
+//       console.log(resultObj);
+//     }
+//
+//   });
+// }else{
+//   Conversation.find({clientId:mongoose.Types.ObjectId(res.locals.userId)}, {},{sort: {'timestampLastMessage': 1}, limit: nbEventsQueryLimit, skip:nbEventsAlreadyFetched}, function(err, resultObj){
+//     if(err){
+//       console.log(err);
+//     }else{
+//       console.log(resultObj);
+//     }
+//
+//   });
+// }
+// });
 
 
 
+
+//not optimized
 app.post('/updateClientInfo', sessionMiddlewares.loggedInCheck, function(req, res){
 if(!req.body.newPassword && !req.body.currentPassword && !req.body.email && !req.body.phone && !req.body.location && !req.body.lat && !req.body.long){
   res.send('err');
@@ -749,44 +748,41 @@ var wantedNewPassword = req.body.newPassword;
 
 
 
-app.post('/postChatMessage', sessionMiddlewares.loggedInCheck, function(req, res){
-if(!req.body.messageContent && req.body.messageContent != null && req.body.senderIsStore != null && !req.body.conversationId && req.body.conversationId != null && !req.body.messageType && req.body.messageType != null){
-res.send('err');
-}else{
-if(req.body.conversationId == -1){
-//new convo that doesnt exist
-
-}else{
-  //conversation already exists
-            var messageObj = {message:req.body.messageContent, messageType:req.body.messageType, senderIsStore:req.body.senderIsStore}
-            Conversation.findOne({_id:mongoose.Types.ObjectId(req.body.conversationId)}).then(function(theConversation){
-          theConversation.messages.push(messageObj);
-          theConversation.save();
-        }).then(function(){
-
-          Conversation.updateOne({_id:mongoose.Types.ObjectId(req.body.conversationId)}, {timestampLastMessage:new Date()}, function(errorUpdate, responseObj){
-            if(errorUpdate){
-              console.log(errorUpdate);
-          res.send('err');
-          }else{
-            res.send('ok');
-          }
-
-          });
-
-        });
 
 
+// app.post('/postChatMessage', sessionMiddlewares.loggedInCheck, function(req, res){
+// if(!req.body.messageContent && req.body.messageContent != null && req.body.senderIsStore != null && !req.body.conversationId && req.body.conversationId != null && !req.body.messageType && req.body.messageType != null){
+// res.send('err');
+// }else{
+// if(req.body.conversationId == -1){
+// //new convo that doesnt exist
+//
+// }else{
+//   //conversation already exists
+//             var messageObj = {message:req.body.messageContent, messageType:req.body.messageType, senderIsStore:req.body.senderIsStore}
+//             Conversation.findOne({_id:mongoose.Types.ObjectId(req.body.conversationId)}).then(function(theConversation){
+//           theConversation.messages.push(messageObj);
+//           theConversation.save();
+//         }).then(function(){
+//
+//           Conversation.updateOne({_id:mongoose.Types.ObjectId(req.body.conversationId)}, {timestampLastMessage:new Date()}, function(errorUpdate, responseObj){
+//             if(errorUpdate){
+//               console.log(errorUpdate);
+//           res.send('err');
+//           }else{
+//             res.send('ok');
+//           }
+//
+//           });
+//
+//         });
+//
+//
+//
+// }
+// }
+// });
 
-}
-}
-});
-
-
-
-app.get('/warzone', function(req,res){
-  res.render('myPopupForNewEvent', {languageCookie:getLanguageCookieValue(req)});
-});
 
 
 
@@ -843,7 +839,7 @@ app.post('/deleteStoreAbsence', sessionMiddlewares.loggedInCheck, function(req, 
 app.post('/updateStoreGeneralSettings', sessionMiddlewares.loggedInCheck, function(req, res){
 //bName, bLocation, bPhone,fbLink, instaLink, websiteLink, bEmail, oldPass, newPass, ownerName
   if(req.body.oldPass != "" && req.body.newPass != ""){
-    Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, function(error, responseObj){
+    Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {_id:0, storeName:1, ownerName:1, facebookLink:1, instagramLink:1, websiteLink:1,clientCanPickEmployee:1,location:1, phoneNumber:1, email:1}, function(error, responseObj){
       if(responseObj){
         bcrypt.compare(req.body.oldPass, responseObj.password, function(err, respBcrypt) {
             // res == true
@@ -965,32 +961,6 @@ app.post('/updateStoreGeneralSettings', sessionMiddlewares.loggedInCheck, functi
 
 
 
-
-app.get('/testNewAppointment', sessionMiddlewares.loggedInCheck, function(req,res){
-
-  Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, function(err, eventsObj){
-    if(err){
-      console.log(err);
-      res.redirect('/error');
-    }else{
-      Store.findOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {_id:0,password:0},function(error, resultObj){
-        if(error){
-          console.log('error');
-          res.redirect('/error');
-        }else{
-          // object of the store
-          console.log(resultObj.newNotifications);
-          res.render("warzoneDevNewAppointmentPopup.ejs",{eventsObj:eventsObj, storeObj:resultObj, languageCookie:getLanguageCookieValue(req)});
-        }
-      });
-    }
-
-  });
-})
-
-
-
-
 app.post('/updateStoreScheduleSettings', sessionMiddlewares.loggedInCheck, function(req, res){
 
   if(req.body.dailySchedule){
@@ -1080,17 +1050,17 @@ app.get('/changeLanguage', function(req,res){
 
 
 
-app.get('/searchAllRegisteredUsers', sessionMiddlewares.loggedInCheck, function(req, res){
-  console.log(req.query);
-Client.find({$or:[{ "phoneNumber": { $regex: '.*' + req.query.searchQuery + '.*' } },{ "clientName": { $regex: '.*' + req.query.searchQuery + '.*' } }, { "email": { $regex: '.*' + req.query.searchQuery + '.*' } }]}, {_id:0},function(error, clientObj){
-            if(error){
-            console.log(error);
-            res.send('error');
-            }else{
-            res.send(clientObj);
-            }
-        });
-});
+// app.get('/searchAllRegisteredUsers', sessionMiddlewares.loggedInCheck, function(req, res){
+//   console.log(req.query);
+// Client.find({$or:[{ "phoneNumber": { $regex: '.*' + req.query.searchQuery + '.*' } },{ "clientName": { $regex: '.*' + req.query.searchQuery + '.*' } }, { "email": { $regex: '.*' + req.query.searchQuery + '.*' } }]}, {_id:0},function(error, clientObj){
+//             if(error){
+//             console.log(error);
+//             res.send('error');
+//             }else{
+//             res.send(clientObj);
+//             }
+//         });
+// });
 
 
 app.post('/registerPrelaunchB2bEmails', function(req, res){
@@ -1152,7 +1122,7 @@ html:"<link href='https://fonts.googleapis.com/css?family=Roboto:400,900&display
 
 
 app.use(function(req, res, next) {
-  return res.status(404).render('404page.ejs', {languageCookie:getLanguageCookieValue(req)});
+  return res.status(404).render('404page.ejs', {languageCookie:getLanguageCookieValue(req, res)});
 });
 
 

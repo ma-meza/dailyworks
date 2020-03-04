@@ -7,10 +7,11 @@ var userSchema = new Schema({
   dateCreated:{type:Date, default:Date.now},
   clientName:{type:String, required:true},
   password:{type:String, required:false},
-  email:{type:String, default:null},
-  phoneNumber:{type:String, default:null},
-  location:{type:String, default:null},
-  profilePictureLink:{type:String, default:null},
+  email:{type:String, required:false},
+  phoneNumber:{type:String, required:false},
+  location:{type:String, required:false},
+  profilePictureLink:{type:String, required:false},
+  provider:{type:Number, default:null},
   socialNetId:{type:String, required:false},
   points:{type:Number, default:0}
 });

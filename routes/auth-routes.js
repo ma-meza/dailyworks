@@ -7,7 +7,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const sessionMiddlewares = require('../middlewares/sessionCheck');
 const bcrypt = require('bcrypt');
-const User = require('../models/userSchema');
+const Client = require('../models/userSchema');
 const Store = require('../models/storeSchema');
 const STRIPE_API = require('../stripeApi/stripe-functions.js');
 const saltRoundsBcrypt = 10;
@@ -53,28 +53,33 @@ router.post('/postLocalClientLogin', sessionMiddlewares.loggedInCheckForNonProte
 
 var email = req.body.email;
 var password = req.body.password;
-  User.findOne({email:email, provider:null}).then(function(currentUser){
-         if(currentUser){
-           //user exists
-           bcrypt.compare(password, currentUser.password, function(err, respBcrypt) {
-               // res == true
-               if(err){
-                 console.log(err);
-                 res.send('err');
-               }else{
-                 //pass match
-                 if(respBcrypt == true){
-                   createSessionCookie(currentUser._id, 'client', res, 'local');
-                 }else{
-                   res.send("passwordNoMatch");
-                 }
+  Client.findOne({email:email, provider:null}, {password:1, _id:1, email:1}, function(errorFind, currentUser){
+    if(!errorFind){
+      if(currentUser){
+        //user exists
+        bcrypt.compare(password, currentUser.password, function(err, respBcrypt) {
+            // res == true
+            if(err){
+              console.log(err);
+              res.send('err');
+            }else{
+              //pass match
+              if(respBcrypt == true){
+                createSessionCookie(currentUser._id, 'client', res, 'local');
+              }else{
+                res.send("passwordNoMatch");
+              }
 
-               }
-           });
-         }else{
-           //user doesnt exist
-            res.send("userNoExist");
-         }
+            }
+        });
+      }else{
+        //user doesnt exist
+         res.send("userNoExist");
+      }
+    }else{
+      res.send(err);
+        }
+
 
 
 
@@ -89,31 +94,32 @@ router.post('/postLocalStoreLogin', sessionMiddlewares.loggedInCheckForNonProtec
 var email = req.body.email;
 var password = req.body.password;
 
-  Store.findOne({email:email}).then(function(currentUser){
-         if(currentUser){
-           //user exists
-           bcrypt.compare(password, currentUser.password, function(err, resBcrypt) {
-               // res == true
-               if(err){
-                 console.log(err);
-                 res.send('err');
-               }else{
-                 //pass match
-                 if(resBcrypt == true){
-                   createSessionCookie(currentUser._id, 'store', res, 'local');
-                 }else{
-                   res.send("passwordNoMatch");
-                 }
+  Store.findOne({email:email}, {password:1, _id:1, email:1}, function(errorFind, currentUser){
+    if(!errorFind){
+      if(currentUser){
+        //user exists
+        bcrypt.compare(password, currentUser.password, function(err, resBcrypt) {
+            // res == true
+            if(err){
+              console.log(err);
+              res.send('err');
+            }else{
+              //pass match
+              if(resBcrypt == true){
+                createSessionCookie(currentUser._id, 'store', res, 'local');
+              }else{
+                res.send("passwordNoMatch");
+              }
 
-               }
-           });
-         }else{
-           //user doesnt exist
-            res.send('userNoExist');
-         }
-
-
-
+            }
+        });
+      }else{
+        //user doesnt exist
+         res.send('userNoExist');
+      }
+    }else{
+      res.send('err');
+    }
     });
 
 
@@ -189,28 +195,32 @@ router.post('/postLocalStoreSignup', sessionMiddlewares.loggedInCheckForNonProte
   var storeName = req.body.storeName;
 
 
-  Store.findOne({email:email}).then(function(currentUser){
-         if(currentUser){
-           //user exists
-           res.send('alreadyExist');
-         }else{
-           bcrypt.hash(password, saltRoundsBcrypt, function(err, hash) {
-             if(err){
-               console.log(err);
-               res.send('err');
-             }else{
-                 var tasksArray = [0,1];
-                       Store.create({ storeName: storeName, email:email, password:hash, registrationTasks:tasksArray}, function (err, storeObj) {
-                       if (err){
-                         console.log(err);
-                         res.send('err');
-                       }else{
-                         res.send('ok');
-                       }
-                     });
-             }
-         });
-         }
+  Store.findOne({email:email}, {email:1, _id:1, password:1}, function(errorFind, currentUser){
+    if(!errorFind){
+      if(currentUser){
+        //user exists
+        res.send('alreadyExist');
+      }else{
+        bcrypt.hash(password, saltRoundsBcrypt, function(err, hash) {
+          if(err){
+            console.log(err);
+            res.send('err');
+          }else{
+              var tasksArray = [0,1];
+                    Store.create({ storeName: storeName, email:email, password:hash, registrationTasks:tasksArray}, function (err, storeObj) {
+                    if (err){
+                      console.log(err);
+                      res.send('err');
+                    }else{
+                      res.send('ok');
+                    }
+                  });
+          }
+      });
+      }
+    }else{
+      res.send('err');
+    }
     });
 });
 
@@ -224,32 +234,33 @@ router.post('/postLocalClientSignup', sessionMiddlewares.loggedInCheckForNonProt
   var clientName = req.body.name;
 
 
-  User.findOne({email:email, provider:null}).then(function(currentUser){
-         if(currentUser){
-           //user exists
-           res.send('alreadyExist');
-         }else{
-           //user doesnt exist
-           bcrypt.hash(password, saltRoundsBcrypt, function(err, hash) {
-             console.log(hash);
-             if(err){
-               console.log(err);
-               res.send('err');
-             }else{
-               User.create({ email:email, password:hash, clientName:clientName}, function (err, clientObj) {
-               if (err){
-                 console.log(err);
-                 res.send('err');
-               }else{
-                 res.send('ok');
-               }
-             });
-             }
-         });
-         }
-
-
-
+  Client.findOne({email:email, provider:null}, {_id:0, email:1}, function(errorFind, currentUser){
+    if(!errorFind){
+      if(currentUser){
+        //user exists
+        res.send('alreadyExist');
+      }else{
+        //user doesnt exist
+        bcrypt.hash(password, saltRoundsBcrypt, function(err, hash) {
+          console.log(hash);
+          if(err){
+            console.log(err);
+            res.send('err');
+          }else{
+            User.create({ email:email, password:hash, clientName:clientName}, function (err, clientObj) {
+            if (err){
+              console.log(err);
+              res.send('err');
+            }else{
+              res.send('ok');
+            }
+          });
+          }
+      });
+      }
+    }else{
+      res.send('err');
+    }
     });
 });
 
