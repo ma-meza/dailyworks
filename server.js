@@ -90,7 +90,7 @@ var Conversation = require('./models/conversationSchema');
 var Event = require('./models/eventSchema');
 var Client = require('./models/userSchema');
 var GuestClient = require('./models/guestUserSchema');
-var LocalGuestClient = require('./models/LocalGuestClientSchema');
+var LocalGuestClient = require('./models/localGuestClientSchema');
 var B2bPrelaunchClient = require('./models/b2bPrelaunchSchema');
 
 function getLanguageCookieValue(req, res){
