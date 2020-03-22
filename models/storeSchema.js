@@ -41,7 +41,7 @@ var storeSchema = new Schema({
     _id:{type:mongoose.Schema.Types.ObjectId,required:true},
       serviceName:{type:String, required:true},
       description:{type:String, required:false},
-      price:{type:mongoose.Schema.Types.Decimal128, required:false},
+      price:{type:Number, required:false},
       employees:[{
         employeeId:{type:mongoose.Schema.Types.ObjectId, required:true},
         employeeName:{type:String, required:true}

@@ -30,14 +30,14 @@ app.use(cookieParser());
 
 
 
-const express_enforces_ssl = require('express-enforces-ssl');
-const helmet = require('helmet');
-const sixtyDaysInSeconds = 5184000
-app.use(helmet.hsts({
-  maxAge: sixtyDaysInSeconds
-}));
-app.use(express_enforces_ssl());
-app.set('trust proxy', true);
+// const express_enforces_ssl = require('express-enforces-ssl');
+// const helmet = require('helmet');
+// const sixtyDaysInSeconds = 5184000
+// app.use(helmet.hsts({
+//   maxAge: sixtyDaysInSeconds
+// }));
+// app.use(express_enforces_ssl());
+// app.set('trust proxy', true);
 
 
 app.use(express.static(__dirname + '/public')); // configure express to use public folder for all img srcs and other files
@@ -79,8 +79,8 @@ var emailTransporterAdmin = nodemailer.createTransport({
 
 // mongoose connect to MONGODB
 
-mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
-// mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+// mongoose.connect("mongodb+srv://markymark:Fortune2019@cluster0-sotud.gcp.mongodb.net/test?retryWrites=true&w=majority", {  useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
+mongoose.connect('mongodb://localhost:27017/appointmentApp', {useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("MONGO SERVER ERROR"+error));
 
 
 
@@ -209,7 +209,7 @@ app.get('/welcomeBusiness', function(req, res){
 
 //MAIN HOme PAGE loggedin FOR CLIENT AND STORE
 app.get('/home', sessionMiddlewares.loggedInCheck, function(req, res){
-
+console.log(res.locals.userId+" meh");
 if(res.locals.userType == "store"){
 
   Event.find({storeId:mongoose.Types.ObjectId(res.locals.userId)}, {_id:1, clientName:1, startDate:1, endDate:1, fullDay:1, services:1}, function(err, eventsObj){
@@ -223,7 +223,6 @@ if(res.locals.userType == "store"){
           res.redirect('/error');
         }else{
           // object of the store
-          console.log(resultObj.employees);
           res.render('storeHome',{eventsObj:JSON.stringify(eventsObj), storeNotifications:JSON.stringify(resultObj.notifications), employeeObj:JSON.stringify(resultObj.employees), serverStoreObj:JSON.stringify(resultObj),storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
         }
       });
@@ -264,7 +263,7 @@ if(res.locals.userType == "store"){
       console.log(err);
       res.redirect('/error');
     }else{
-      res.render('storeSettings',{storeObj:resultObj, languageCookie:getLanguageCookieValue(req, res)});
+      res.render('storeSettings',{storeObj:JSON.stringify(resultObj), storeNotifications:JSON.stringify(resultObj.notifications),languageCookie:getLanguageCookieValue(req, res)});
     }
 
   });
@@ -836,6 +835,37 @@ app.post('/deleteStoreAbsence', sessionMiddlewares.loggedInCheck, function(req, 
 });
 
 
+app.post('/addStoreService', sessionMiddlewares.loggedInCheck, function(req,res){
+  //[startDate, startTime, endDate, endTime, reason]
+    var serviceObjId = new ObjectID();
+    var serviceObj = req.body.serviceObj;
+    serviceObj['_id'] = serviceObjId;
+    if(serviceObj){
+      Store.updateOne({_id:mongoose.Types.ObjectId(res.locals.userId)}, {$push:{services:serviceObj}}, function(errorUpdate, responseObjUpdated){
+        if(errorUpdate){
+          console.log(errorUpdate);
+          res.send({status:'error'});
+        }else{
+          console.log(responseObjUpdated);
+          res.send({status:'ok', serviceId:serviceObjId});
+        }
+      });
+    }
+});
+app.post('/deleteStoreService', sessionMiddlewares.loggedInCheck, function(req, res){
+  var serviceId = req.body.serviceId;
+  Store.updateOne({ _id:mongoose.Types.ObjectId(res.locals.userId)}, {$pull: { services: { _id:mongoose.Types.ObjectId(serviceId)} } }, function(errorUpdate, responseObjUpdated){
+    if(errorUpdate){
+      console.log(errorUpdate);
+      res.send('error');
+    }else{
+      console.log(responseObjUpdated);
+      res.send("ok");
+    }
+  });
+});
+
+
 app.post('/updateStoreGeneralSettings', sessionMiddlewares.loggedInCheck, function(req, res){
 //bName, bLocation, bPhone,fbLink, instaLink, websiteLink, bEmail, oldPass, newPass, ownerName
   if(req.body.oldPass != "" && req.body.newPass != ""){
@@ -982,19 +1012,16 @@ app.post('/updateStoreScheduleSettings', sessionMiddlewares.loggedInCheck, funct
           console.log(errorUpdate);
           res.send('error');
         }else{
-          if(req.body.absences){
-            var absencesArrayLength = req.body.absences.length;
-            if(absencesArrayLength>0){
-              for(var i=0;i<absencesArrayLength;i++){
-                res.send('ok');
-              }
-            }
-          }
-
+          res.send('ok');
         }
       });
+    }
+});
 
-  }else{
+
+
+app.post('/updateStoreAbsencesSettings', sessionMiddlewares.loggedInCheck, function(req, res){
+
     if(req.body.absences){
       var absencesArrayLength = req.body.absences.length;if(absencesArrayLength>0){
         var absencesObj = new Object();
@@ -1037,8 +1064,9 @@ app.post('/updateStoreScheduleSettings', sessionMiddlewares.loggedInCheck, funct
         });
       }
     }
-  }
 });
+
+
 
 
 
@@ -1120,6 +1148,70 @@ html:"<link href='https://fonts.googleapis.com/css?family=Roboto:400,900&display
   });
 });
 
+
+
+
+app.post('/postNewAppointmentLocal', sessionMiddlewares.loggedInCheck, function(req, res){
+  console.log(res.locals.userId+"wtfff");
+  var servicesObj = new Array();
+  for(var i=0;i<req.body.appointmentInfos.servicesObj.length;i++){
+    var oneServiceObj = new Object();
+    oneServiceObj.serviceId = mongoose.Types.ObjectId(req.body.appointmentInfos.servicesObj[i].id);
+    oneServiceObj.price = req.body.appointmentInfos.servicesObj[i].price;
+    oneServiceObj.serviceName = req.body.appointmentInfos.servicesObj[i].serviceName;
+    oneServiceObj.duaration = req.body.appointmentInfos.servicesObj[i].duration;
+    servicesObj.push(oneServiceObj);
+  }
+  var employeeId = '';
+  var employeeName = "";
+  if(req.body.appointmentInfos.employeeId == 'null'){
+    employeeId = null;
+    employeeName = null;
+  }else{
+    employeeId = mongoose.Types.ObjectId(req.body.appointmentInfos.employeeId);
+    employeeName = req.body.appointmentInfos.employeeName;
+  }
+
+  if(req.body.clientInfos.newClient == true){
+        Event.create({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:req.body.appointmentInfos.startDate, endDate:req.body.appointmentInfos.endDate, clientId:mongoose.Types.ObjectId(req.body.clientInfos.clientId), employeeId:employeeId, employeeName:employeeName, services:servicesObj, addNote:req.body.appointmentInfos.addNote}, function(errorEvent, eventObj){
+          if(errorEvent){
+            console.log(errorEvent);
+            res.send('err');
+          }else{
+            res.send('ok');
+          }
+        });
+
+  }else{
+    LocalGuestClient.create({fullName:req.body.clientInfos.name, email:req.body.clientInfos.email, phoneNumber:req.body.clientInfos.phoneNumber, customerSince:new Date(), storeId:mongoose.Types.ObjectId(res.locals.userId)}, function(errorClient, clientObj){
+      if(errorClient){
+        console.log(errorClient);
+        res.send('err');
+      }else{
+        Event.create({storeId:mongoose.Types.ObjectId(res.locals.userId), startDate:req.body.appointmentInfos.startDate, endDate:req.body.appointmentInfos.endDate, clientId:clientObj._id, employeeId:employeeId, employeeName:employeeName, services:servicesObj, addNote:req.body.appointmentInfos.addNote}, function(errorEvent, eventObj){
+          if(errorEvent){
+            console.log(errorEvent);
+            res.send('err');
+          }else{
+            res.send('ok');
+          }
+        });
+      }
+    });
+  }
+});
+
+
+
+app.get('/getAllStoreLocalGuestClients', sessionMiddlewares.loggedInCheck,function(req, res){
+  LocalGuestClient.find({storeId:mongoose.Types.ObjectId(res.locals.userId)},{}, function(error, clientsObj){
+    if(error){
+      res.send('error');
+    }else{
+      res.send(JSON.stringify(clientsObj));
+    }
+  });
+});
 
 app.use(function(req, res, next) {
   return res.status(404).render('404page.ejs', {languageCookie:getLanguageCookieValue(req, res)});

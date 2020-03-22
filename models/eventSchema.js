@@ -9,8 +9,8 @@ var eventSchema = new Schema({
   endDate:{type:Date, required:true},
   clientId:{type:mongoose.Schema.Types.ObjectId, required:true},
   clientName:{type:String, required:false},
-  employeeId:{type:mongoose.Schema.Types.ObjectId, required:true},
-  employeeName:{type:String, required:false},
+  employeeId:{type:mongoose.Schema.Types.ObjectId, default:null},
+  employeeName:{type:String, default:null},
   recurring:{type:Boolean, default:false},
   fullDay:{type:Boolean, default:false},
   frequencyRecurring:{type:Number, default:null},
@@ -18,7 +18,7 @@ var eventSchema = new Schema({
   services:[{
     serviceId:{type:mongoose.Schema.Types.ObjectId, required:true},
     serviceName:{type:String, required:false},
-    price:{type:mongoose.Schema.Types.Decimal128, required:true},
+    price:{type:Number, required:false},
     duration:{type:Number, default:0}
   }],
   numberTimesMissedOrMoved:{type:Number, default:0},

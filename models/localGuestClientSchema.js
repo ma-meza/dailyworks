@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+//for people who dont want to book online
+
 
 // create a schema
 var localGuestClientSchema = new Schema({

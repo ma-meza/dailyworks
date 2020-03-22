@@ -1,0 +1,166 @@
+
+<div class="transparentDarkModal" id="transparentDarkModal" >
+  <div class="cardPopupContainer">
+    <div class="cardPopup">
+      <div class="popupHeader">
+        <p class="popupTitle">Popup title</p>
+        <p class="popupX">X</p>
+      </div>
+      <div class="popupContent">
+
+      </div>
+      <div class="popupFooter">
+        <button type="button" class="ctaButton" id="displayButton2" name="button">Hide popup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<button type="button" class="ctaButton" id="displayButton" name="button">Show popup</button>
+
+
+<div class="uiColorCard">
+
+</div>
+
+
+
+
+
+<script>
+  var transparentDarkModal = document.getElementById('transparentDarkModal');
+  document.getElementById('displayButton').onclick = function(){
+    if(transparentDarkModal.style.display == "block"){
+      transparentDarkModal.style.display = "none";
+    }else{
+      transparentDarkModal.style.display = "block"
+    }
+  };
+  document.getElementById('displayButton2').onclick = function(){
+    if(transparentDarkModal.style.display == "block"){
+      transparentDarkModal.style.display = "none";
+    }else{
+      transparentDarkModal.style.display = "block"
+    }
+  };
+</script>
+
+<style>
+body{
+  background-color:#fff;
+}
+.transparentDarkModal{
+  height:100%;
+  left:0;
+  top:0;
+  width:100%;
+  position:fixed;
+  border:none;
+  background-color:rgba(0,0,0,0.6);
+  display:none;
+}
+.cardPopupContainer{
+  position:absolute;
+  width:500px;
+  max-width:86%;
+  height:100%;
+  background-color:transparent;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  border:none;
+}
+.cardPopup{
+  width:100%;
+  background-color:#fff;
+  position:relative;
+  height:auto;
+  min-height:10px;
+  overflow:hidden;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:8px;
+  -webkit-box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+}
+.popupContent{
+  position:relative;
+  background-color:transparent;
+  width:100%;
+  left:0;
+  height:120px;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.popupContentInfiniteHeight{
+  position:relative;
+  background-color:transparent;
+  width:100%;
+  left:0;
+  min-height:5px;
+  overflow-x:hidden;
+}
+.popupHeader{
+  position:relative;
+  width:100%;
+  height:auto;
+  min-height:5px;
+  padding:15px 0px 15px 0px;
+  left:0;
+  display:flex;
+  background-color:#fff;
+}
+.popupFooter{
+  position:relative;
+  width:100%;
+  left:0;
+  min-height:5px;
+  display:flex;
+  justify-content:flex-end;
+  padding:15px 0px 15px 0px;
+  background-color:transparent;
+}
+.uiColorCard{
+background-color:#393a4b;
+position:relative;
+top:0;
+left:0;
+height:100px;
+width:80px;
+margin:5px;
+}
+.ctaButton{
+  padding:8px 19px 8px 19px;
+  color:#fff;
+  cursor:pointer;
+  background-color:#2a9d8f;
+  border-radius:4px;
+  border:none;
+}
+.ctaButton:hover{
+  background-color:#227f73;
+  transition:all 80ms linear;
+  -webkit-box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px -2px rgba(0,0,0,0.75);
+}
+.popupTitle{
+  color:#000;
+  display:inline-block;
+  position:relative;
+  margin: 0 0 0 20px;
+  cursor:context-menu;
+}
+.popupX{
+  color:#000;
+  display:inline-block;
+  position:relative;
+  margin: 0 20px 0 auto;
+}
+#displayButton2{
+margin:0 20px 0 20px;
+}
+</style>

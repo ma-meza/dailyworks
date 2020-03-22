@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+//for people who book online but don't create account
+
 
 // create a schema
 var guestUserSchema = new Schema({

@@ -1,3 +1,20 @@
+
+@media screen and (min-width:780px){
+
+}
+
+
+@media screen and (max-width:780px){
+
+
+
+}
+input[type=checkbox] {
+  -moz-appearance:initial;
+}
+input[type=radio] {
+  -moz-appearance:initial;
+}
 .appointmentSummaryP{
   width:100%;
   left:0;
@@ -8,7 +25,9 @@
   font-size:var(--mobile-font-size-regular);
   line-height:40px;
 }
-
+.serviceCheckboxLabel{
+  cursor:pointer;
+}
 .newClientInputErrorLabel{
   position:relative;
   width:100%;
@@ -135,7 +154,7 @@ height:50px;
   border-bottom:1px solid #000;
 }
 .orSeparatorDiv::before{
-  content: <%= __('or') %>;
+  content: ' / ';
   position:absolute;
   left:50%;
   font-size:var(--mobile-font-size-small);
@@ -160,6 +179,7 @@ height:50px;
   padding-bottom:20;
   margin-left:20px;
   border-bottom:var(--nav-bar-border);
+  cursor:pointer;
 }
 .cancelButton{
   border:none;
@@ -254,9 +274,10 @@ border-color:rgba(66, 66, 66, 0.76);
 .checkboxServiceSelector{
   visibility:hidden;
   position: absolute;
-  right:20px;
-  top:calc(50% - 7px);
+  left:20px;
+  top:calc(50% - 4px);
   transform:translateY(-50%);
+  cursor:pointer;
 }
 .checkboxServiceEmployeeSelector:after{
   position: relative;
@@ -273,9 +294,10 @@ border-color:rgba(66, 66, 66, 0.76);
 .checkboxServiceEmployeeSelector{
   visibility:hidden;
   position: absolute;
-  right:20px;
-  top:calc(50% - 7px);
+  left:20px;
+  top:calc(50% - 4px);
   transform:translateY(-50%);
+  cursor:pointer;
 }
 .checkboxServiceEmployeeSelector:checked:after{
     background-color:var(--icon-color-active);
@@ -408,6 +430,7 @@ border: var(--nav-bar-border);
   padding:10 20;
   border:1px solid #000;
   margin: 0 0 20 20;
+  cursor:pointer;
 }
 .selectDatePInside{
   text-align:center;
@@ -438,12 +461,16 @@ border: var(--nav-bar-border);
   background: #FFF;
   transition:0.3s all;
 }
+.servicesTimePickerCheckboxSpan{
+  cursor:pointer;
+}
 .servicesTimePickerCheckboxSelector{
   visibility:hidden;
   position: absolute;
-  right:20px;
-  top:calc(50% - 7px);
+  left:20px;
+  top:calc(50% - 4px);
   transform:translateY(-50%);
+  cursor:pointer;
 }
 .servicesTimePickerCheckboxSelector:checked:after{
     background-color:var(--icon-color-active);
@@ -453,7 +480,7 @@ border: var(--nav-bar-border);
     height:100% !important;
   }
 
-  .newAppointmentTextarea{
+  #newAppointmentTextarea{
     width:calc(100% - 40px);
     position:relative;
     margin:20px;
@@ -461,4 +488,5 @@ border: var(--nav-bar-border);
     height:200px;
     border-radius:var(--official-border-radius);
     padding:10px;
+    border:1px solid #000;
   }

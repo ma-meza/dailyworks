@@ -1,6 +1,7 @@
 var newAppointmentInfos = {
     servicesName:[],
-    servicesEmployee:[],
+    employeeName:null,
+    employeeId:null,
     servicesObj:[],
     startDate:null,
     endDate:null,
@@ -15,6 +16,8 @@ var newAppointmentClientInfos = {
   newClient:false,
   clientId:null
 }
+
+var localGuestClientsObj = null;
 
 
 
@@ -156,6 +159,7 @@ function removeClientResultDiv(){
           popupTitleClientProfile.id = "clientProfileTitle";
           popupTitleClientProfile.innerText = translateWord('New client profile');
           newAppointmentScrollableDivClientProfile.appendChild(popupTitleClientProfile);
+          newAppointmentScrollableDivClientProfile.id = "clientProfile";
           newAppointmentScrollableDivClientProfile.style.left = "100%";
 
           var newClientNameInput = document.createElement('input');
@@ -190,13 +194,12 @@ function removeClientResultDiv(){
           newAppointmentScrollableDivClientProfile.appendChild(newClientNoteInput);
 
 
-          function createDivOfFoundClient(clientObj){
+          function createDivOfFoundExistingClient(clientObj){
             emptyClientProfileInputs();
             resetClientProfilePlaceholders();
               newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
               newAppointmentClientInfos.newClient = false;
               newAppointmentClientInfos.clientId = clientObj._id;
-              console.log(clientObj);
               if(clientObj){
                 if(clientObj.fullName != "" && clientObj.fullName){
                   newClientNameInput.placeholder = clientObj.fullName;
@@ -213,13 +216,14 @@ function removeClientResultDiv(){
                   newClientPhoneInput.placeholder = clientObj.phoneNumber;
                   newAppointmentClientInfos.phoneNumber = clientObj.phoneNumber;
                 }
+                newAppointmentScrollableDivClientProfile.style.left = "0";
+
+                moveNext();
+                setTimeout(function() { removeClientResultDiv(); }, 1000);
               }
 
 
-              newAppointmentScrollableDivClientProfile.style.left = "0";
 
-              moveNext();
-              setTimeout(function() { removeClientResultDiv(); }, 1000);
           }
 
 
@@ -358,7 +362,7 @@ function removeClientResultDiv(){
             popupTitleAddNote.innerText = translateWord('Add a note');
             newAppointmentScrollableDivAddNote.appendChild(popupTitleAddNote);
             var addNoteTextarea = document.createElement('textarea');
-            addNoteTextarea.classList.add('newAppointmentTextarea');
+            addNoteTextarea.id = 'newAppointmentTextarea';
             addNoteTextarea.placeholder = "Add a note, message or request";
             newAppointmentScrollableDivAddNote.appendChild(addNoteTextarea);
             newAppointmentScrollableDivAddNote.style.left = "100%";
@@ -405,17 +409,18 @@ function removeClientResultDiv(){
           var currentDiv = 0;
 
           function moveNext(){
-            console.log(newAppointmentInfos);
             console.log(newAppointmentClientInfos);
             switch(currentDiv){
+
               case 0:
               document.getElementById("newAppointmentBottomNavigationBar").style.left = "0";
               document.getElementById("newAppointmentBottomNavigationBar").style.display = "block";
               currentDiv++;
               break;
               case 1:
-              resetErrorLabelClientProfile();
+
               if(newAppointmentClientInfos.newClient == true){
+                resetClientObj();
                 console.log('yo');
                 if(newClientNameInput.value == ""){
                   newClientNameLabelUnder.innerText = translateWord("Please enter the client's name");
@@ -461,14 +466,13 @@ function removeClientResultDiv(){
 
 
 
-              newAppointmentInfos.servicesEmployee.name = "null";
-              newAppointmentInfos.servicesEmployee.id = 'null';
+              newAppointmentInfos.employeeName = "null";
+              newAppointmentInfos.employeeId = 'null';
 
               if(newAppointmentInfos.servicesName.length>0){
 
-                                newAppointmentInfos.servicesEmployee.length=0;
-                                newAppointmentInfos.servicesEmployee.name = "null";
-                                newAppointmentInfos.servicesEmployee.id='null';
+                newAppointmentInfos.employeeName = "null";
+                newAppointmentInfos.employeeId = 'null';
                                             newAppointmentScrollableDivServiceSelector.style.left = "-100%";
                                             newAppointmentScrollableDivServiceEmployeeSelector.innerHTML = "";
 
@@ -589,17 +593,17 @@ function removeClientResultDiv(){
         for(var n=0;n<serviceEmployeeCheckboxLabelClass.length;n++){
           var radioEmployeeSelect = serviceEmployeeCheckboxLabelClass[n].getElementsByClassName('checkboxServiceEmployeeSelector')[0];
             if(radioEmployeeSelect.checked){
-            newAppointmentInfos.servicesEmployee.id = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeId');
-            newAppointmentInfos.servicesEmployee.name = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeValue');
+            newAppointmentInfos.employeeId = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeId');
+            newAppointmentInfos.employeeName = serviceEmployeeCheckboxLabelClass[n].getAttribute('employeeValue');
 
             }
         }
 
 
 
-            if(newAppointmentInfos.servicesName.length>0 && newAppointmentInfos.servicesEmployee.name && newAppointmentInfos.servicesEmployee.id){
+            if(newAppointmentInfos.servicesName.length>0 && newAppointmentInfos.employeeName && newAppointmentInfos.employeeId){
             var allServicesEmployeeNoPreference = true;
-            if(newAppointmentInfos.servicesEmployee.id != 'null'){
+            if(newAppointmentInfos.employeeId != 'null'){
               allServicesEmployeeNoPreference = false;
             }
 
@@ -651,8 +655,9 @@ function removeClientResultDiv(){
                                                     createTheCalendarPopup(setDateSelectorP);
                                                     function setDateSelectorP(theDateFromFunction){
 
+
                                                           var splittedDateArray = theDateFromFunction.split('/');
-                                                          var dateObjFromFunction = new Date(splittedDateArray[0]+"-"+(parseInt(splittedDateArray[1]))+"-"+(parseInt(splittedDateArray[2])));
+                                                          var dateObjFromFunction = new Date(splittedDateArray[0]+"/"+(parseInt(splittedDateArray[1]))+"/"+(parseInt(splittedDateArray[2])));
 
                                                           renderAvailableTimesForSpecificDate(dateObjFromFunction, appointmentDurationInMilliseconds);
                                                           closeAllTransparentOverlays();
@@ -730,7 +735,7 @@ function removeClientResultDiv(){
                                                                                                               var startTimesArray = [];
 
                                                                                                               for(var t=0;t<serverStoreObj.employees.length;t++){
-                                                                                                                if(serverStoreObj.employees[t]._id == newAppointmentInfos.servicesEmployee.id){
+                                                                                                                if(serverStoreObj.employees[t]._id == newAppointmentInfos.employeeId){
                                                                                                                   for(var w=0;w<serverStoreObj.employees[t].schedule.length;w++){
                                                                                                                     if(dayOfWeek == serverStoreObj.employees[t].schedule[w].weekDay){
                                                                                                                       var startTime = decimalHourToMilliseconds(serverStoreObj.employees[t].schedule[w].startTime);
@@ -896,7 +901,7 @@ function removeClientResultDiv(){
                                                                                                         var atLeastOneAvailabilityFound = false;
 
                                                                                                         for(var t=0;t<serverStoreObj.employees.length;t++){
-                                                                                                          if( serverStoreObj.employees[t]._id == newAppointmentInfos.servicesEmployee.id){
+                                                                                                          if( serverStoreObj.employees[t]._id == newAppointmentInfos.employeeId){
                                                                                                             for(var w=0;w<serverStoreObj.employees[t].schedule.length;w++){
                                                                                                               if(dayOfWeek == serverStoreObj.employees[t].schedule[w].weekDay){
                                                                                                                 console.log();
@@ -915,7 +920,7 @@ function removeClientResultDiv(){
 
                                                                                                           for(var ws=0;ws<data.length;ws++){
 
-                                                                                                            if(data[ws].employeeId == newAppointmentInfos.servicesEmployee.id){
+                                                                                                            if(data[ws].employeeId == newAppointmentInfos.empoyeeId){
                                                                                                               var eventStartTime = new Date(data[ws].backendDateObjStart);
                                                                                                               var eventEndTime = new Date(data[ws].backendDateObjEnd);
 
@@ -1093,10 +1098,10 @@ function removeClientResultDiv(){
 
 
 
-                if(newAppointmentInfos.servicesEmployee.id == 'null'){
+                if(newAppointmentInfos.employeeId == 'null'){
                   appointmentSummaryString+="Employee: no preferance<br>";
                 }else{
-                  appointmentSummaryString+="Employee: "+newAppointmentInfos.servicesEmployee.name+"<br>";
+                  appointmentSummaryString+="Employee: "+newAppointmentInfos.employeeName+"<br>";
                 }
 
                 appointmentSummaryString+="Date: "+dateToClientString(newAppointmentInfos.startDate)+" - "+dateToClientString(newAppointmentInfos.endDate);
@@ -1111,11 +1116,48 @@ function removeClientResultDiv(){
                 currentDiv++;
                 break;
                 case 6:
-                document.getElementById("newAppointmentBottomNavigationBar").style.left = "100%";
-                document.getElementById("newAppointmentBottomNavigationBar").style.display = "none";
-                newAppointmentScrollableDivSummary.style.left = "-100%";
-                newAppointmentScrollableDivConfirmation.style.left = "0";
-                currentDiv++;
+
+
+
+                // var newAppointmentInfos = {
+                //     servicesName:[],
+                //     servicesEmployee:[],
+                //     servicesObj:[],
+                //     startDate:null,
+                //     endDate:null,
+                //     addNote:null
+                // }
+                //
+                // var newAppointmentClientInfos = {
+                //   name:null,
+                //   email:null,
+                //   phoneNumber:null,
+                //   addNote:null,
+                //   newClient:false,
+                //   clientId:null
+                // }
+
+                $.ajax({
+                 url: '/postNewAppointmentLocal',
+                 type: 'post',
+                 data:{appointmentInfos:newAppointmentInfos, clientInfos:newAppointmentClientInfos},
+                 success: function( data, textStatus){
+                 if(data == "error"){
+                   displaySnackbar('There has been a server error, the appointment was not created.', document.body);
+                 }else if(data == "ok"){
+                   document.getElementById("newAppointmentBottomNavigationBar").style.left = "100%";
+                   document.getElementById("newAppointmentBottomNavigationBar").style.display = "none";
+                   newAppointmentScrollableDivSummary.style.left = "-100%";
+                   newAppointmentScrollableDivConfirmation.style.left = "0";
+                   currentDiv++;
+                 }else{
+                   displaySnackbar('There has been a server error, the appointment was not created.', document.body);
+                 }
+                 },
+                 error: function( textStatus, errorThrown ){
+                   displaySnackbar('There has been a server error, the appointment was not created.', document.body);
+                 }
+                 });
                 break;
             }
           }
@@ -1124,7 +1166,7 @@ function removeClientResultDiv(){
 
 
           function moveBack(){
-            console.log(newAppointmentInfos);
+            console.log(newAppointmentClientInfos);
             switch(currentDiv){
               case 1:
 
@@ -1195,7 +1237,8 @@ function removeClientResultDiv(){
           }
 
           function unselectAllServicesEmployeeDiv(){
-            newAppointmentInfos.servicesEmployee = [];
+            newAppointmentInfos.employeeName = "null";
+            newAppointmentInfos.employeeId = 'null';
             var selectedServicesEmployeeDiv = newAppointmentScrollableDivServiceEmployeeSelector.getElementsByClassName('selectedServiceDivNewAppointment');
             while(newAppointmentScrollableDivServiceEmployeeSelector.getElementsByClassName('selectedServiceDivNewAppointment').length>0){
               newAppointmentScrollableDivServiceEmployeeSelector.getElementsByClassName('selectedServiceDivNewAppointment')[0].classList.remove('selectedServiceDivNewAppointment');
@@ -1204,79 +1247,130 @@ function removeClientResultDiv(){
 
 
 
-
           existingClientSearchInput.onkeyup = function(){
-
             if(!existingClientSearchResultsIsDisplayed){
-              createExistingClientSearchContainerDiv.innerText = "";
               existingClientSearchInput.classList.add('fullWidthTextInput');
               existingClientSearchResultsIsDisplayed = true;
-
               cancelButton.style.display = "block";
             }
             createExistingClientSearchContainerDiv.innerHTML = "";
+            var searchQuery = existingClientSearchInput.value;
 
-                var searchQuery = existingClientSearchInput.value;
 
+
+
+            if(localGuestClientsObj == null){
+                displayLoader();
+
+                  $.ajax({
+                   url: '/getAllStoreLocalGuestClients',
+                   type: 'get',
+                   success: function( data, textStatus){
+                   if(data == "error"){
+                     console.log('error');
+                     createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('Server error, please try again.')+"</p>";
+                   }else{
+                     localGuestClientsObj = JSON.parse(data);
+
+                     if(localGuestClientsObj.length !=0){
+                       var nbResults = 0;
+                           for(var i=0;i<localGuestClientsObj.length;i++)(function(i){
+
+                                 if(localGuestClientsObj[i].fullName.toLowerCase().includes(searchQuery.toLowerCase())){
+                                       var clientEachResultDiv = document.createElement('div');
+                                       clientEachResultDiv.onclick = function(){
+                                           createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                                       }
+                                       clientEachResultDiv.classList.add('innerClientResultDiv');
+                                       clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                                       createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                                       nbResults++;
+                                 }else if(localGuestClientsObj[i].phoneNumber.includes(searchQuery)){
+                                       var clientEachResultDiv = document.createElement('div');
+                                       clientEachResultDiv.onclick = function(){
+                                           createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                                       }
+                                       clientEachResultDiv.classList.add('innerClientResultDiv');
+                                       clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                                       createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                                       nbResults++;
+                                 }else if(localGuestClientsObj[i].email.includes(searchQuery)){
+                                       var clientEachResultDiv = document.createElement('div');
+                                       clientEachResultDiv.onclick = function(){
+                                           createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                                       }
+                                       clientEachResultDiv.classList.add('innerClientResultDiv');
+                                       clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                                       createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                                       nbResults++;
+                                 }
+                           })(i);
+                           if(nbResults == 0){
+                             createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('There are no results for that search.')+"</p>";
+                           }
+                      }else{
+                        var createClient = document.createElement('button');
+                        createClient.classList.add('emptyScreenButton');
+                        createClient.innerText = "Create a client now";
+                        createClient.onclick = function(){
+                          newAppointmentScrollableDivClientProfile.style.left = "0";
+                          newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
+                          newAppointmentClientInfos.newClient = true;
+                          moveNext();
+                        }
+                           createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
+                           createExistingClientSearchContainerDiv.appendChild(createClient);
+                     }
+                   }
+                   deleteLoader();
+                   },
+                   error: function( textStatus, errorThrown ){
+                     deleteLoader();
+                     console.log('error');
+                      createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('Server error, please try again.')+"</p>";
+                   }
+                   });
+            }else{
+              displayLoader();
+              var nbResults = 0;
+              for(var i=0;i<localGuestClientsObj.length;i++)(function(i){
+                    if(localGuestClientsObj[i].fullName.toLowerCase().includes(searchQuery.toLowerCase())){
+                          var clientEachResultDiv = document.createElement('div');
+                          clientEachResultDiv.onclick = function(){
+                              createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                          }
+                          clientEachResultDiv.classList.add('innerClientResultDiv');
+                          clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                          createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                          nbResults++;
+                    }else if(localGuestClientsObj[i].phoneNumber.includes(searchQuery)){
+                          var clientEachResultDiv = document.createElement('div');
+                          clientEachResultDiv.onclick = function(){
+                              createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                          }
+                          clientEachResultDiv.classList.add('innerClientResultDiv');
+                          clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                          createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                          nbResults++;
+                    }else if(localGuestClientsObj[i].email.toLowerCase().includes(searchQuery.toLowerCase())){
+                          var clientEachResultDiv = document.createElement('div');
+                          clientEachResultDiv.onclick = function(){
+                              createDivOfFoundExistingClient(localGuestClientsObj[i]);
+                          }
+                          clientEachResultDiv.classList.add('innerClientResultDiv');
+                          clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
+                          createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
+                          nbResults++;
+                    }
+              })(i);
+              if(nbResults == 0){
+                createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('There are no results for that search.')+"</p>";
+              }
+              deleteLoader();
+            }
 
                 //search for users that already took appointments with the store
-            if(typeof localGuestClientsObj != 'undefined'){
-                  if(localGuestClientsObj.length !=0){
-                        for(var i=0;i<localGuestClientsObj.length;i++){
 
-                              if(localGuestClientsObj[i].fullName.toLowerCase().includes(searchQuery.toLowerCase())){
-                                    var clientEachResultDiv = document.createElement('div');
-                                    clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(localGuestClientsObj[--i]);
-
-
-                                    }
-                                    clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
-                                    createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
-                              }else if(localGuestClientsObj[i].phoneNumber.includes(searchQuery)){
-                                    var clientEachResultDiv = document.createElement('div');
-                                    clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(localGuestClientsObj[--i]);
-                                    }
-                                    clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = localGuestClientsObj[i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
-                                    createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
-                              }else if(localGuestClientsObj[i].email.includes(searchQuery)){
-                                    var clientEachResultDiv = document.createElement('div');
-                                    clientEachResultDiv.onclick = function(){
-                                        createDivOfFoundClient(localGuestClientsObj[--i]);
-                                    }
-                                    clientEachResultDiv.classList.add('innerClientResultDiv');
-                                    clientEachResultDiv.innerText = localGuestClientsObj[--i].fullName+" ("+localGuestClientsObj[i].phoneNumber+")";
-                                    createExistingClientSearchContainerDiv.appendChild(clientEachResultDiv);
-                              }
-                        }
-                   }else{
-                     var createClient = document.createElement('button');
-                     createClient.classList.add('emptyScreenButton');
-                     createClient.innerText = "Create a client now";
-                     createClient.onclick = function(){
-                       newAppointmentScrollableDivClientProfile.style.left = "0";
-                       newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-                       moveNext();
-                     }
-                        createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
-                        createExistingClientSearchContainerDiv.appendChild(createClient);
-                  }
-            }else{
-              var createClient = document.createElement('button');
-              createClient.classList.add('emptyScreenButton');
-              createClient.innerText = "Create a client now";
-              createClient.onclick = function(){
-                newAppointmentScrollableDivClientProfile.style.left = "0";
-                newAppointmentScrollableDivEmailPhoneName.style.left = "-100%";
-                moveNext();
-
-              }
-                 createExistingClientSearchContainerDiv.innerHTML = "<p class='emptyScreenText'>"+translateWord('You have no clients yet')+"</p>";
-                 createExistingClientSearchContainerDiv.appendChild(createClient);
-              }
 
             // if(searchQuery !=""){
             //   // $.ajax({
@@ -1291,7 +1385,7 @@ function removeClientResultDiv(){
             //   //   for(var g=0;g<data.length;g++){
             //   //     var clientEachResultDiv = document.createElement('div');
             //   //     clientEachResultDiv.onclick = function(){
-            //   //         createDivOfFoundClient(data[g]);
+            //   //         createDivOfFoundExistingClient(data[g]);
             //   //     }
             //   //     clientEachResultDiv.classList.add('innerClientResultDiv');
             //   //     clientEachResultDiv.innerText = data[g].clientName;
@@ -1308,9 +1402,7 @@ function removeClientResultDiv(){
             //   // }
             //   // });
             // }
-            setTimeout(function(){
-              createExistingClientSearchContainerDiv.style.display = "block";
-            }, 350)
+            createExistingClientSearchContainerDiv.style.display = "block";
 
           }
 

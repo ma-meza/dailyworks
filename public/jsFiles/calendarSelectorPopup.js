@@ -12,20 +12,29 @@ if(typeof dateNow != "undefined"){
   dateNow = dateNow;
 }
 
-var calendarMainDivSelectorDate = document.createElement('div');
-calendarMainDivSelectorDate.classList.add("calendarPopupDatePicker");
+var calendarMainDiv = document.createElement('div');
+calendarMainDiv.classList.add("cardPopup");
+
+var calendarContentContainer = document.createElement('div');
+calendarContentContainer.classList.add('popupContentInfiniteHeight');
+
+var calendarHeaderContainer = document.createElement('div');
+calendarHeaderContainer.classList.add('popupHeader');
+
+
 
 
 
 var topPickerDiv = document.createElement('div');
 topPickerDiv.classList.add('monthCalendarPickerTopDiv');
 
-var leftArrow  = document.createElement('p');
+var leftArrow  = document.createElement('img');
 leftArrow.classList.add('monthCalendarPickerLeftArrow');
-leftArrow.innerHTML = "&#9668;";
-var rightArrow  = document.createElement('p');
+leftArrow.src = "assets/icons/octiconsSvg/chevron-left.svg";
+
+var rightArrow  = document.createElement('img');
 rightArrow.classList.add('monthCalendarPickerRightArrow');
-rightArrow.innerHTML = "&#9658;";
+rightArrow.src = "assets/icons/octiconsSvg/chevron-right.svg";
 
 var monthName  = document.createElement('p');
 monthName.classList.add('monthCalendarPickerMonthName');
@@ -34,7 +43,7 @@ monthName.innerText = fullMonthsName[calendarPickerDate.getMonth()]+" "+calendar
 topPickerDiv.appendChild(leftArrow);
 topPickerDiv.appendChild(rightArrow);
 topPickerDiv.appendChild(monthName);
-calendarMainDivSelectorDate.appendChild(topPickerDiv);
+calendarContentContainer.appendChild(topPickerDiv);
 
 
 var divAroundTable = document.createElement('div');
@@ -124,10 +133,11 @@ divAroundTable.innerHTML = "";
                var calendarCell = null;
                for (var i=0;i<weekDayName.length;i++) {
                  calendarCell = document.createElement("td");
-                 calendarCell.innerHTML = weekDayName[i];
+                 calendarCell.classList.add('weekDayNameCell');
+                 calendarCell.innerText = weekDayName[i];
                  monthNameRow.appendChild(calendarCell);
                }
-               monthNameRow.classList.add("monthNameRow");
+               monthNameRow.classList.add("weekDayNameRow");
                monthTable.appendChild(monthNameRow);
 
 
@@ -182,17 +192,34 @@ divAroundTable.innerHTML = "";
 
            divAroundTable.appendChild(monthTable);
  }
-calendarMainDivSelectorDate.appendChild(divAroundTable);
+calendarContentContainer.appendChild(divAroundTable);
+
+
+calendarMainDiv.appendChild(calendarHeaderContainer);
+calendarMainDiv.appendChild(calendarContentContainer);
 
 
 
 
+var popupTitle = document.createElement('p');
+popupTitle.classList.add('modalMainTitle');
+popupTitle.innerText = translateWord('Choose a date');
+
+var popupXQuit = document.createElement('p');
+popupXQuit.classList.add('popupX');
+popupXQuit.innerText = "X";
+popupXQuit.onclick = function(){
+  closeCalendarPopup();
+}
+
+calendarHeaderContainer.appendChild(popupTitle);
+calendarHeaderContainer.appendChild(popupXQuit);
+
+var cardPopupContainer = document.createElement('div');
+cardPopupContainer.classList.add('cardPopupContainer');
 
 
-
-
-
-
+cardPopupContainer.appendChild(calendarMainDiv);
 
 
 
@@ -200,15 +227,17 @@ calendarMainDivSelectorDate.appendChild(divAroundTable);
 
 
 var transparentOverlay = document.createElement('div');
-transparentOverlay.classList.add('transparentOverlay');
-transparentOverlay.appendChild(calendarMainDivSelectorDate);
+transparentOverlay.classList.add("transparentOverlay");
+transparentOverlay.appendChild(cardPopupContainer);
 
 function closeCalendarPopup(){
 transparentOverlay.remove();
 }
 transparentOverlay.onclick = function(e){
   if(e.target != this){
-
+    if(e.target.className == "cardPopupContainer"){
+      closeCalendarPopup();
+    }
   }else{
     closeCalendarPopup();
   }

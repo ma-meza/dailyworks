@@ -12,38 +12,80 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
   var todayMonthName = new Date().getMonth();
 </script>
 
+<div id='notificationMainAroundDiv'></div>
 
-<div id="bottomNavMainDiv" class="">
-
-  <div id="innerDiv1" onclick="location.href='/home' " class="innerDivs">
-    <img id="homeImgIcon" src="assets/icons/octiconsSvg/home-white.svg" class="navIcons clickableIconImg" alt="">
+<div id="bottomNavMainDiv">
+  <div id="firstDivisorBottomNav" class="divisorsBottomNav">
+    <p id="storeNameBottomNav"><%= storeObj.storeName %></p>
   </div>
-  <!-- <div id="innerDiv2" onclick="location.href='/analytics'" class="innerDivs">
-    <img id="analyticsImgIcon" src="assets/icons/octiconsSvg/graph-inactive.svg" class="navIcons clickableIconImg" alt="">
-  </div> -->
-  <!-- <div id="innerDiv3" onclick="location.href='/messages' " class="innerDivs">
-    <img id="messagesImgIcon" src="assets/icons/octiconsSvg/comment-inactive.svg" class="navIcons clickableIconImg" alt="">
 
-    <% if(typeof storeObj != 'undefined' && storeObj){ %>
-            <% if(storeObj.newMessageNotifications == true){ %>
-              <div id="newMessagesNotificationAlertCircle"></div>
-            <% } %>
-      <% } %>
-
-
-
-
-  </div> -->
-  <div id="innerDiv4" onclick="location.href='/settings' " class="innerDivs clickableIconImg">
-    <img id="settingsImgIcon" src="assets/icons/octiconsSvg/gear-white.svg" class="navIcons" alt="">
+  <div class="divisorsBottomNav">
+    <a href="/home">
+      <img id="homeImgIcon" src="assets/icons/octiconsSvg/home-beige.svg" class="navIcons clickableIconImg" alt="">
+    </a>
+  </div>
+  <div class="divisorsBottomNav">
+    <a href="/settings">
+      <img id="settingsImgIcon" src="assets/icons/octiconsSvg/gear-beige.svg" class="navIcons clickableIconImg" alt="">
+    </a>
+  </div>
+  <div id="lastDivisorBottomNav" class="divisorsBottomNav">
+    <img id='notificationIconImg' class='navIcons clickableIconImg' src="assets/icons/octiconsSvg/bell-beige.svg" alt="">
+    <% if(storeObj.newNotifications == true){ %>
+      <div id="newNotificationAlertCircle"></div>
+    <% } %>
   </div>
 </div>
 
 
-<style>
 
+
+<style>
 @media screen and (min-width:780px){
+  #storeNameBottomNav{
+    color:#f4f0e5;
+    font-size:var(--desktop-font-size-regular);
+    text-align:center;
+    font-weight:var(--mobile-font-weight-bold);
+  }
+  .divisorsBottomNav{
+    position:relative;
+    width:100%;
+    margin-top:0;
+    margin-bottom:20px;
+    top:0;
+    left:0;
+    display:block
+    border:none;
+    min-height:10px;
+  }
+  #lastDivisorBottomNav{
+    top:unset;
+    position:absolute;
+    bottom:0px;
+    width:100%;
+    height:50px;
+  }
+  #firstDivisorBottomNav{
+    margin-top:10px;
+    margin-bottom:50px;
+  }
+  #notificationMainAroundDiv{
+    position:absolute;
+    bottom:0;
+    right:0;
+    height:calc(100% - 64px);
+    width:400px;
+    display:none;
+    background-color:#fff;
+    z-index:100;
+    border-left:var(--nav-bar-border);
+    border-top:var(--nav-bar-border);
+    box-shadow:var(--box-shaow-card);
+  }
+
   #bottomNavMainDiv{
+    overflow-x:hidden;
     z-index:5;
     width:80px;
     position:fixed;
@@ -51,33 +93,48 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
     left:0px;
     height:100%;
     border:0.3px solid rgba(66, 66, 66, 0.76);
-    background-color:var(--dark-blue-color);
-  }
-  .innerDivs{
-    position:absolute;
-    width:80%;
-    height:80px;
-    left:10%;
-    margin-top:50px;
-  }
-  #innerDiv1{
-    top:0px;
-  }
-  #innerDiv4{
-    top:80px;
+    background-color:var(--main-color);
   }
   .navIcons{
-    height:50%;
-    position:absolute;
-    top:0;
-    transform:translateX(-50%);
-    left:50%;
+    position:relative;
+    width:40%;
+    left: 50%;
+    transform: translateX(-50%);
   }
+
 }
 
+#notificationPanelHeader{
+  height:50px !important;
+  border-bottom:var(--nav-bar-border);
+  background-color:#f9f9f9;
 
+}
 
 @media screen and (max-width:780px){
+  #storeNameBottomNav{
+    display:none;
+  }
+  .divisorsBottomNav{
+    position:relative;
+    height:100%;
+    width:calc(100% / 3);
+    display:inline-block;
+    border:none;
+  }
+  #firstDivisorBottomNav{
+    display:none;
+  }
+  #notificationMainAroundDiv{
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    display:none;
+    background-color:#fff;
+    z-index:100;
+  }
   #bottomNavMainDiv{
     z-index:5;
     width:100%;
@@ -87,18 +144,7 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
     height:65px;
     border-top:0.3px solid rgba(66, 66, 66, 0.76);
     background-color:var(--dark-blue-color);
-  }
-  .innerDivs{
-    position:absolute;
-    width:50%;
-    height:100%;
-    top:0px;
-  }
-  #innerDiv1{
-    left:0px;
-  }
-  #innerDiv4{
-    left:50%;
+    font-size:0;
   }
   .navIcons{
     height:calc(100% - 22px);
@@ -113,7 +159,23 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
 
 
 
-
+#notificationInsideScrollableDiv{
+  top:50;
+  left:0;
+  position:absolute;
+  width:100%;
+  height:calc(100% - 50px);
+  overflow-y:auto;
+}
+.emptyScreenNotificationText{
+  font-size:18px;
+  margin:0;
+  width:100%;
+  text-align:center;
+  top:50%;
+  transform:translateY(-50%);
+  position:absolute;
+}
 
 
   #innerDiv2{
@@ -165,6 +227,39 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
 
 
 <script>
+
+
+  //notification panel
+  var notificationServerObj = <%- storeNotifications %>;
+  var notificationContainer = document.getElementById('notificationMainAroundDiv');
+  var notificationPanelString = "<div class='popupHeader' id='notificationPanelHeader'><p class='modalMainTitle'>"+translateWord("Notifications")+"</p><p id='notificationPanelDownArrow' class='popupX'>X</p></div><div id='notificationInsideScrollableDiv'>";
+    if(notificationServerObj.length ==0){
+      notificationPanelString += "<p class='emptyScreenNotificationText'>"+translateWord("No notifications for now.")+"</p></div>";
+      notificationContainer.innerHTML = notificationPanelString;
+    }else{
+      console.log(notificationServerObj);
+      notificationPanelString+= "</div>";
+      notificationContainer.innerHTML = notificationPanelString;
+        var nbOfNotifications = notificationServerObj.length
+              if(nbOfNotifications == 0){
+                notificationPanelString+= "<p class='emptyScreenNotificationText'>No notifications for now.</p></div>";
+              }else{
+                  var theScrollNotificationDiv = document.getElementById('notificationInsideScrollableDiv');
+                  for(var d = 0; d<nbOfNotifications; d++){
+                    var notificationContainer = document.createElement('div');
+                    notificationContainer.innerText = notificationServerObj[d].text;
+                    notificationContainer.classList.add('notificationContainerDiv');
+                    theScrollNotificationDiv.appendChild(notificationContainer);
+                  }
+              }
+    }
+    document.getElementById('notificationPanelDownArrow').onclick = function(){
+      closeAllOpenPopup();
+    };
+
+
+
+
 if(pageUrl.indexOf('home') != -1){
     document.getElementById('homeImgIcon').src ="assets/icons/octiconsSvg/home-active.svg";
   }else if(pageUrl.indexOf('analytics') != -1){
@@ -177,6 +272,15 @@ if(pageUrl.indexOf('home') != -1){
 
 
 
-
+  var notificationIcon = document.getElementById('notificationIconImg');
+  var notificationPanel = document.getElementById('notificationMainAroundDiv');
+  notificationIcon.onclick = function(){
+    if(notificationPanel.style.display == "block"){
+      notificationPanel.style.display = "none";
+    }else{
+        notificationPanel.style.display = 'block';
+    }
+  removeNotificationAlert();
+  }
 
 </script>

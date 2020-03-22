@@ -2,59 +2,83 @@
 <%- include partials/storeBottomNavBar.ejs %>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgRl2MKw024PModYPvSktDkFbsOird77o&libraries=places"></script>
 <script type="text/javascript" src="/jsFiles/miscFunctions.js"></script>
-
+<% storeObj = JSON.parse(storeObj)%>
 <% if(!storeObj || storeObj.length == 0){ %>
 sorry no store
   <% }else{ %>
+    <div class="thirdLevelParentCategorySelector" id="newAbsencesParentContainer">
+      <div id="newAbsencesDiv">
+        <div class="popupHeader">
+          <p class="modalMainTitle"><script type="text/javascript">document.write(translateWord("New absence"));</script></p>
+          <img src="assets/icons/octiconsSVG/x.svg" class="popupX" id="newAbsenceCloseButton" alt="">
+        </div>
+        <div class="sideModalContentScrolling">
+          <div id="newAbsencesDivInnerContainer">
+            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Description"));</script></label>
+            <input type="text" name="" value="" id="newAbsenceReason" class="textInputSetting" placeholder="Reason">
+            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
+            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceStart" class="absenceInputDateTime textInputSetting newStoreAbsenceStart" placeholder="Start date">
+            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("End date"));</script></label>
+            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceEnd" class="absenceInputDateTime textInputSetting newStoreAbsenceEnd" placeholder="End date">
+          </div>
+        </div>
+        <div class="saveButtonDiv">
+          <button class="quasiFullWidthCtaButton" id="addAbsenceButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Add absence"));</script></button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="thirdLevelParentCategorySelector" id="newServiceParentContainer">
+      <div id="newServicesDiv">
+        <div class="popupHeader">
+          <p class="modalMainTitle"><script type="text/javascript">document.write(translateWord("New service"));</script></p>
+          <img src="assets/icons/octiconsSVG/x.svg" class="popupX" id="newServiceCloseButton" alt="">
+        </div>
+        <div class="sideModalContentScrolling">
+          <div id="newServicesDivInnerContainer">
+            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Name"));</script></label>
+            <input type="text" name="" value="" id="newServiceName" class="textInputSetting" placeholder="Service name">
+            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Price"));</script></label>
+            <input type="number" name="" value="" data-date="-1" data-time="-1" id="newServicePrice" class="textInputSetting" placeholder="Service price">
+          </div>
+        </div>
+        <div class="saveButtonDiv">
+          <button class="quasiFullWidthCtaButton" id="addServiceButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Add service"));</script></button>
+        </div>
+      </div>
+    </div>
+
+
+
 <div id="settingsPageMainBody" class="">
-
-
-
-
-
   <div id="servicesSettingsMainContainer" class="secondLevelParentCategorySelector">
     <div class="settingsContentScrolling">
       <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
       <p class="settingsPageTitleSecondLevel">Services</p>
-      <div class="mainInputContainer">
+      <div class="dataEntriesMainContainer">
+        <div class="dataEntriesInnerDiv" id="currentServicesDiv">
 
-          <% for(var y=0;y<storeObj.services.length;y++){ %>
+            <% for(var y=0;y<storeObj.services.length;y++){ %>
+              <div class="dataEntryInputContainer" data-id="<%= storeObj.services[y]._id %>">
+                <img src="assets/icons/octiconsSvg/trashcan.svg" class="dataEntryRemoveButton storeServicesRemoveX" alt="">
+                <p class="inputSettingLabel">Name:</p>
+                <input class="textInputSetting" type="text" name="" placeholder="<%= storeObj.services[y].serviceName %>">
+                <p class="inputSettingLabel">Price:</p>
+                <input class="textInputSetting" type="number" placeholder="<%= storeObj.services[y].price %>">
+</div>
+            <% } %>
 
-            <button type="button" class="collapsibleSettingsServicesButton" name="button"><%= storeObj.services[y].serviceName %></button>
-            <div class="collapsibleSettingsServicesContent">
-              <p class="leftServicesLabel">Name:</p>
-              <br>
-              <input class="textInputSetting" type="text" name="" value="">
-              <br>
-              <p class="leftServicesLabel">Price:</p>
-              <br>
-              <input class="textInputSetting" type="number" name="" value="">
-            </div>
-
-          <% } %>
-
-
-
-
-        <p class="inputSettingLabel">Business name</p>
-        <input class="textInputSetting" id="bNameInput" type="text" name="" value="" placeholder="<%= storeObj.storeName %>">
-        <p class="labelUnderInputGeneralSettings" id="bNameInputUnderLabel"></p>
-
-        <p class="inputSettingLabel">Location</p>
-        <% if(typeof storeObj.location == "undefined"){ %>
-          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="Business location">
-        <% }else{ %>
-          <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="<%= storeObj.location %>">
-        <% } %>
-        <input id="locationLat" type="hidden" name="lat">
-        <input id="locationLong" type="hidden" name="long">
-
-
-
+        </div>
+      </div>
+      <div id="newServiceButton" class="roundButtonNewAction">
+        <img class="clickableIconImg newButtonWhitePlus" src="assets/icons/octiconsSvg/plus-white.svg" alt="">
       </div>
     </div>
     <div class="saveButtonDiv">
-      <button class="quasiFullWidthCtaButton" id="servicesSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+      <button class="quasiFullWidthCtaButton" id="servicesSettingsSaveButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Save"));</script></button>
     </div>
   </div>
 
@@ -65,7 +89,7 @@ sorry no store
 
 
 
-  <div id="generalSettingsMainContainer" class="secondLevelParentCategorySelector">
+  <div id="generalSettingsMainContainer" class="activeCategorySelector mobileNotActive secondLevelParentCategorySelector">
     <div class="settingsContentScrolling">
       <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
       <p class="settingsPageTitleSecondLevel" id="">General Settings</p>
@@ -73,11 +97,11 @@ sorry no store
 
 
 
-        <p class="inputSettingLabel">Business name</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Business name"));</script></p>
         <input class="textInputSetting" id="bNameInput" type="text" name="" value="" placeholder="<%= storeObj.storeName %>">
         <p class="labelUnderInputGeneralSettings" id="bNameInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Location</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Store location"));</script></p>
         <% if(typeof storeObj.location == "undefined"){ %>
           <input class="textInputSetting" id="bLocationInput" type="text" name="" value="" placeholder="Business location">
         <% }else{ %>
@@ -88,7 +112,7 @@ sorry no store
 
         <p class="labelUnderInputGeneralSettings" id="locationInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Phone number</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Phone number"));</script></p>
         <% if(typeof storeObj.phoneNumber == "undefined"){ %>
           <input class="textInputSetting" id="bPhoneInput" type="text" name="" value="" placeholder="ex: 5149932019">
         <% }else{ %>
@@ -96,7 +120,7 @@ sorry no store
         <% } %>
         <p class="labelUnderInputGeneralSettings" id="phoneNumberInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Social pages</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Social pages"));</script></p>
         <% if(typeof storeObj.facebookLink == "undefined"){ %>
           <input class="textInputSetting" id="fbLinkInput" type="text" name="" value="" placeholder="Facebook page link">
         <% }else{ %>
@@ -118,16 +142,16 @@ sorry no store
         <% } %>
         <p class="labelUnderInputGeneralSettings" id="websiteLinkInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Email address</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Email address"));</script></p>
         <input class="textInputSetting" type="email" id="bEmailInput" name="" value="" placeholder="<%= storeObj.email %>">
         <p class="labelUnderInputGeneralSettings" id="emailInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Password</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Password"));</script></p>
         <input class="passwordInputSetting" id="oldPasswordInput" type="password" name="" value="" placeholder="Old password"><img class="eyeIconPassword" id="oldPasswordEyeIcon" data-relatedpasswordid="oldPasswordInput" src="assets/icons/octiconsSvg/eye.svg" alt="">
         <input class="passwordInputSetting" id="newPasswordInput" type="password" name="" value="" placeholder="New Password"><img class="eyeIconPassword" id="newPasswordEyeIcon" data-relatedpasswordid="newPasswordInput" src="assets/icons/octiconsSvg/eye.svg" alt="">
         <p class="labelUnderInputGeneralSettings" id="passwordInputUnderLabel"></p>
 
-        <p class="inputSettingLabel">Owner's name</p>
+        <p class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Owner/manager's name"));</script></p>
         <% if(typeof storeObj.ownerName == "undefined"){ %>
           <input class="textInputSetting" id="ownerNameInput" type="text" name="" value="" placeholder="Business owner's name">
         <% }else{ %>
@@ -138,7 +162,7 @@ sorry no store
       </div>
     </div>
     <div class="saveButtonDiv">
-      <button class="quasiFullWidthCtaButton" id="generalSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+      <button class="quasiFullWidthCtaButton" id="generalSettingsSaveButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Save"));</script></button>
     </div>
   </div>
 
@@ -148,100 +172,112 @@ sorry no store
   <div id="storeScheduleSettingsMainContainer" class="secondLevelParentCategorySelector">
     <div class="settingsContentScrolling">
       <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
-      <p class="settingsPageTitleSecondLevel" id="">Store Schedule</p>
+      <p class="settingsPageTitleSecondLevel" id=""><script type="text/javascript">document.write(translateWord("Store schedule"));</script></p>
       <div class="mainInputContainer">
         <div id="storeScheduleMonday" class="storeScheduleDayLineContainer">
-          <p class="storeScheduleDayText">Monday :</p><input readonly class="storeScheduleTimeInput storeScheduleStartTime storeScheduleMondayInput" type="text" name="" value=""><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleMondayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleMondayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleMondayInput"><label for="storeScheduleMondayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Monday"));</script> :</p><input readonly class="storeScheduleTimeInput storeScheduleStartTime storeScheduleMondayInput" type="text" name="" value=""><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleMondayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleMondayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleMondayInput"><label for="storeScheduleMondayCheckbox" class="storeScheduleDayText"><script>document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer" id="storeScheduleTuesday">
-          <p class="storeScheduleDayText">Tuesday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleTuesdayInput" type="text" name="" value=""  readonly><p class="storeScheduleDayText">to</p><input class="storeScheduleTuesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""  readonly ><input id="storeScheduleTuesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleTuesdayInput"><label for="storeScheduleTuesdayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Tuesday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleTuesdayInput" type="text" name="" value=""  readonly><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input class="storeScheduleTuesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""  readonly ><input id="storeScheduleTuesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleTuesdayInput"><label for="storeScheduleTuesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer" id="storeScheduleWednesday">
-          <p class="storeScheduleDayText">Wednesday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleWednesdayInput" type="text" name="" value=""  readonly ><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleWednesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleWednesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleWednesdayInput"><label for="storeScheduleWednesdayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Wednesday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleWednesdayInput" type="text" name="" value=""  readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleWednesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleWednesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleWednesdayInput"><label for="storeScheduleWednesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer" id="storeScheduleThursday">
-          <p class="storeScheduleDayText">Thursday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleThursdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input  readonly class="storeScheduleThursdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleThursdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleThursdayInput"><label for="storeScheduleThursdayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Thursday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleThursdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleThursdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleThursdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleThursdayInput"><label for="storeScheduleThursdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer" id="storeScheduleFriday">
-          <p class="storeScheduleDayText">Friday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleFridayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleFridayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleFridayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleFridayInput"><label for="storeScheduleFridayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Friday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleFridayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleFridayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleFridayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleFridayInput"><label for="storeScheduleFridayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer" id="storeScheduleSaturday">
-          <p class="storeScheduleDayText">Saturday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSaturdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleSaturdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSaturdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSaturdayInput"><label for="storeScheduleSaturdayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Saturday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSaturdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSaturdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSaturdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSaturdayInput"><label for="storeScheduleSaturdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
         <div class="storeScheduleDayLineContainer storeScheduleSunday" id="storeScheduleSunday">
-          <p class="storeScheduleDayText">Sunday :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSundayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText">to</p><input readonly class="storeScheduleSundayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSundayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSundayInput"><label for="storeScheduleSundayCheckbox" class="storeScheduleDayText">Closed</label>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Sunday"));</script> :</p><input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSundayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSundayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSundayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSundayInput"><label for="storeScheduleSundayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
         </div>
-      </div>
-
-      <div class="mainStoreAbsencesContainer">
-          <p class="settingsPageTitleSecondLevel">Store absences</p>
-          <div class="currentAbsencesDiv storeAbsencesInnerDiv">
-
-            <% for(var y=0; y<storeObj.storeAbsences.length;y++){ %>
-              <div class="currentAbsenceEntryContainer" data-id="<%=storeObj.storeAbsences[y]._id %>">
-                  <input type="text" name="" value="" class="existingStoreAbsenceReason" placeholder="<%=storeObj.storeAbsences[y].reason %>">
-
-                    <% if(storeObj.storeAbsences[y].startTime == -1){ %>
-                    <input type="text" class="absenceInputDateTime existingStoreAbsenceStart" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="-1" readonly name="" placeholder="<%=storeObj.storeAbsences[y].startDate %> (full day)">
-                    <% }else{ %>
-                    <input type="text" class="absenceInputDateTime existingStoreAbsenceStart" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="<%=storeObj.storeAbsences[y].startTime %>" readonly name="" value="" placeholder="<%=storeObj.storeAbsences[y].startDate %> <%=decimalToHour12FormatEJS(storeObj.storeAbsences[y].startTime) %>">
-                    <% } %>
-
-
-                  <% if(storeObj.storeAbsences[y].endDate == -1){ %>
-                  <input type="text" name="" class="absenceInputDateTime" data-date="-1" data-time="-1" readonly placeholder="same day">
-                  <% }else{ %>
-
-                    <% if(storeObj.storeAbsences[y].endTime == -1){ %>
-                    <input type="text" name="" class="absenceInputDateTime existingStoreAbsenceEnd" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="-1" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> (full day)">
-                    <% }else{ %>
-                    <input type="text" name="" value="" class="absenceInputDateTime existingStoreAbsenceEnd" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="<%=storeObj.storeAbsences[y].endTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> <%= decimalToHour12FormatEJS(storeObj.storeAbsences[y].endTime) %>">
-                    <% } %>
-                  <% } %>
-
-                  <img src="assets/icons/octiconsSvg/x.svg" class="storeAbsencesRemoveX" alt="">
-              </div>
-            <% } %>
-          </div>
-          <div class="newAbsencesDiv storeAbsencesInnerDiv">
-            <input type="text" name="" value="" id="newAbsenceReason" placeholder="Reason">
-            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceStart" class="absenceInputDateTime newStoreAbsenceStart" placeholder="Start date">
-            <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceEnd" class="absenceInputDateTime newStoreAbsenceEnd" placeholder="End date">
-            <button type="button" id="addAbsenceButton" name="button">Add absence</button>
-          </div>
       </div>
     </div>
     <div class="saveButtonDiv">
-      <button class="quasiFullWidthCtaButton" id="storeScheduleSettingsSaveButton" type="button" name="button" value="Save">Save</button>
+      <button class="quasiFullWidthCtaButton" id="storeScheduleSettingsSaveButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Save"));</script></button>
     </div>
   </div>
 
 
-<div class="activeCategorySelector parentCategorySelector" id="firstLevelCategorySelector">
-  <p class="settingsPageTitle" id="">Settings</p>
+
+
+      <div id="storeAbsencesSettingsMainContainer" class="secondLevelParentCategorySelector">
+        <div class="settingsContentScrolling">
+          <img class="backArrowSettings" src="assets/icons/octiconsSVG/chevron-left.svg" alt="">
+          <p class="settingsPageTitleSecondLevel"><script type="text/javascript">document.write(translateWord("Store absences"));</script></p>
+          <div class="dataEntriesMainContainer">
+              <div id="currentAbsencesDiv" class="dataEntriesInnerDiv">
+                <% for(var y=0; y<storeObj.storeAbsences.length;y++){ %>
+                  <div class="dataEntryInputContainer" data-id="<%=storeObj.storeAbsences[y]._id %>">
+                    <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Description"));</script></label>
+                      <input type="text" name="" value="" class="existingStoreAbsenceReason textInputSetting" placeholder="<%=storeObj.storeAbsences[y].reason %>">
+                      <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
+                        <% if(storeObj.storeAbsences[y].startTime == -1){ %>
+                        <input type="text" class="absenceInputDateTime existingStoreAbsenceStart textInputSetting" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="-1" readonly name="" placeholder="<%=storeObj.storeAbsences[y].startDate %> (full day)">
+                        <% }else{ %>
+                        <input type="text" class="absenceInputDateTime existingStoreAbsenceStart textInputSetting" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="<%=storeObj.storeAbsences[y].startTime %>" readonly name="" value="" placeholder="<%=storeObj.storeAbsences[y].startDate %> <%=decimalToHour12FormatEJS(storeObj.storeAbsences[y].startTime) %>">
+                        <% } %>
+
+                        <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("End date"));</script></label>
+                      <% if(storeObj.storeAbsences[y].endDate == -1){ %>
+                      <input type="text" name="" class="absenceInputDateTime" data-date="-1" data-time="-1" readonly placeholder="same day">
+                      <% }else{ %>
+
+                        <% if(storeObj.storeAbsences[y].endTime == -1){ %>
+                        <input type="text" name="" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="-1" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> (full day)">
+                        <% }else{ %>
+                        <input type="text" name="" value="" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="<%=storeObj.storeAbsences[y].endTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> <%= decimalToHour12FormatEJS(storeObj.storeAbsences[y].endTime) %>">
+                        <% } %>
+                      <% } %>
+
+                      <img src="assets/icons/octiconsSvg/trashcan.svg" class="dataEntryRemoveButton storeAbsencesRemoveX" alt="">
+                  </div>
+                <% } %>
+              </div>
+          </div>
+          <div id="newAbsenceButton" class="roundButtonNewAction">
+            <img class="clickableIconImg newButtonWhitePlus" src="assets/icons/octiconsSvg/plus-white.svg" alt="">
+          </div>
+        </div>
+        <div class="saveButtonDiv">
+          <button class="quasiFullWidthCtaButton" id="storeAbsencesSettingsSaveButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Save"));</script></button>
+        </div>
+      </div>
+
+<div class="parentCategorySelector" id="firstLevelCategorySelector">
+  <p class="settingsPageTitle" id=""><script type="text/javascript">document.write(translateWord("Settings"));</script></p>
   <div id="mainMenuSettingSelector" class="settingSelectorMainContainer">
-    <p class="settingsSubCategoryMainTitle">Business Settings</p>
+    <p class="settingsSubCategoryMainTitle"><script type="text/javascript">document.write(translateWord("Business settings"));</script></p>
     <div class="mainCategorySelectorDiv">
       <div id="generalFirstSelector" class="subCategorySelectorDiv">
         <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
         <div class="subCategoryInnerDiv">
-          <p>General Settings</p>
+          <p class="activeP"><script type="text/javascript">document.write(translateWord("General settings"));</script></p>
         </div>
       </div>
       <div id="servicesFirstSelector" class="subCategorySelectorDiv">
         <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
         <div class="subCategoryInnerDiv">
-          <p>Services</p>
+          <p><script type="text/javascript">document.write(translateWord("Services"));</script></p>
         </div>
       </div>
       <div id="scheduleFirstSelector" class="subCategorySelectorDiv">
         <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
         <div class="subCategoryInnerDiv">
-          <p>Store Schedule</p>
+          <p><script type="text/javascript">document.write(translateWord("Store schedule"));</script></p>
+        </div>
+      </div>
+      <div id="storeAbsencesFirstSelector" class="subCategorySelectorDiv">
+        <img class="categoryRightArrow" src="assets/icons/octiconsSVG/chevron-right.svg" alt="">
+        <div class="subCategoryInnerDiv">
+          <p><script type="text/javascript">document.write(translateWord("Store absences"));</script></p>
         </div>
       </div>
     </div>
-
     <!-- <p class="settingsSubCategoryMainTitle">Staff Settings</p>
     <div class="mainCategorySelectorDiv">
       <div id="manageStaffFirstSelector" class="subCategorySelectorDiv">
@@ -324,12 +360,17 @@ for (var w = 0; w < collapsibleServicesButton.length; w++) {
 
 
 
-
+var storeServicesRemoveX = document.getElementsByClassName("storeServicesRemoveX");
+for(var s=0;s<storeServicesRemoveX.length;s++){
+  storeServicesRemoveX[s].onclick = function(){
+    removeExistingServiceEntry(this.closest(".dataEntryInputContainer"))
+  }
+}
 
 var storeAbsencesRemoveX = document.getElementsByClassName('storeAbsencesRemoveX');
 for(var w=0;w<storeAbsencesRemoveX.length;w++){
   storeAbsencesRemoveX[w].onclick = function(){
-    removeExistingAbsenceEntry(this.closest(".currentAbsenceEntryContainer"));
+    removeExistingAbsenceEntry(this.closest(".dataEntryInputContainer"));
   }
 }
 
@@ -357,10 +398,10 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
 <% if(storeObj.storeSchedule[0].startTime == 0 && storeObj.storeSchedule[0].endTime == 0){ %>
 var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 sundayStart.setAttribute('data-time', -1);
-sundayStart.placeholder = "closed";
+sundayStart.placeholder = translateWord("closed");
 sundayStart.disabled = true;
 var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-sundayEnd.placeholder = "closed";
+sundayEnd.placeholder = translateWord("closed");
 sundayEnd.disabled = true;
 sundayEnd.setAttribute('data-time', -1);
 sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
@@ -378,10 +419,10 @@ sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
 
 <% if(storeObj.storeSchedule[1].startTime == 0 && storeObj.storeSchedule[1].endTime == 0){ %>
 var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-mondayStart.placeholder = "closed";
+mondayStart.placeholder = translateWord("closed");
 mondayStart.disabled = true;
 var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-mondayEnd.placeholder = "closed";
+mondayEnd.placeholder = translateWord("closed");
 mondayEnd.disabled = true;
 mondayStart.setAttribute('data-time', -1);
 mondayEnd.setAttribute('data-time', -1);
@@ -400,10 +441,10 @@ mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
 
 <% if(storeObj.storeSchedule[2].startTime == 0 && storeObj.storeSchedule[2].endTime == 0){ %>
 var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-tuesdayStart.placeholder = "closed";
+tuesdayStart.placeholder = translateWord("closed");
 tuesdayStart.disabled = true;
 var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-tuesdayEnd.placeholder = "closed";
+tuesdayEnd.placeholder = translateWord("closed");
 tuesdayEnd.disabled = true;
 tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
 tuesdayStart.setAttribute('data-time', -1);
@@ -422,10 +463,10 @@ tuesdayEnd.setAttribute('data-time', -1);
 
 <% if(storeObj.storeSchedule[3].startTime == 0 && storeObj.storeSchedule[3].endTime == 0){ %>
 var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-wednesdayStart.placeholder = "closed";
+wednesdayStart.placeholder = translateWord("closed");
 wednesdayStart.disabled = true;
 var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-wednesdayEnd.placeholder = "closed";
+wednesdayEnd.placeholder = translateWord("closed");
 wednesdayEnd.disabled = true;
 wednesdayStart.setAttribute('data-time', -1);
 wednesdayEnd.setAttribute('data-time', -1);
@@ -444,10 +485,10 @@ wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = tru
 
 <% if(storeObj.storeSchedule[4].startTime == 0 && storeObj.storeSchedule[4].endTime == 0){ %>
 var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-thursdayStart.placeholder = "closed";
+thursdayStart.placeholder = translateWord("closed");
 thursdayStart.disabled = true;
 var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-thursdayEnd.placeholder = "closed";
+thursdayEnd.placeholder = translateWord("closed");
 thursdayEnd.disabled = true;
 thursdayStart.setAttribute('data-time', -1);
 thursdayEnd.setAttribute('data-time', -1);
@@ -466,10 +507,10 @@ thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true
 
 <% if(storeObj.storeSchedule[5].startTime == 0 && storeObj.storeSchedule[5].endTime == 0){ %>
 var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-fridayStart.placeholder = "closed";
+fridayStart.placeholder = translateWord("closed");
 fridayStart.disabled = true;
 var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-fridayEnd.placeholder = "closed";
+fridayEnd.placeholder = translateWord("closed");
 fridayEnd.disabled = true;
 fridayStart.setAttribute('data-time', -1);
 fridayEnd.setAttribute('data-time', -1);
@@ -488,10 +529,10 @@ fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
 
 <% if(storeObj.storeSchedule[6].startTime == 0 && storeObj.storeSchedule[6].endTime == 0){ %>
 var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-saturdayStart.placeholder = "closed";
+saturdayStart.placeholder = translateWord("closed");
 saturdayStart.disabled = true;
 var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-saturdayEnd.placeholder = "closed";
+saturdayEnd.placeholder = translateWord("closed");
 saturdayEnd.disabled = true;
 saturdayStart.setAttribute('data-time', -1);
 saturdayEnd.setAttribute('data-time', -1);
@@ -571,7 +612,6 @@ document.getElementById('newPasswordEyeIcon').onclick = function(){
 
 //save button onclick for general settings
 document.getElementById('generalSettingsSaveButton').onclick = function(){
-  displayLoader();
   clearLabelUnderInput();
   var bName = document.getElementById('bNameInput');
   var bLocation = document.getElementById('bLocationInput');
@@ -584,13 +624,14 @@ document.getElementById('generalSettingsSaveButton').onclick = function(){
   var newPass = document.getElementById('newPasswordInput');
   var ownerName = document.getElementById('ownerNameInput');
 
-
+if(bName.value!="" || bLocation.value != ""|| bPhone.value != "" || fbLink.value != "" || instaLink.value!=""|| websiteLink.value!=""||bEmail.value!=""||oldPass.value!=""||newPass.value!=""||ownerName.value!=""){
   if((newPass.value != "" && oldPass.value == "") || (newPass.value == "" && oldPass.value != "")){
     document.getElementById('passwordInputUnderLabel').innerText = "Your old password and new password must be filled in";
   }else{
     if(newPass.value !="" && oldPass.value != "" && newPass.value == oldPass.value){
       document.getElementById('passwordInputUnderLabel').innerText = "Your new password must not be the same as your old password";
     }else{
+      displayLoader();
       $.ajax({
          url : 'updateStoreGeneralSettings',
          type : 'POST',
@@ -601,6 +642,7 @@ document.getElementById('generalSettingsSaveButton').onclick = function(){
              document.getElementById('passwordInputUnderLabel').innerText = "Your current password doesn't match your real one";
 
            }else if(data == "ok"){
+
              if(bName.value!=""){
                bName.placeholder = bName.value;
                bName.value="";
@@ -641,23 +683,26 @@ document.getElementById('generalSettingsSaveButton').onclick = function(){
                newPass.placeholder = newPass.value;
                newPass.value="";
              }
-             deleteLoader();
+
 
           displaySnackbar('Settings successfully updated', document.getElementById('settingsPageMainBody'));
         }else if(data=="error"){
-          deleteLoader();
+
           displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
         }
          },
          error : function(textStatut, errorThrown){
-           deleteLoader();
+
            displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
          }
 
       });
+      deleteLoader();
     }
   }
-
+}else{
+  displaySnackbar('Oups, looks like you have not modified anything.', document.getElementById('settingsPageMainBody'));
+}
 }
 
 
@@ -670,9 +715,8 @@ document.getElementById('generalSettingsSaveButton').onclick = function(){
 
 //save button onclick for store schedule settings
 document.getElementById('storeScheduleSettingsSaveButton').onclick = function(){
-  displayLoader();
+
 var dailyScheduleUpdateArray = [];
-var existingAbsencesUpdateArray = [];
 
 //scan for changes in daily regular schedule
 var dailyScheduleClass = document.getElementsByClassName('storeScheduleDayLineContainer');
@@ -700,8 +744,69 @@ var dailyScheduleClass = document.getElementsByClassName('storeScheduleDayLineCo
     }
   }
 
+if(dailyScheduleUpdateArray.length!=0){
+  displayLoader();
+  $.ajax({
+     url : 'updateStoreScheduleSettings',
+     type : 'POST',
+     data:{dailySchedule:dailyScheduleUpdateArray},
+     success : function(data, textStatut){
+        if(data == "ok"){
+
+          for(var w=0;w<dailyScheduleClass.length;w++){
+            var startTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleStartTime')[0];
+            var endTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleEndTime')[0];
+            if(startTime.value!=""){
+              startTime.placeholder = startTime.value;
+              startTime.value="";
+            }
+            if(endTime.value!=""){
+              endTime.placeholder = endTime.value;
+              endTime.value="";
+            }
+          }
+
+
+
+         deleteLoader();
+
+      displaySnackbar('Schedule successfully updated', document.getElementById('settingsPageMainBody'));
+    }else if(data="error"){
+      deleteLoader();
+      displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+    }
+     },
+     error : function(textStatut, errorThrown){
+       deleteLoader();
+       displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+     }
+
+  });
+}else{
+  displaySnackbar('Oups, looks like you have not modified anything.', document.getElementById('settingsPageMainBody'));
+}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+//save button onclick for store absences settings
+document.getElementById('storeAbsencesSettingsSaveButton').onclick = function(){
+var existingAbsencesUpdateArray = [];
+
+
 //scan for changes in store absences that already exist
-var existingStoreAbsences = document.getElementsByClassName('currentAbsenceEntryContainer');
+var existingStoreAbsences = document.getElementsByClassName('dataEntryInputContainer');
 for(var t=0;t<existingStoreAbsences.length;t++){
   var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
   var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
@@ -714,77 +819,54 @@ for(var t=0;t<existingStoreAbsences.length;t++){
     existingAbsencesUpdateArray.push(modifiedAbsenceArray);
   }
 }
-console.log(dailyScheduleUpdateArray);
 console.log(existingAbsencesUpdateArray);
+if(existingAbsencesUpdateArray.length!=0){
+  displayLoader();
+  $.ajax({
+
+     url : 'updateStoreAbsencesSettings',
+     type : 'POST',
+     data:{absences:existingAbsencesUpdateArray},
+     success : function(data, textStatut){
+        if(data == "ok"){
 
 
+          for(var t=0;t<existingStoreAbsences.length;t++){
+            var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
+            var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
+            var reasonInput = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceReason')[0];
+            if(startTime.value!=""){
+              startTime.placeholder = startTime.value;
+              startTime.value="";
+            }
+            if(endTime.value!=""){
+              endTime.placeholder = endTime.value;
+              endTime.value="";
+            }
+            if(reasonInput.value!=""){
+              reasonInput.placeholder = reasonInput.value;
+              reasonInput.value="";
+            }
 
-
-$.ajax({
-   url : 'updateStoreScheduleSettings',
-   type : 'POST',
-   data:{dailySchedule:dailyScheduleUpdateArray, absences:existingAbsencesUpdateArray},
-   success : function(data, textStatut){
-      if(data == "ok"){
-
-        for(var w=0;w<dailyScheduleClass.length;w++){
-          var startTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleStartTime')[0];
-          var endTime = dailyScheduleClass[w].getElementsByClassName('storeScheduleEndTime')[0];
-          if(startTime.value!=""){
-            startTime.placeholder = startTime.value;
-            startTime.value="";
           }
-          if(endTime.value!=""){
-            endTime.placeholder = endTime.value;
-            endTime.value="";
-          }
-        }
+         deleteLoader();
 
-
-        for(var t=0;t<existingStoreAbsences.length;t++){
-          var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
-          var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
-          var reasonInput = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceReason')[0];
-          if(startTime.value!=""){
-            startTime.placeholder = startTime.value;
-            startTime.value="";
-          }
-          if(endTime.value!=""){
-            endTime.placeholder = endTime.value;
-            endTime.value="";
-          }
-          if(reasonInput.value!=""){
-            reasonInput.placeholder = reasonInput.value;
-            reasonInput.value="";
-          }
-
-        }
-
-
-
-
-
-
+      displaySnackbar('absences successfully updated', document.getElementById('settingsPageMainBody'));
+    }else if(data="error"){
+      deleteLoader();
+      displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+    }
+     },
+     error : function(textStatut, errorThrown){
        deleteLoader();
+       displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+     }
 
-    displaySnackbar('Settings successfully updated', document.getElementById('settingsPageMainBody'));
-  }else if(data="error"){
-    deleteLoader();
-    displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
-  }
-   },
-   error : function(textStatut, errorThrown){
-     deleteLoader();
-     displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
-   }
-
-});
-
-
-
-
+  });
+}else{
+  displaySnackbar('Oups, looks like you have not modified anything.', document.getElementById('settingsPageMainBody'));
 }
-
+}
 
 
 
@@ -798,7 +880,8 @@ $.ajax({
     var firstLevelCat = document.getElementById('firstLevelCategorySelector');
     firstLevelCat.classList.remove('activeCategorySelector');
     firstLevelCat.classList.add('leftCategorySelector');
-
+    removeActiveAllPanels();
+    makePActive(this);
     var servicesSettingsMainContainer = document.getElementById('servicesSettingsMainContainer');
     servicesSettingsMainContainer.classList.add('activeCategorySelector');
     }
@@ -809,8 +892,12 @@ $.ajax({
     var firstLevelCat = document.getElementById('firstLevelCategorySelector');
       firstLevelCat.classList.remove('activeCategorySelector');
       firstLevelCat.classList.add('leftCategorySelector');
+      removeActiveAllPanels();
+      makePActive(this);
       var generalSettingsMainContainer = document.getElementById('generalSettingsMainContainer');
       generalSettingsMainContainer.classList.add('activeCategorySelector');
+      generalSettingsMainContainer.classList.remove('mobileNotActive');
+
   }
 
 
@@ -819,8 +906,19 @@ $.ajax({
     var firstLevelCat = document.getElementById('firstLevelCategorySelector');
       firstLevelCat.classList.remove('activeCategorySelector');
       firstLevelCat.classList.add('leftCategorySelector');
+      removeActiveAllPanels();
+      makePActive(this);
       var storeScheduleSettingsMainContainer = document.getElementById('storeScheduleSettingsMainContainer');
       storeScheduleSettingsMainContainer.classList.add('activeCategorySelector');
+  }
+  document.getElementById('storeAbsencesFirstSelector').onclick = function(){
+    var firstLevelCat = document.getElementById('firstLevelCategorySelector');
+      firstLevelCat.classList.remove('activeCategorySelector');
+      firstLevelCat.classList.add('leftCategorySelector');
+      removeActiveAllPanels();
+      makePActive(this);
+      var storeAbsencesMainContainer = document.getElementById('storeAbsencesSettingsMainContainer');
+      storeAbsencesMainContainer.classList.add('activeCategorySelector');
   }
 
 
@@ -967,15 +1065,25 @@ document.getElementById('addAbsenceButton').onclick = function(){
 
 
            var absenceEntryContainer = document.createElement('div');
-           absenceEntryContainer.classList = 'currentAbsenceEntryContainer';
+           absenceEntryContainer.classList = 'dataEntryInputContainer';
            absenceEntryContainer.setAttribute('data-id',data.absenceId);
+
+           var descLabel = document.createElement("p");
+           descLabel.className = "inputSettingLabel";
+           descLabel.innerText = translateWord("Description");
+
            var reasonInput = document.createElement('input');
            reasonInput.type="text";
-           reasonInput.classList = "existingStoreAbsenceReason";
+           reasonInput.className = "existingStoreAbsenceReason textInputSetting";
            reasonInput.placeholder = absenceObj["reason"];
+
+           var startLabel = document.createElement("p");
+           startLabel.className = "inputSettingLabel";
+           startLabel.innerText = translateWord("Start time");
+
            var startInput = document.createElement('input');
            startInput.type="text";
-           startInput.classList = 'absenceInputDateTime existingStoreAbsenceStart';
+           startInput.classList = 'absenceInputDateTime existingStoreAbsenceStart textInputSetting';
            startInput.readOnly = true;
            startInput.setAttribute('data-date', absenceObj['startDate']);
            startInput.setAttribute('data-time', absenceObj['startTime']);
@@ -983,9 +1091,14 @@ document.getElementById('addAbsenceButton').onclick = function(){
            startInput.onclick = function(){
              createDivForDateTimePicker(this);
            }
+
+           var endLabel = document.createElement("p");
+           endLabel.className = "inputSettingLabel";
+           endLabel.innerText = translateWord("End time");
+
            var endInput = document.createElement('input');
            endInput.type="text";
-           endInput.classList = 'absenceInputDateTime existingStoreAbsenceEnd';
+           endInput.classList = 'absenceInputDateTime existingStoreAbsenceEnd textInputSetting';
            endInput.readOnly = true;
            endInput.setAttribute('data-date', absenceObj['endDate']);
            endInput.setAttribute('data-time', absenceObj['endTime']);
@@ -994,17 +1107,22 @@ document.getElementById('addAbsenceButton').onclick = function(){
              createDivForDateTimePicker(this);
            }
            var xImg = document.createElement('img');
-           xImg.src="assets/icons/octiconsSvg/x.svg";
+           xImg.src="assets/icons/octiconsSvg/trashcan.svg";
            xImg.onclick = function(){
-             removeExistingAbsenceEntry(this.closest(".currentAbsenceEntryContainer"));
+             removeExistingAbsenceEntry(this.closest(".dataEntryInputContainer"));
            }
-
+           xImg.className = "dataEntryRemoveButton storeAbsencesRemoveX";
+           absenceEntryContainer.appendChild(descLabel);
            absenceEntryContainer.appendChild(reasonInput);
+           absenceEntryContainer.appendChild(startLabel);
            absenceEntryContainer.appendChild(startInput);
+           absenceEntryContainer.appendChild(endLabel);
            absenceEntryContainer.appendChild(endInput);
            absenceEntryContainer.appendChild(xImg);
 
-           document.getElementsByClassName('currentAbsencesDiv')[0].appendChild(absenceEntryContainer);
+           document.getElementById('currentAbsencesDiv').appendChild(absenceEntryContainer);
+           document.getElementById('newAbsencesParentContainer').classList.remove('activeThirdLevel');
+           document.getElementById('storeAbsencesSettingsMainContainer').classList.remove('leftCategorySelector');
          }else if(data.status == "error"){
            displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
          }
@@ -1017,6 +1135,78 @@ document.getElementById('addAbsenceButton').onclick = function(){
   }
 
 
+}
+
+
+document.getElementById('addServiceButton').onclick = function(){
+  var serviceObj = new Object();
+  var serviceName = document.getElementById('newServiceName');
+  var servicePrice = document.getElementById('newServicePrice');
+  if(serviceName.value=="" || servicePrice.value == ""){
+
+  }else{
+    serviceObj['serviceName'] = serviceName.value;
+    serviceObj['price'] = servicePrice.value;
+
+    $.ajax({
+       url : '/addStoreService',
+       type : 'POST',
+       data:{serviceObj:serviceObj},
+       success : function(data, textStatut){
+
+         if(data.status == "ok"){
+           serviceName.value="";
+           servicePrice.value="";
+
+
+           var serviceEntryContainer = document.createElement('div');
+           serviceEntryContainer.classList = 'dataEntryInputContainer';
+           serviceEntryContainer.setAttribute('data-id',data.serviceId);
+
+           var nameLabel = document.createElement("p");
+           nameLabel.className = "inputSettingLabel";
+           nameLabel.innerText = translateWord("Name");
+
+           var nameInput = document.createElement('input');
+           nameInput.type="text";
+           nameInput.classList = "textInputSetting";
+           nameInput.placeholder = serviceObj["serviceName"];
+
+           var priceLabel = document.createElement("p");
+           priceLabel.className = "inputSettingLabel";
+           priceLabel.innerText = translateWord("Price");
+
+           var priceInput = document.createElement('input');
+           priceInput.type="text";
+           priceInput.classList = "textInputSetting";
+           priceInput.placeholder = serviceObj["price"];
+
+
+
+           var xImg = document.createElement('img');
+           xImg.src="assets/icons/octiconsSvg/trashcan.svg";
+           xImg.onclick = function(){
+             removeExistingServiceEntry(this.closest(".dataEntryInputContainer"));
+           }
+           xImg.className = "dataEntryRemoveButton storeServicesRemoveX";
+           serviceEntryContainer.appendChild(nameLabel);
+           serviceEntryContainer.appendChild(nameInput);
+           serviceEntryContainer.appendChild(priceLabel);
+           serviceEntryContainer.appendChild(priceInput);
+           serviceEntryContainer.appendChild(xImg);
+
+           document.getElementById('currentServicesDiv').appendChild(serviceEntryContainer);
+           document.getElementById('newServiceParentContainer').classList.remove('activeThirdLevel');
+           document.getElementById('servicesSettingsMainContainer').classList.remove('leftCategorySelector');
+         }else if(data.status == "error"){
+           displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+         }
+       },
+       error : function(textStatut, errorThrown){
+         displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+       }
+    });
+  }
 }
 
 
@@ -1039,6 +1229,7 @@ function removeExistingAbsenceEntry(parentEntryContainer){
      data:{absenceId:parentEntryContainer.getAttribute('data-id')},
      success : function(data, textStatut){
        if(data =="ok"){
+         parentEntryContainer.remove();
          displaySnackbar('Absence successfully deleted', document.getElementById('settingsPageMainBody'));
        }else if(data == "error"){
         displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
@@ -1049,7 +1240,26 @@ function removeExistingAbsenceEntry(parentEntryContainer){
      }
 
   });
-  parentEntryContainer.remove();
+}
+
+function removeExistingServiceEntry(parentEntryContainer){
+  $.ajax({
+     url : '/deleteStoreService',
+     type : 'POST',
+     data:{serviceId:parentEntryContainer.getAttribute('data-id')},
+     success : function(data, textStatut){
+       if(data =="ok"){
+         parentEntryContainer.remove();
+         displaySnackbar('Service successfully deleted', document.getElementById('settingsPageMainBody'));
+       }else if(data == "error"){
+        displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+       }
+     },
+     error : function(textStatut, errorThrown){
+       displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+     }
+
+  });
 }
 
 
@@ -1074,22 +1284,385 @@ function createDivForDateTimePicker(clickedInput){
     createDateTimePicker(clickedInput, semiTransparentOverlay, closeTimePopup, clickedInput.getAttribute('data-date'), clickedInput.getAttribute('data-time'));
     document.body.appendChild(semiTransparentOverlay);
 }
+
+
+function removeActiveAllPanels(){
+var activeP = document.getElementsByClassName('activeP');
+for(var i=0;i<activeP.length;i++){
+  activeP[i].classList.remove('activeP');
+}
+var panels = document.getElementsByClassName("secondLevelParentCategorySelector");
+for(var i=0;i<panels.length;i++){
+panels[i].classList.remove("activeCategorySelector");
+}
+}
+
+function makePActive(parentContainer){
+var pTags = parentContainer.getElementsByTagName('p');
+for(var t=0;t<pTags.length;t++){
+pTags[t].classList.add('activeP');
+}
+}
+
+
+
+
+
+
+
+
+document.getElementById("newAbsenceButton").onclick = function(){
+  document.getElementById('newAbsencesParentContainer').classList.add('activeThirdLevel');
+  document.getElementById('storeAbsencesSettingsMainContainer').classList.add('leftCategorySelector');
+}
+document.getElementById("newServiceButton").onclick = function(){
+  document.getElementById("newServiceParentContainer").classList.add("activeThirdLevel");
+  document.getElementById('servicesSettingsMainContainer').classList.add('leftCategorySelector');
+}
+
+document.getElementById("newAbsenceCloseButton").onclick = function(){
+  document.getElementById("newAbsencesParentContainer").classList.remove('activeThirdLevel');
+  document.getElementById('storeAbsencesSettingsMainContainer').classList.remove('leftCategorySelector');
+}
+document.getElementById("newServiceCloseButton").onclick = function(){
+  document.getElementById("newServiceParentContainer").classList.remove('activeThirdLevel');
+  document.getElementById('servicesSettingsMainContainer').classList.remove('leftCategorySelector');
+}
+document.getElementById("newAbsencesParentContainer").onclick = function(e){
+if(e.target!=this){
+
+}else{
+  this.classList.remove("activeThirdLevel");
+}
+}
+document.getElementById("newServiceParentContainer").onclick = function(e){
+if(e.target!=this){
+
+}else{
+  this.classList.remove("activeThirdLevel");
+}
+}
 </script>
 
 
 
 <style>
-  .currentAbsenceEntryContainer{
-    border:1px solid #000;
+  .activeThirdLevel{
+    left:0 !important;
+  }
+  .dataEntryRemoveButton{
+    cursor:pointer;
+    position:absolute;
+    top:20px;
+    right:20px;
+    height:25px;
+  }
+
+  @media screen and (min-width:780px){
+    #newAbsencesDivInnerContainer{
+      width:calc(100% - 40px);
+      left:20px;
+      position:relative;
+    }
+    #newServicesDivInnerContainer{
+      width:calc(100% - 40px);
+      left:20px;
+      position:relative;
+    }
+    .sideModalContentScrolling{
+      position:relative;
+      top:0;
+      left:0;
+      height:fit-content;
+      width:100%;
+    }
+    #newAbsencesDiv{
+      background-color:#fff;
+      height:100%;
+      position:relative;
+      overflow:hidden;
+      top:0;
+      float:right;
+      width:max-content;
+      min-width:350px;
+      border-radius:8px 0 0 8px;
+    }
+    #newServicesDiv{
+      background-color:#fff;
+      height:100%;
+      position:relative;
+      overflow:hidden;
+      top:0;
+      float:right;
+      width:max-content;
+      min-width:350px;
+      border-radius:8px 0 0 8px;
+    }
+    .thirdLevelParentCategorySelector{
+        top:0;
+        height:100%;
+        width:100%;
+        left:100%;
+        transition:0.3s all;
+        z-index:300;
+        position:fixed;
+        border:none;
+        background-color:rgba(0,0,0,0.6);
+    }
+    #settingsPageMainBody{
+      overflow-x:hidden;
+      overflow-y:auto;
+      top:0;
+      border:none;
+      left: 80px;
+      position: fixed;
+      width: calc(100% - 80px);
+      height: 100%;
+      background-color: var(--background-page-color);
+    }
+    .parentCategorySelector{
+      position:absolute;
+      top:0;
+      height:100%;
+      width:180px;
+      left:60px;
+      transition:0.3s all;
+    }
+    .subCategoryInnerDiv{
+      position:relative;
+      top:0;
+      left:20px;
+      width:calc(100% - 20px);
+    }
+    .categoryRightArrow{
+      display:none;
+    }
+    .subCategorySelectorDiv{
+      position:relative;
+      margin:0;
+      width:100%;
+      border:none;
+      cursor:pointer;
+    }
+    .settingsSubCategoryMainTitle{
+      color:var(--font-color-black);
+      font-size:var(--mobile-font-size-big);
+      font-weight:var(--mobile-font-weight-bold);
+      padding-left:20px;
+      margin-bottom:20px;
+      cursor:context-menu;
+    }
+    .leftCategorySelector{
+      left:60px;
+    }
+    .backArrowSettings{
+      display:none;
+    }
+    .secondLevelParentCategorySelector{
+        position:absolute;
+        top:60px;
+        height:calc(100% - 80px);
+        width:calc(100% - 500px);
+        min-width:360px;
+        max-width:530px;
+        left:100%;
+        transition:0.3s all;
+        background-color:#fff;
+    }
+    .activeCategorySelector{
+      left:calc(45% + 120px) !important;
+      transform:translateX(-50%);
+    }
+
+    .settingsPageTitleSecondLevel{
+      display:none;
+    }
+    .subCategoryInnerDiv p{
+      font-size:var(--mobile-font-size-regular);
+      color:var(--font-color-grey);
+      font-weight:var(--mobile-font-weight-big);
+      margin:0;
+      padding:7px 5px 7px 9px;
+      margin-bottom:2px;
+    }
+    .subCategoryInnerDiv p:not(.activeP):hover {
+      border-radius:4px;
+      border:none;
+      background-color:#e3e3e3;
+    }
+    .activeP{
+      border:none;
+      border-radius:4px;
+      color:#fff !important;
+      background-color:var(--cool-blue);
+    }
+    .storeScheduleDayLineContainer{
+      margin:0px 20px 0px 20px;
+      text-align:left;
+    }
+  }
+
+
+  @media screen and (max-width:780px){
+    #newServicesDiv{
+      height:100%;
+      position:relative;
+      width:100%;
+      left:0;
+      top:0;
+    }
+    #settingsPageMainBody{
+      overflow-x:hidden;
+      overflow-y:auto;
+      width:100%;
+      position:fixed;
+      height:calc(100% - 65px);
+      top:0;
+      border:none;
+      left:0;
+    }
+    .sideModalContentScrolling{
+      position:absolute;
+      top:50px;
+      left:0;
+      height:calc(100% - 110px);
+      width:100%;
+    }
+    .parentCategorySelector{
+      position:absolute;
+      top:0;
+      height:100%;
+      width:100%;
+      left:0;
+      transition:0.3s all;
+    }
+    .thirdLevelParentCategorySelector{
+        top:0;
+        height:calc(100% - 65px);
+        width:100%;
+        left:100%;
+        transition:0.3s all;
+        z-index:300;
+        position:fixed;
+        border:none;
+        background-color:transparent;
+    }
+    .mainCategorySelectorDiv > div:first-of-type > div{
+      border-top:1px solid #000;
+    }
+    .subCategoryInnerDiv{
+      position:relative;
+      top:0;
+      left:20px;
+      width:calc(100% - 20px);
+      border-bottom:1px solid #000;
+      height:100%;
+    }
+    .categoryRightArrow{
+      position:absolute;
+      top:20px;
+      height:calc(100% - 40px);
+      right:20px;
+    }
+    .subCategorySelectorDiv{
+      position:relative;
+      margin:0;
+      width:100%;
+      border:none;
+      height:60px;
+      cursor:pointer;
+    }
+    .settingsSubCategoryMainTitle{
+      color:var(--font-color-black);
+      font-size:var(--mobile-font-size-big);
+      font-weight:var(--mobile-font-weight-bold);
+      padding-left:20px;
+    }
+    .leftCategorySelector{
+      left:-100% !important;
+    }
+    .backArrowSettings{
+      position:relative;
+      display:inline-block;
+      margin:23px;
+      height:var(--mobile-font-size-big);
+      vertical-align:top;
+      cursor:pointer;
+    }
+    .secondLevelParentCategorySelector{
+        position:absolute;
+        top:0;
+        height:100%;
+        width:100%;
+        left:100%;
+        transition:0.3s all
+    }
+    .activeCategorySelector{
+      left:0;
+    }
+    .mobileNotActive{
+      left:100% !important;
+    }
+    .settingsPageTitleSecondLevel{
+      position:relative;
+      display:inline-block;
+      margin:20px;
+      font-size:var(--mobile-font-size-big);
+      font-weight:var(--mobile-font-weight-bold);
+      color:#000;
+      vertical-align:top;
+    }
+    .subCategoryInnerDiv p{
+      font-size:var(--mobile-font-size-regular);
+      color:var(--font-color-grey);
+      line-height:60px;
+      font-weight:var(--mobile-font-weight-big);
+      margin:0;
+    }
+    .storeScheduleDayLineContainer{
+      margin:0px 20px 0px 20px;
+      text-align:right;
+    }
+  }
+
+  .roundButtonNewAction{
+    background-color:var(--icon-color-active);
+    height:50px;
+    width:50px;
+    border-radius:50%;
+    position:relative;
+    top:0;
+    margin-top:50px;
+    left:50%;
+    z-index:5;
+    cursor:pointer;
+    transform:translateX(-50%);
+  }
+  .newButtonWhitePlus{
+    position:absolute;
+    height:70%;
+    width:70%;
+    left:15%;
+    top:15%;
+  }
+
+
+
+.storeAbsencesInput{
+display:block;
+position:relative;
+margin-bottom:10px;
+}
+
+  .dataEntryInputContainer{
+    border-top:1px solid #000;
     position:relative;
     width:100%;
     height:auto;
-    padding:20px;
+    padding-right:40px;
+    padding-bottom:10px;
   }
-  .storeScheduleDayLineContainer{
-    margin:0px 20px 0px 20px;
-    text-align:right;
-  }
+
   .storeScheduleTimeInput{
     width:60px;
     border-top:none;
@@ -1126,14 +1699,7 @@ function createDivForDateTimePicker(clickedInput){
     margin:0;
     text-align:center;
   }
-  .snackbarMainContainer{
-    transition:0.3s all;
-    position:absolute;
-    width:100%;
-    left:0;
-    bottom:-200px;
-    background-color:transparent;
-  }
+
   .labelUnderInputGeneralSettings{
   margin:0px 20px 0 20px;
   position:relative;
@@ -1151,11 +1717,12 @@ function createDivForDateTimePicker(clickedInput){
     height:40px;
     top:50%;
     transform:translateY(-50%);
-    background-color:var(--icon-color-active);
+    background-color:var(--cta-accent-color);
     border-radius:var(--official-border-radius);
     border:none;
     color:#fff;
     text-align:center;
+    cursor:pointer;
   }
   .settingsContentScrolling{
     position:absolute;
@@ -1194,7 +1761,7 @@ function createDivForDateTimePicker(clickedInput){
     font-size:var(--mobile-font-size-regular);
     font-weight:var(--mobile-font-weight-regular);
     color:var(--font-color-grey);
-    margin:0px 20px 10px 20px;
+    margin:0px 0 10px 20px;
     display:block;
     width:calc(100% - 40px);
     border-radius:5px;
@@ -1229,83 +1796,36 @@ function createDivForDateTimePicker(clickedInput){
     margin:20px 0 50px 0;
     min-height:70px;
   }
-  .mainStoreAbsencesContainer{
+  .dataEntriesMainContainer{
     position:relative;
     width:100%;
     left:0;
     margin:20px 0 50px 0;
     min-height:10px;
-    padding-bottom:20px;
-    border:1px solid #000;
+    border:none;
   }
-  .storeAbsencesInnerDiv{
+  .dataEntriesInnerDiv{
     position:relative;
     top:0;
     left:0;
     width:calc(100% - 40px);
-    margin:0 20 0 20;
+    margin:0 20px 0 20px;
     border:none;
-  }
-  .settingsSubCategoryMainTitle{
-    color:var(--font-color-black);
-    font-size:var(--mobile-font-size-big);
-    font-weight:var(--mobile-font-weight-bold);
-    padding-left:20px;
-  }
-  .parentCategorySelector{
-    position:absolute;
-    top:0;
-    height:100%;
-    width:100%;
-    left:100%;
-    transition:0.3s all;
-  }
-  .secondLevelParentCategorySelector{
-      position:absolute;
-      top:0;
-      height:100%;
-      width:100%;
-      left:100%;
-      transition:0.3s all
-  }
-  .activeCategorySelector{
-    left:0 !important;
-  }
-  .leftCategorySelector{
-    left:-100% !important;
+    margin-bottom:100px;
+    border-left:5px solid #000;
+    border-right:1px solid #000;
+    border-bottom:1px solid #000;
   }
 
-  .subCategoryInnerDiv{
-    position:relative;
-    top:0;
-    left:20px;
-    width:calc(100% - 20px);
-    border-bottom:1px solid #000;
-    height:100%;
-  }
-  .categoryRightArrow{
-position:absolute;
-top:20px;
-height:calc(100% - 40px);
-right:20px;
-  }
-  .subCategoryInnerDiv p{
-    font-size:var(--mobile-font-size-regular);
-    color:var(--font-color-grey);
-    line-height:60px;
-    font-weight:var(--mobile-font-weight-big);
-    margin:0;
-  }
+
+
+
+
+
   .firstChildSubCategory{
     border-top:1px solid #000;
   }
-  .subCategorySelectorDiv{
-    position:relative;
-    margin:0;
-    width:100%;
-    border:none;
-    height:60px;
-  }
+
   .mainCategorySelectorDiv{
     width:100%;
     margin:0px 0px 60px 0px;
@@ -1313,9 +1833,7 @@ right:20px;
     border:none;
     background-color:#fff;
   }
-  .mainCategorySelectorDiv > div:first-of-type > div{
-    border-top:1px solid #000;
-  }
+
 
   .settingsPageTitle{
     position:relative;
@@ -1325,32 +1843,11 @@ right:20px;
     font-weight:var(--mobile-font-weight-bold);
     color:#000;
     vertical-align:top;
+    cursor:context-menu;
   }
-  .settingsPageTitleSecondLevel{
-    position:relative;
-    display:inline-block;
-    margin:20px;
-    font-size:var(--mobile-font-size-big);
-    font-weight:var(--mobile-font-weight-bold);
-    color:#000;
-    vertical-align:top;
-  }
-  .backArrowSettings{
-    position:relative;
-    display:inline-block;
-    margin:23px;
-    height:var(--mobile-font-size-big);
-    vertical-align:top;
-  }
-#settingsPageMainBody{
-  overflow-x:hidden;
-  overflow-y:auto;
-  width:100%;
-  position:absolute;
-  height:calc(100% - 65px);
-  top:0;
-  border:none;
-}
+
+
+
 .settingSelectorMainContainer{
 width:100%;
 position:relative;
@@ -1606,6 +2103,7 @@ margin:0;
   padding:10px 20px 10px 20px;
   border:var(--official-light-grey-border);
   background-color:#f9f9f9;
+  cursor:pointer;
 }
 .collapsibleSettingsServicesButton:after{
   content: '\002B';
@@ -1620,11 +2118,6 @@ margin:0;
     font-weight: bold;
     float: right;
     margin-left: 5px;
-}
-.leftServicesLabel{
-  position:relative;
-  display:inline-block;
-  margin:0 10px 0 20px;
 }
 .inline-servicesInput{
   position:relative;

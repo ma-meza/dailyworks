@@ -44,7 +44,7 @@ if(!req.cookies.appointmentApp){
     }else{
       res.locals.userId = decryptedToken.id;
       res.locals.userType = decryptedToken.type;
-      console.log(res.locals.userType);
+      console.log(res.locals.userId);
       next();
     }
 

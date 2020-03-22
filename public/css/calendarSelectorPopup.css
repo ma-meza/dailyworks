@@ -1,4 +1,14 @@
 @media screen and (min-width:780px){
+  .weekDayNameRow{
+    font-size:var(--desktop-font-size-small);
+    font-weight:var(--mobile-font-weight-regular);
+    margin-bottom:20px;
+
+  }
+  .weekDayNameCell{
+    padding-bottom:20px;
+    cursor:context-menu;
+  }
   .calendarPopupDatePicker{
 
     width:400px;
@@ -14,18 +24,20 @@
     position:absolute;
     text-align:center;
     width:auto;
-    font-weight:var(--mobile-font-weight-bold);
+    font-weight:var(--mobile-font-weight-medium);
     color:var(--font-color-black);
-    font-size:var(--desktop-font-size-big);
+    font-size:var(--desktop-font-size-regular);
     left:50%;
     transform:translateX(-50%);
-    top:10;
+    top:10px;
     margin:0;
+    cursor:context-menu;
   }
   .calendarTextBlocked{
     color:var(--font-color-lightgrey);
     font-weight:var(--mobile-font-weight-regular);
     font-size:var(--desktop-font-size-small);
+    cursor:not-allowed;
   }
   .calendarTextAvailable{
     color:var(--font-color-black);
@@ -74,12 +86,12 @@
 }
 
 .monthCalendarSelectorTable{
-position:absolute;
+position:relative;
 bottom:0;
-left:20;
+left:0;
 width:calc(100% - 40px);
-height:calc(100% - 40px);
-margin:0;
+height:250px;
+margin:0 0 0 20px;
 }
 .monthCalendarSelectorTable td{
   width:calc(100% / 7);
@@ -89,19 +101,24 @@ margin:0;
   height:40px;
   top:0;
   left:0;
-  width:calc(100% - 20px);
+  margin-left:20px;
+  margin-bottom:0;
+  width:calc(100% - 40px);
 }
+
 .monthCalendarPickerLeftArrow{
 position:absolute;
 text-align:left;
 left:20;
 top:10;
 margin:0;
+cursor:pointer;
 }
 .monthCalendarPickerRightArrow{
   position:absolute;
   text-align:right;
   right:20;
   top:10;
+  cursor:pointer;
   margin:0;
 }
