@@ -394,163 +394,161 @@ var fridayDiv = document.getElementById("storeScheduleFriday");
 var saturdayDiv = document.getElementById("storeScheduleSaturday");
 var sundayDiv = document.getElementById("storeScheduleSunday");
 
-
-<% if(storeObj.storeSchedule[0].startTime == 0 && storeObj.storeSchedule[0].endTime == 0){ %>
-var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-sundayStart.setAttribute('data-time', -1);
-sundayStart.placeholder = translateWord("closed");
-sundayStart.disabled = true;
-var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-sundayEnd.placeholder = translateWord("closed");
-sundayEnd.disabled = true;
-sundayEnd.setAttribute('data-time', -1);
-sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+<% if(storeObj.storeSchedule){ %>
+  <% if(storeObj.storeSchedule[0].startTime == 0 && storeObj.storeSchedule[0].endTime == 0){ %>
   var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  sundayStart.setAttribute('data-time', -1);
+  sundayStart.placeholder = translateWord("closed");
+  sundayStart.disabled = true;
+  var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  sundayEnd.placeholder = translateWord("closed");
+  sundayEnd.disabled = true;
+  sundayEnd.setAttribute('data-time', -1);
+  sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var sundayEnd = sundayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var sundayStart = sundayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  sundayStart.setAttribute('data-time', <%- storeObj.storeSchedule[0].startTime %>);
-  sundayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[0].endTime %>);
+    sundayStart.setAttribute('data-time', <%- storeObj.storeSchedule[0].startTime %>);
+    sundayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[0].endTime %>);
 
-  sundayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].startTime %>);
-  sundayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].endTime %>);
-  sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    sundayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].startTime %>);
+    sundayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].endTime %>);
+    sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[1].startTime == 0 && storeObj.storeSchedule[1].endTime == 0){ %>
-var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-mondayStart.placeholder = translateWord("closed");
-mondayStart.disabled = true;
-var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-mondayEnd.placeholder = translateWord("closed");
-mondayEnd.disabled = true;
-mondayStart.setAttribute('data-time', -1);
-mondayEnd.setAttribute('data-time', -1);
-mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[1].startTime == 0 && storeObj.storeSchedule[1].endTime == 0){ %>
   var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  mondayStart.placeholder = translateWord("closed");
+  mondayStart.disabled = true;
+  var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  mondayEnd.placeholder = translateWord("closed");
+  mondayEnd.disabled = true;
+  mondayStart.setAttribute('data-time', -1);
+  mondayEnd.setAttribute('data-time', -1);
+  mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var mondayEnd = mondayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var mondayStart = mondayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  mondayStart.setAttribute('data-time', <%- storeObj.storeSchedule[1].startTime %>);
-  mondayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[1].endTime %>);
+    mondayStart.setAttribute('data-time', <%- storeObj.storeSchedule[1].startTime %>);
+    mondayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[1].endTime %>);
 
-  mondayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].startTime %>);
-  mondayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].endTime %>);
-  mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    mondayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].startTime %>);
+    mondayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].endTime %>);
+    mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[2].startTime == 0 && storeObj.storeSchedule[2].endTime == 0){ %>
-var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-tuesdayStart.placeholder = translateWord("closed");
-tuesdayStart.disabled = true;
-var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-tuesdayEnd.placeholder = translateWord("closed");
-tuesdayEnd.disabled = true;
-tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-tuesdayStart.setAttribute('data-time', -1);
-tuesdayEnd.setAttribute('data-time', -1);
-<% }else{ %>
-  var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[2].startTime == 0 && storeObj.storeSchedule[2].endTime == 0){ %>
   var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  tuesdayStart.placeholder = translateWord("closed");
+  tuesdayStart.disabled = true;
+  var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  tuesdayEnd.placeholder = translateWord("closed");
+  tuesdayEnd.disabled = true;
+  tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  tuesdayStart.setAttribute('data-time', -1);
+  tuesdayEnd.setAttribute('data-time', -1);
+  <% }else{ %>
+    var tuesdayEnd = tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var tuesdayStart = tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  tuesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[2].startTime %>);
-  tuesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[2].endTime %>);
+    tuesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[2].startTime %>);
+    tuesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[2].endTime %>);
 
-  tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].startTime %>);
-  tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].endTime %>);
-  tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].startTime %>);
+    tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].endTime %>);
+    tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[3].startTime == 0 && storeObj.storeSchedule[3].endTime == 0){ %>
-var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-wednesdayStart.placeholder = translateWord("closed");
-wednesdayStart.disabled = true;
-var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-wednesdayEnd.placeholder = translateWord("closed");
-wednesdayEnd.disabled = true;
-wednesdayStart.setAttribute('data-time', -1);
-wednesdayEnd.setAttribute('data-time', -1);
-wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[3].startTime == 0 && storeObj.storeSchedule[3].endTime == 0){ %>
   var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  wednesdayStart.placeholder = translateWord("closed");
+  wednesdayStart.disabled = true;
+  var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  wednesdayEnd.placeholder = translateWord("closed");
+  wednesdayEnd.disabled = true;
+  wednesdayStart.setAttribute('data-time', -1);
+  wednesdayEnd.setAttribute('data-time', -1);
+  wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var wednesdayEnd = wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var wednesdayStart = wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  wednesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[3].startTime %>);
-  wednesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[3].endTime %>);
+    wednesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[3].startTime %>);
+    wednesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[3].endTime %>);
 
-  wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].startTime %>);
-  wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].endTime %>);
-  wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].startTime %>);
+    wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].endTime %>);
+    wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[4].startTime == 0 && storeObj.storeSchedule[4].endTime == 0){ %>
-var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-thursdayStart.placeholder = translateWord("closed");
-thursdayStart.disabled = true;
-var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-thursdayEnd.placeholder = translateWord("closed");
-thursdayEnd.disabled = true;
-thursdayStart.setAttribute('data-time', -1);
-thursdayEnd.setAttribute('data-time', -1);
-thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[4].startTime == 0 && storeObj.storeSchedule[4].endTime == 0){ %>
   var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  thursdayStart.placeholder = translateWord("closed");
+  thursdayStart.disabled = true;
+  var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  thursdayEnd.placeholder = translateWord("closed");
+  thursdayEnd.disabled = true;
+  thursdayStart.setAttribute('data-time', -1);
+  thursdayEnd.setAttribute('data-time', -1);
+  thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var thursdayEnd = thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var thursdayStart = thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  thursdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[4].startTime %>);
-  thursdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[4].endTime %>);
+    thursdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[4].startTime %>);
+    thursdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[4].endTime %>);
 
-  thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].startTime %>);
-  thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].endTime %>);
-  thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].startTime %>);
+    thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].endTime %>);
+    thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[5].startTime == 0 && storeObj.storeSchedule[5].endTime == 0){ %>
-var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-fridayStart.placeholder = translateWord("closed");
-fridayStart.disabled = true;
-var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-fridayEnd.placeholder = translateWord("closed");
-fridayEnd.disabled = true;
-fridayStart.setAttribute('data-time', -1);
-fridayEnd.setAttribute('data-time', -1);
-fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[5].startTime == 0 && storeObj.storeSchedule[5].endTime == 0){ %>
   var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  fridayStart.placeholder = translateWord("closed");
+  fridayStart.disabled = true;
+  var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  fridayEnd.placeholder = translateWord("closed");
+  fridayEnd.disabled = true;
+  fridayStart.setAttribute('data-time', -1);
+  fridayEnd.setAttribute('data-time', -1);
+  fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var fridayEnd = fridayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var fridayStart = fridayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  fridayStart.setAttribute('data-time', <%- storeObj.storeSchedule[5].startTime %>);
-  fridayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[5].endTime %>);
+    fridayStart.setAttribute('data-time', <%- storeObj.storeSchedule[5].startTime %>);
+    fridayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[5].endTime %>);
 
-  fridayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].startTime %>);
-  fridayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].endTime %>);
-  fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
-<% } %>
+    fridayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].startTime %>);
+    fridayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].endTime %>);
+    fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 
-<% if(storeObj.storeSchedule[6].startTime == 0 && storeObj.storeSchedule[6].endTime == 0){ %>
-var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
-saturdayStart.placeholder = translateWord("closed");
-saturdayStart.disabled = true;
-var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
-saturdayEnd.placeholder = translateWord("closed");
-saturdayEnd.disabled = true;
-saturdayStart.setAttribute('data-time', -1);
-saturdayEnd.setAttribute('data-time', -1);
-saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
-<% }else{ %>
-  var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  <% if(storeObj.storeSchedule[6].startTime == 0 && storeObj.storeSchedule[6].endTime == 0){ %>
   var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
+  saturdayStart.placeholder = translateWord("closed");
+  saturdayStart.disabled = true;
+  var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+  saturdayEnd.placeholder = translateWord("closed");
+  saturdayEnd.disabled = true;
+  saturdayStart.setAttribute('data-time', -1);
+  saturdayEnd.setAttribute('data-time', -1);
+  saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = true;
+  <% }else{ %>
+    var saturdayEnd = saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0];
+    var saturdayStart = saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0];
 
-  saturdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[6].startTime %>);
-  saturdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[6].endTime %>);
+    saturdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[6].startTime %>);
+    saturdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[6].endTime %>);
 
-  saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].startTime %>);
-  saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].endTime %>);
-  saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+    saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].startTime %>);
+    saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].endTime %>);
+    saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
+  <% } %>
 <% } %>
-
-
-
 }
 setStoreScheduleDayValues();
 
