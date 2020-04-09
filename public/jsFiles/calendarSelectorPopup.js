@@ -30,11 +30,11 @@ topPickerDiv.classList.add('monthCalendarPickerTopDiv');
 
 var leftArrow  = document.createElement('img');
 leftArrow.classList.add('monthCalendarPickerLeftArrow');
-leftArrow.src = "assets/icons/octiconsSvg/chevron-left.svg";
+leftArrow.src = "/assets/icons/octiconsSvg/chevron-left.svg";
 
 var rightArrow  = document.createElement('img');
 rightArrow.classList.add('monthCalendarPickerRightArrow');
-rightArrow.src = "assets/icons/octiconsSvg/chevron-right.svg";
+rightArrow.src = "/assets/icons/octiconsSvg/chevron-right.svg";
 
 var monthName  = document.createElement('p');
 monthName.classList.add('monthCalendarPickerMonthName');

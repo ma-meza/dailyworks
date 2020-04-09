@@ -1,0 +1,361 @@
+<% include partials/clientTopNavBar.ejs%>
+<% include partials/regularEmptyHead.ejs%>
+
+<% if(locals.storeObj){ %>
+<% storeObj = JSON.parse(storeObj) %>
+
+
+<script>
+  var storeObj = <%- storeObj %>;
+  var appointmentInfos = {
+    services:null,
+    startDate:null,
+    endDate:null,
+    employee:null,
+    addNote:null
+  }
+</script>
+<div id="storeInfoParentContainerDiv" class="">
+<p id="storeName"><%= storeObj.storeName %></p>
+</div>
+
+
+<div id="appointmentParentContainerDiv">
+  <div id="servicesMainContainer" class="categoryMainContainer activeDiv">
+    <div class="categoryHeader">
+      <p class="divTitleP">Which services do you need?</p>
+    </div>
+    <div class="categoryContentScroll">
+      <div id="servicesContainer">
+        <% if(typeof storeObj.services != "undefined"){ %>
+          <% if(storeObj.services.length>0){ %>
+            <% for(var i=0;i<storeObj.services.length;i++){ %>
+              <label class="serviceCheckboxLabel" serviceid="<%= i %>">
+              <div class="serviceDivAroundText">
+
+                  <span class="serviceCheckboxSpan"><%= storeObj.services[i].serviceName %></span>
+                  <input type="checkbox" class="serviceCheckboxInput" value="">
+
+              </div>
+              </label>
+            <% } %>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <div id="employeesMainContainer" class="categoryMainContainer">
+    <div class="categoryHeader">
+      <img src="../assets/icons/octiconsSvg/chevron-left.svg" class="backButton" alt="">
+      <p class="divTitleP">By which employee do you want to be served?</p>
+    </div>
+    <div class="categoryContentScroll">
+
+    </div>
+  </div>
+  <div id="dateTimesMainContainer" class="categoryMainContainer">
+    <div class="categoryHeader">
+      <img src="../assets/icons/octiconsSvg/chevron-left.svg" class="backButton" alt="">
+      <p class="divTitleP">When do you want your appointment?</p>
+    </div>
+    <div class="categoryContentScroll">
+
+    </div>
+  </div>
+  <div id="summaryMainContainer" class="categoryMainContainer">
+    <div class="categoryHeader">
+      <img src="../assets/icons/octiconsSvg/chevron-left.svg" class="backButton" alt="">
+      <p class="divTitleP">Here's a little summary</p>
+    </div>
+    <div class="categoryContentScroll">
+
+    </div>
+  </div>
+  <div id="confirmationMainContainer" class="categoryMainContainer">
+    <div class="categoryHeader">
+      <img src="../assets/icons/octiconsSvg/chevron-left.svg" class="backButton" alt="">
+      <p class="divTitleP">Congrats!</p>
+    </div>
+    <div class="categoryContentScroll">
+
+    </div>
+  </div>
+  <div class="categoryFooter">
+    <button type="button" class="nextButton" name="button">next</button>
+  </div>
+</div>
+
+
+<script>
+function newAppointmentPopup(parentContainerDiv, loggedIn){
+var mainAppointmentContainer = document.createElement('div');
+mainAppointmentContainer.id = "appointmentParentContainer";
+//services, employee, date, logintry/phone/pre-confirmation, confirmation
+
+
+var servicesMainContainer = document.getElementById("servicesMainContainer");
+var employeesMainContainer = document.getElementById("employeesMainContainer");
+var dateTimesMainContainer = document.getElementById("dateTimesMainContainer");
+var summaryMainContainer = document.getElementById("summaryMainContainer");
+var confirmationMainContainer = document.getElementById("confirmationMainContainer");
+
+
+parentContainerDiv.appendChild(mainAppointmentContainer);
+}
+
+var currentDivPosition = 0;
+
+var backButtons = document.getElementsByClassName("backButton");
+for(var i = 0;i<backButtons.length;i++){
+  backButtons[i].onclick = function(){
+    moveBack();
+  }
+}
+var nextButtons = document.getElementsByClassName("nextButton");
+for(var i=0;i<nextButtons.length;i++){
+  nextButtons[i].onclick = function(){
+    moveNext();
+  }
+}
+function moveNext(){
+  currentDivPosition++;
+  switch(currentDivPosition){
+    case 1:
+    servicesMainContainer.classList.remove('activeDiv');
+    servicesMainContainer.classList.add('leftPastDiv');
+    employeesMainContainer.classList.add('activeDiv');
+    break;
+    case 2:
+    employeesMainContainer.classList.remove('activeDiv');
+    employeesMainContainer.classList.add('leftPastDiv');
+    dateTimesMainContainer.classList.add("activeDiv");
+    break;
+    case 3:
+    dateTimesMainContainer.classList.remove("activeDiv");
+    dateTimesMainContainer.classList.add('leftPastDiv');
+    summaryMainContainer.classList.add('activeDiv');
+    break;
+    case 4:
+    summaryMainContainer.classList.remove('activeDiv');
+    summaryMainContainer.classList.add('leftPastDiv');
+    confirmationMainContainer.classList.add('activeDiv');
+    break;
+    default:
+    currentDivPosition--;
+    break;
+  }
+}
+
+function moveBack(){
+  currentDivPosition--;
+  switch(currentDivPosition){
+    case 0:
+    servicesMainContainer.classList.add('activeDiv');
+    servicesMainContainer.classList.remove('leftPastDiv');
+    employeesMainContainer.classList.remove('activeDiv');
+    break;
+    case 1:
+    employeesMainContainer.classList.add('activeDiv');
+    employeesMainContainer.classList.remove('leftPastDiv');
+    dateTimesMainContainer.classList.remove("activeDiv");
+    break;
+    case 2:
+    dateTimesMainContainer.classList.add("activeDiv");
+    dateTimesMainContainer.classList.remove('leftPastDiv');
+    summaryMainContainer.classList.remove('activeDiv');
+    break;
+    case 3:
+    summaryMainContainer.classList.add('activeDiv');
+    summaryMainContainer.classList.remove('leftPastDiv');
+    confirmationMainContainer.classList.remove('activeDiv');
+    break;
+    default:
+    currentDivPosition++;
+    break;
+  }
+}
+</script>
+
+<style>
+  input[type=checkbox] {
+    -moz-appearance:initial;
+  }
+  input[type=radio] {
+    -moz-appearance:initial;
+  }
+  @media screen and (min-width:780px){
+    #appointmentParentContainerDiv{
+      width:calc(40% - 20px);
+      position:fixed;
+      top:80px;
+      right:20%;
+      height:calc(100% - 100px);
+      border:var(--nav-bar-border);
+      overflow:hidden;
+    }
+    #storeInfoParentContainerDiv{
+      width:20%;
+      left:20%;
+      position:fixed;
+      top:80px;
+      height:calc(100% - 60px);
+      border:none;
+    }
+    #storeName{
+      width:100%;
+      padding:0 20px 0 20px;
+      left:0;
+      top:0;
+      margin:0;
+      position:relative;
+      font-size:var(--desktop-font-size-page-title);
+      font-weight:var(--mobile-font-weight-bold);
+    }
+  }
+  @media screen and (max-width:780px){
+    #appointmentParentContainerDiv{
+      width:100%;
+      position:fixed;
+      top:60px;
+      left:0;
+      height:calc(100% - 60px);
+      border:none;
+      overflow:hidden;
+    }
+    #storeInfoParentContainerDiv{
+      display:none;
+    }
+  }
+
+  .backButton{
+    position:relative;
+    display:block;
+    height:40px;
+    margin: 0 0 0 20px;
+    cursor:pointer;
+  }
+  .nextButton{
+    position:absolute;
+    bottom:20px;
+    height:60px;
+    width:calc(100% - 40px);
+    left:20px;
+    cursor:pointer;
+    border-radius:4px;
+    border:none;
+    background-color:var(--cta-accent-color);
+    color:#fff;
+    font-size:var(--desktop-font-size-modal-title);
+    font-weight:var(--mobile-font-weight-bold);
+  }
+  .categoryMainContainer{
+    width:100%;
+    left:100%;
+    position:absolute;
+    top:0;
+    height:calc(100% - 100px);
+    transition:all 0.3s ease-out 0s;
+    background-color:#fff;
+  }
+  .activeDiv{
+    left:0 !important;
+  }
+  .leftPastDiv{
+    left:-100% !important;
+  }
+  .categoryHeader{
+    position:absolute;
+    top:0;
+    height:130px;
+    left:0;
+    width:100%;
+    border:none;
+  }
+  .categoryFooter{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:100px;
+    border:none;
+  }
+  .categoryContentScroll{
+    position:absolute;
+    height:calc(100% - 130px);
+    width:100%;
+    top:130px;
+    border:none;
+    overflow-y:auto;
+  }
+  .divTitleP{
+    font-size:var(--desktop-font-size-extra-big);
+    font-weight:var(--mobile-font-weight-bold);
+    margin:0;
+    width:100%;
+    left:0;
+    padding:20px 20px 0 20px;
+    cursor:context-menu;
+  }
+
+
+
+
+  #servicesContainer{
+    position: relative;
+    top: 10px;
+    width: calc(100% - 40px);
+    height: auto;
+    left: 20px;
+  }
+  .serviceDivAroundText{
+    background-color: #fff;
+    border: var(--nav-bar-border);
+    border-radius: var(--official-border-radius);
+    position: relative;
+    width: 100%;
+    margin: 0 0 10px 0;
+    left: 0;
+    padding: 15px;
+    color: #000;
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .serviceCheckboxLabel{
+    cursor:pointer;
+  }
+  .serviceCheckboxInput:after{
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #808080;
+    content: "";
+    visibility: visible;
+    background: #FFF;
+    transition: 0.3s all;
+  }
+  .serviceCheckboxInput:checked:after{
+    background-color: var(--main-color);
+    border: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+    background-repeat: no-repeat;
+    background-position: 0px -2px;
+    background-size: inherit;
+  }
+  .serviceCheckboxInput{
+    visibility: hidden;
+    position: absolute;
+    left: 20px;
+    top: calc(50% - 4px);
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+</style>
+
+<% }else{ %>
+
+This store doesnt exist.
+
+
+  <% } %>

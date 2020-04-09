@@ -1,30 +1,45 @@
-<%- include partials/regularEmptyHead.ejs %>
+<% include partials/regularEmptyHead.ejs %>
+<% include partials/clientTopNavBar.ejs %>
+<% include partials/clientBottomNavBar.ejs %>
 <body>
-  <div id="mainFormContainer">
-    <a href="/"><img src="assets/logos/dwFullLogoBlack.png" id="logoImg" alt=""></a>
-    <p id="formTitle">Sign up</p>
-    <input type="text" class="textInput" id="nameInput" name="" placeholder="name" value="">
-    <input type="email" class="textInput" id="emailInput" name="" placeholder="youremail@email.com" value="">
-    <input type="password" class="textInput" id="passwordInput" name="" placeholder="password" value="">
+
+    <a href="/"><img src="assets/logos/dwFullLogoBlack.svg" id="logoImgLogin" alt=""></a>
+    <p id="formTitle"><%= __('Sign up') %></p>
+    <input type="text" class="textInput" id="nameInput" name="" placeholder="<%= __('Name') %>" value="">
+    <input type="email" class="textInput" id="emailInput" name="" placeholder="<%= __('your@email.com') %>" value="">
+    <input type="password" class="textInput" id="passwordInput" name="" placeholder="<%= __('Password') %>" value="">
     <p id="messageP"></p>
-    <input type="submit" id="inputSubmit" name="" value="Sign up">
+    <input type="submit" id="inputSubmit" name="" value="<%= __('Continue') %>">
     <!-- <p class="optionsP">Forgot your password? <a class="optionsLink" href="#">Recover your password</a></p> -->
-    <p class="optionsP">Already have an account? <a class="optionsLink" href="/login">Sign in now</a></p>
+    <p class="optionsP"><%= __('Already have an account?') %> <a class="optionsLink" href="/login"><%= __('Log in now') %></a></p>
 
-    <a href="/googleAuth"><img id="signupGoogleButton" src="assets/socialIcons/googleIconLogin.png"></href>
-    <a href="/facebookAuth"><img id="signupFacebookButton" src="assets/socialIcons/fbIcon.jpg"></href>
+    <!-- <a href="/googleAuth"><img id="signupGoogleButton" src="assets/socialIcons/googleIconLogin.png"></a>
+    <a href="/facebookAuth"><img id="signupFacebookButton" src="assets/socialIcons/fbIcon.jpg"></a> -->
 
-  </div>
+    <div id="footerContainer">
+      <% if(locals.languageCookie){ %>
+        <% if(languageCookie == "fr"){ %>
+          <select id='langSelect'><option value='fr' selected>Francais</option><option value='en'>English</option></select>
+        <% }else{ %>
+          <select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>
+        <% } %>
+      <% }else{ %>
+        <select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>
+      <% } %>
+
+
+      <p id="footerText">© <script>document.write(new Date().getFullYear());</script> Dailyworks, Inc. <%= __('All rights reserved.') %></p>
+    </div>
 </body>
 
 
 
 <style media="screen">
   body{
-    background-color:#fff4ec;
+    background-color:#fff;
   }
     @media screen and (min-width:780px){
-      #logoImg{
+      #logoImgLogin{
         position:relative;
         margin:0 0 30px 60px;
         width:30%;
@@ -77,6 +92,7 @@
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--desktop-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -121,25 +137,11 @@
     }
 
     @media screen and (max-width:780px){
-      #logoImg{
+      #logoImgLogin{
         position:relative;
-        margin:0 0 30px 20px;
+        margin:50px 0 75px 20px;
         width:50%;
         left:0;
-      }
-      #mainFormContainer{
-        width:96%;
-        position:relative;
-        left:2%;
-        margin:0;
-        top:50%;
-        transform:translateY(-50%);
-        height:auto;
-        background-color:#fff;
-        border:none;
-        box-shadow:var(--box-shadow-card);
-        border-radius:var(--official-border-radius);
-        padding:40px 0 40px 0;
       }
       #formTitle{
         margin:0 0 30px 0;
@@ -149,30 +151,30 @@
         position:relative;
         font-weight:var(--mobile-font-weight-bold);
         text-align:left;
-
         }
         .textInput{
           background-color:#fff;
-          padding:0 20px 0 20px;
+          padding:0 10px 0 10px;
           width:calc(100% - 40px);
           position:relative;
-          margin:0 20px 15px 20px;
+          margin:0 20px 20px 20px;
           font-size:var(--mobile-font-size-regular);
-          border:1px solid #000;
-          border-radius:var(--official-border-radius);
+          border:1px solid #a1a1a1;
+          border-radius:4px;
           height:50px;
         }
         #inputSubmit{
           width:calc(100% - 40px);
           position:relative;
           margin:0 20px 30px 20px;
-          border-radius:var(--official-border-radius);
+          border-radius:4px;
           border:none;
-          height:50px;
-          background-color:var(--icon-color-active);
+          height:52px;
+          background:var(--gradient-cta-background);
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--mobile-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -197,18 +199,18 @@
         .optionsLink{
           width:100%;
           font-size:var(--mobile-font-size-regular);
-          font-weight:var(--mobile-font-weight-regular);
-          color:var(--icon-color-active);
-          text-decoration:none;
+          font-weight:var(--mobile-font-weight-bold);
+          text-decoration:underline;
+          color:#000;;
         }
-        #signupGoogleButton{
+        #loginGoogleButton{
           position:relative;
           margin:0 0 0 20px;
         height:40px;
     display:block;
         }
 
-        #signupFacebookButton{
+        #loginFacebookButton{
           position:relative;
           margin:0 0 0 20px;
         height:40px;
@@ -216,20 +218,68 @@
         }
     }
 
-
+    #footerText{
+      margin:0;
+      top:0;
+      left:0;
+      padding:0 20px 0 20px;
+      font-size:var(--mobile-font-size-regular);
+      font-weight:var(--mobile-font-weight-regular);
+      color:#a1a1a1;
+      text-align:center;
+    }
+    #langSelect{
+      text-align:left;
+      left:50%;
+      transform:translateX(-50%);
+      margin:90px 0 30px 0;
+      display:block;
+      position:relative;
+      border-radius:4px;
+      padding:10px;
+      background-color:#fff;
+    }
+    #footerContainer{
+      width:100%;
+      left:0;
+      min-height:20px;
+      top:0;
+      position:relative;
+      margin:0 0 70px 0;
+      border:none;
+      padding:20px 0 0 0;
+      font-size:0;
+      min-height:50px;
+    }
 </style>
 
 
 
 <script>
+  $("#emailInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
 
+  $("#passwordInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
+
+  $("#nameInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
 
   document.getElementById("inputSubmit").onclick = function(){
-    submitLoginForm();
+    submitSignupForm();
   };
 
 
-  function submitLoginForm(){
+  function submitSignupForm(){
     document.getElementById('messageP').innerText = "";
 
     var name = $("#nameInput").val();
@@ -296,3 +346,4 @@
   }
 
 </script>
+<% include partials/changeLanguageScript %>

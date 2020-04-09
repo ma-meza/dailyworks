@@ -3,6 +3,11 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var eventSchema = new Schema({
+  dateCreated:{type:Date, default:Date.now},
+  confirmed:{type:Boolean, default:true},
+  reminded:{type:Boolean, default:false},
+  reminderPhone:{type:String, required:false},
+  reminderEmail:{type:String, required:false},
   storeId:{type:mongoose.Schema.Types.ObjectId, required:true},
   storeName:{type:String, required:false},
   startDate:{type:Date, required:true},
@@ -26,20 +31,6 @@ var eventSchema = new Schema({
 });
 
 
-
-
-
-//
-//
-// storeSchema.pre('save', function(next) {
-//   // get the current date
-//   var currentDate = new Date();
-//   // if created_at doesn't exist, add to that field
-//   if (!this.dateAccountCreated){
-//     this.dateAccountCreated = currentDate;
-// }
-//   next();
-// });
 var Event = mongoose.model('Event', eventSchema, 'Events');
 
 

@@ -82,6 +82,7 @@
     color:var(--font-color-black);
     font-weight:var(--mobile-font-weight-regular);
     font-size:var(--mobile-font-size-regular);
+    cursor:pointer;
   }
 }
 

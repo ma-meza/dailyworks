@@ -1,0 +1,341 @@
+<% include partials/regularEmptyHead.ejs %>
+<% include partials/clientTopNavBar.ejs %>
+<% include partials/clientBottomNavBar.ejs %>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK_QD5Epg6sI-Hli0LRmfHQqYmWC4yDPA&libraries=places"></script>
+
+<div id="topPartContainer" class="hpParentContainers">
+<img id="headerLogoImg" src="assets/logos/dwFullLogoBlack.svg" alt="">
+<a id="topSignupLink" href=""><%= __('Sign up') %></a>
+<p id="pageHeader"><%= __('Book appointments with local') %> <span id="serviceTypeSpan"></span> <%= __('wow123456') %></p>
+<p class="labelAboveInput"><%= __('Choose a service type') %></p>
+<input class="searchInputs" id="serviceInput" placeholder="Mechanic, optometrist, barber, psychologist, doctor" type="text" name="" value="">
+<p class="labelAboveInput"><%= __('and a location') %></p>
+<input id="locationInput" placeholder="Montreal, Laval, Delson, Longueil, Quebec..." type="text" name="" value="">
+<button type="button" onclick="getGeolocation()" id="getCurrentLocationButton" name="button"></button>
+<button type="button" id="searchSubmit" name="button"><%= __('Search') %></button>
+</div>
+
+<div id="bottomPartContainer" class="hpParentContainers">
+<p id="cityLinkText"><a href="#" class="cityLinks">Montréal</a> • <a href="#" class="cityLinks">Québec</a> • <a href="#" class="cityLinks">Laval</a> • <a href="#" class="cityLinks">Montérégie</a></p>
+
+
+<% if(locals.languageCookie){ %>
+  <% if(languageCookie == "fr"){ %>
+    <select id='langSelect'><option value='fr' selected>Francais</option><option value='en'>English</option></select>
+  <% }else{ %>
+    <select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>
+  <% } %>
+<% }else{ %>
+  <select id='langSelect'><option value='fr'>Francais</option><option value='en' selected>English</option></select>
+<% } %>
+
+
+<p id="footerText">© <script>document.write(new Date().getFullYear());</script> Dailyworks, Inc. <%= __('All rights reserved.') %></p>
+</div>
+
+<script>
+  //0 means user input location, 1 means user clicked coords
+  var locationInputSource = 0;
+  var locationInput = document.getElementById('locationInput');
+  var locationCoords = {};
+
+function getGeolocation(){
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position){
+      geocodeLatLong(position.coords);
+      $.ajax({
+         url : '/setCookieLocationClient',
+         type : 'POST',
+         data:{coords:position.coords},
+         success : function(data, textStatut){
+           if(data == "error"){
+           }else if(data == "ok"){
+           }
+         },
+         error : function(textStatut, errorThrown){
+           console.log(textStatut);
+           console.log(errorThrown);
+         }
+      });
+    });
+  } else {
+    //cant get geo
+    alert("Cant get location");
+  }
+}
+
+document.getElementById('getCurrentLocationButton').onclick = function(){
+getGeolocation();
+}
+
+var geocoder = new google.maps.Geocoder;
+function geocodeLatLong(coords){
+  var latLong = {lat:coords.latitude, lng:coords.longitude};
+
+  geocoder.geocode({'location': latLong}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              console.log(results);
+              locationInput.value = results[0].address_components[2].short_name;
+              locationInputSource = 1;
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+
+}
+
+
+
+var serviceTypeSpan = document.getElementById('serviceTypeSpan');
+var servicesArray = ["mechanics", "barbers", "optometrists", "psychologists"];
+var nbServices = servicesArray.length;
+var positionInServicesArray = 0;
+var charIterator = 0;
+function writeWord(){
+  if(charIterator<servicesArray[positionInServicesArray].length){
+    serviceTypeSpan.innerText += servicesArray[positionInServicesArray].charAt(charIterator);
+    charIterator++;
+    setTimeout(writeWord, 120);
+  }else{
+    charIterator=0;
+    setTimeout(function () {
+        deleteWord();
+    }, 2000);
+  }
+}
+
+function deleteWord(){
+  if(serviceTypeSpan.innerText.length>0){
+    serviceTypeSpan.innerText = serviceTypeSpan.innerText.substring(0, serviceTypeSpan.innerText.length-1);
+    setTimeout(deleteWord, 100);
+  }else{
+    positionInServicesArray = (positionInServicesArray+1)%nbServices;
+    writeWord();
+  }
+}
+
+document.getElementById("searchSubmit").onclick = function(){
+  var serviceInput = document.getElementById('serviceInput');
+  var locationObj = {source:locationInputSource};
+  var locationIsFilled = false;
+  if(locationInputSource == 0){
+    //user inputted manually his location
+    if(locationInput.value.length>0){
+      locationIsFilled = true;
+      locationObj.content = locationInput.value;
+    }else{
+      locationIsFilled = false;
+      alert("location input not filled");
+    }
+  }else{
+    //user used coords button
+    var lat = locationCoords.lat;
+    var long = locationCoords.long;
+    if(lat.length>0 && long.length>0){
+      locationIsFilled = true;
+      locationObj.content = {lat:lat, long:long};
+    }else{
+      locationIsFilled = false;
+      alert("location input not filled");
+    }
+  }
+
+  if(serviceInput.value.length >0 && locationIsFilled == true){
+    console.log(serviceInput.value);
+    console.log(locationObj);
+  }else{
+    alert("servicetype not filled");
+  }
+};
+
+writeWord();
+</script>
+<style media="screen">
+  #cityLinkText{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:#000;
+    width:100%;
+    padding:0 20px 0 20px;
+    margin:0 0 100px 0;
+    text-align:center;
+  }
+  #cityLinkText a{
+    color:#000;
+  }
+  .hpParentContainers{
+    width:100%;
+    left:0;
+    min-height:20px;
+    top:0;
+    position:relative;
+    margin:0;
+    border:none;
+    padding:20px 0 0 0;
+    font-size:0;
+  }
+  #bottomPartContainer{
+    margin-bottom:70px;
+    min-height:50px;
+  }
+  #headerLogoImg{
+    width:40%;
+    position:relative;
+    margin:0 0 0 20px;
+    top:0;
+    left:0;
+  }
+  #topSignupLink{
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-medium);
+    position: relative;
+    float: right;
+    margin: 0 20px 0 0;
+    color:#000;
+  }
+  #pageHeader{
+    color:#000;
+    font-size:var(--mobile-font-size-page-title);
+    font-weight:var(--mobile-font-weight-bold);
+    position:relative;
+    top:0;
+    left:0;
+    width:100%;
+    margin:0 0 50px 0;
+    padding:70px 20px 0 20px;
+    min-height:190px;
+  }
+  .labelAboveInput{
+    color:#000;
+    font-size:var(--mobile-font-size-big);
+    font-weight:var(--mobile-font-weight-medium);
+    position:relative;
+    top:0;
+    left:0;
+    margin:0 0 10px 0;
+    width:100%;
+    padding:0 20px 0 20px;
+  }
+  .searchInputs{
+    position:relative;
+    margin:0 0 15px 20px;
+    left:0px;
+    top:0;
+    width:calc(100% - 40px);
+    border-radius:4px;
+    border:1px solid #c9c9c9;
+    height:50px;
+    padding:0 10px 0 10px;
+    font-size:var(--mobile-font-size-big);
+  }
+  #locationInput{
+    position:relative;
+    margin:0 0 20px 20px;
+    left:0;
+    top:0;
+    width:calc(100% - 80px);
+    border-radius:4px 0 0 4px;
+    border:1px solid #c9c9c9;
+    height:50px;
+    padding:0 10px 0 10px;
+    font-size:var(--mobile-font-size-big);
+    display:inline-block;
+    vertical-align:top;
+  }
+  #getCurrentLocationButton{
+    display:inline-block;
+    margin:0;
+    width:40px;
+    height:50px;
+    position:relative;
+    vertical-align:top;
+    border-radius:0 4px 4px 0;
+    border:1px solid #000;
+    cursor:pointer;
+    background:url('assets/icons/octiconsSvg/location.svg') no-repeat;
+    background-position: center;
+    border:1px solid #c9c9c9;
+  }
+  #searchSubmit{
+    position:relative;
+    width:calc(100% - 40px);
+    top:0;
+    color:#fff;
+    left:0;
+    margin:0 20px 40px 20px;
+    height:52px;
+    border-radius:4px;
+    border:none;
+    font-size:var(--mobile-font-size-big);
+    font-weight:var(--mobile-font-weight-bold);
+    cursor:pointer;
+    transition: opacity 1.25s ease 0s !important;
+    background: linear-gradient(to right, rgb(6, 189,140) 0%, var(--cta-accent-color) 100%) !important;
+  }
+  #footerText{
+    margin:0;
+    top:0;
+    left:0;
+    padding:0 20px 0 20px;
+    font-size:var(--mobile-font-size-regular);
+    font-weight:var(--mobile-font-weight-regular);
+    color:#a1a1a1;
+    text-align:center;
+  }
+  #langSelect{
+    text-align:left;
+    left:50%;
+    transform:translateX(-50%);
+    margin:0 0 30px 0;
+
+    position:relative;
+    border-radiu:4px;
+  }
+</style>
+
+
+<script>
+  locationInput.oninput = function(){
+    locationInputSource = 0;
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+    function initialize() {
+      var autocomplete = new google.maps.places.Autocomplete(locationInput);
+      autocomplete.addListener('place_changed', function () {
+      var place = autocomplete.getPlace();
+      // place variable will have all the information you are looking for.
+      locationInputSource = 1;
+      locationCoords.lat = place.geometry['location'].lat().toString();
+      locationCoords.long = place.geometry['location'].lng().toString();
+
+    });
+  }
+
+
+
+
+  document.getElementById('langSelect').onchange = function(){
+    console.log('lang changed');
+    $.ajax({
+          url: '/setlangCookie',
+          type: 'post',
+          data: {lang:this.value},
+          success: function( data, textStatus){
+            if(data=="ok"){
+              location.reload();
+            }else if(data=="error"){
+              alert("error");
+            }else{
+              alert("error");
+            }
+          },
+          error: function( textStatus, errorThrown ){
+              console.log( errorThrown );
+          }
+      });
+  }
+</script>

@@ -297,7 +297,7 @@ function removeClientResultDiv(){
 
                 var serviceCheckboxLabel = document.createElement('label');
                 serviceCheckboxLabel.classList.add('serviceCheckboxLabel');
-                serviceCheckboxLabel.setAttribute('serviceId', i);
+                serviceCheckboxLabel.setAttribute('serviceid', i);
 
                 var serviceCheckboxSpan = document.createElement('span');
                 serviceCheckboxSpan.classList.add('serviceCheckboxSpan');

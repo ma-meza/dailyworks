@@ -1,36 +1,23 @@
 
   function createTimePicker(inputField, divToPutPickerInto, closeTimePopup, dataTime){
-    var finishHour = 11;
-    var startingHour = 0;
+
+    var finishHour = 12;
+    var startHour = 1;
 
     var placeholderTimeString = "";
+
     var hourPicked = null
     var minutePicked = null;
     var amPmPicked = null;
 
 
     if(dataTime != -1){
-
-        hourPicked = parseInt(Number(dataTime));
-        minutePicked = Math.round((Number(dataTime)-hourPicked)*60);
-        var hourDisplay = hourPicked;
-        var minunteDisplay = minutePicked;
-        if(minunteDisplay < 10){
-            minunteDisplay = "0"+minunteDisplay;
-        }
-        if(hourPicked<10){
-          hourDisplay = "0"+hourDisplay;
-        }
-        if(hourPicked<12){
-          placeholderTimeString+="AM";
-          amPmPicked = "AM";
-          placeholderTimeString = (hourDisplay)+":"+minunteDisplay+amPmPicked;
-        }else{
-          placeholderTimeString+="PM";
-          amPmPicked="PM";
-          placeholderTimeString = (hourDisplay-12)+":"+minunteDisplay+amPmPicked;
-        }
-
+      var timeArray = minutesTo12HourArray(dataTime);
+      //hour, minute, ampm, timestring
+      hourPicked = timeArray[0];
+      minutePicked = timeArray[1];
+      amPmPicked = timeArray[2];
+      placeholderTimeString = (timeArray[3]+amPmPicked);
     }else{
       placeholderTimeString = "00:00AM";
     }
@@ -38,17 +25,17 @@
 
 
 
-    var timeString = "";
+    var currentTimeString = "";
 
     var timePickerPopup = document.createElement("div");
     timePickerPopup.classList+= "timePickerPopupMainDiv";
 
 
-      //create placeholder header time
-      var placeholderHeaderTime = document.createElement("p");
-      placeholderHeaderTime.innerText = placeholderTimeString;
-      placeholderHeaderTime.classList.add('timePickerPlaceholderTimeHeader');
-      timePickerPopup.appendChild(placeholderHeaderTime)
+    //create placeholder header time
+    var placeholderHeaderTime = document.createElement("p");
+    placeholderHeaderTime.innerText = placeholderTimeString;
+    placeholderHeaderTime.classList.add('timePickerPlaceholderTimeHeader');
+    timePickerPopup.appendChild(placeholderHeaderTime)
 
 
       //create hour header
@@ -78,14 +65,12 @@
         timePickerPopup.appendChild(minutesTable);
 
 
-      function createTimesTable(){
-
+  function createTimesTable(){
 
     //create hours rows
           var hoursRow = document.createElement("tr");
           var hoursCell = null;
-
-          for(var i = startingHour, counter = 1;i<finishHour+1;i++, counter++){
+          for(var i = startHour, counter = 1;i<finishHour+1;i++, counter++){
             hoursCell = document.createElement('td');
             hoursCell.setAttribute("time", i);
             if(i<10){
@@ -93,13 +78,10 @@
             }else{
               hoursCell.innerText= i;
             }
-
             hoursCell.onclick = function(){
               setHours(this.getAttribute('time'));
             }
-
             hoursRow.appendChild(hoursCell);
-
             if (counter == hoursBreakPoint && i!=finishHour) {
               counter = 0;
               hoursTable.appendChild(hoursRow);
@@ -138,41 +120,35 @@
               minutesRow = document.createElement("tr");
             }
           }
-    minutesTable.appendChild(minutesRow);
+          minutesTable.appendChild(minutesRow);
 
 
 
 
-    //create am pm div
-    var amPmContainer = document.createElement('div');
-    var amContainer = document.createElement('p');
-    var pmContainer = document.createElement('p');
+          //create am pm div
+          var amPmContainer = document.createElement('div');
+          var amContainer = document.createElement('p');
+          var pmContainer = document.createElement('p');
 
-    amPmContainer.appendChild(amContainer);
-    amPmContainer.appendChild(pmContainer);
+          amPmContainer.appendChild(amContainer);
+          amPmContainer.appendChild(pmContainer);
 
-    amPmContainer.classList.add('timePickerAmPmContainer');
-    amContainer.classList.add('timePickerAmContainer');
-    pmContainer.classList.add('timePickerPmContainer');
+          amPmContainer.classList.add('timePickerAmPmContainer');
+          amContainer.classList.add('timePickerAmContainer');
+          pmContainer.classList.add('timePickerPmContainer');
 
-    amContainer.innerText = "AM";
-    pmContainer.innerText = "PM";
+          amContainer.innerText = "AM";
+          pmContainer.innerText = "PM";
 
-    amContainer.onclick = function(){
-      setAmPm("AM");
-      if(hourPicked>11){
-        hourPicked = parseInt(hourPicked)-12;
-      }
-    }
-    pmContainer.onclick = function(){
-      setAmPm("PM");
-      if(hourPicked<12){
-        hourPicked = parseInt(hourPicked)+12;
-      }
-    }
-    timePickerPopup.appendChild(amPmContainer);
+          amContainer.onclick = function(){
+            setAmPm("AM");
+          }
+          pmContainer.onclick = function(){
+            setAmPm("PM");
+          }
+          timePickerPopup.appendChild(amPmContainer);
 
-      }
+  }
 
 
 
@@ -189,29 +165,33 @@
       setPlaceholderHeaderTime();
     }
 
+
     function setPlaceholderHeaderTime(){
-      var timeString = "";
+      var currentTimeString = "";
       if(!hourPicked){
-        timeString+="00:";
+        currentTimeString+="00:";
       }else{
-        if(hourPicked>11){
-          timeString+=(parseInt(hourPicked)-12)+":";
+        if(hourPicked<10){
+          currentTimeString+="0"+hourPicked+":";
         }else{
-          timeString+=hourPicked+":";
+          currentTimeString+=hourPicked+":"
         }
       }
       if(!minutePicked){
-        timeString+="00";
+        currentTimeString+="00";
       }else{
-        timeString+=minutePicked;
+        if(minutePicked<10){
+        currentTimeString+="0";
+        }
+        currentTimeString+=minutePicked;
       }
       if(!amPmPicked){
-        timeString+="AM";
+        currentTimeString+="AM";
       }else{
-        timeString+=amPmPicked;
+        currentTimeString+=amPmPicked;
       }
-      placeholderHeaderTime.innerText = timeString;
-    }
+      placeholderHeaderTime.innerText = currentTimeString;
+  }
 
 
 
@@ -230,53 +210,75 @@
 
 
     function setInputValue(){
-      var timeString = "";
-      var dataTimeAttribute="";
-      var attributeHour = 0;
+      var displayHour = "";
+      var displayMinute = "";
+      var dataTimeAttribute=0;
+
       if(!hourPicked){
-        timeString+="00:";
+        displayHour = "00";
       }else{
-        if(!amPmPicked){
-          attributeHour=parseInt(hourPicked);
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
+        if(!amPmPicked || amPmPicked == "AM"){
+          //am
+          if(hourPicked == 12){
+            displayHour = "00";
+          }else if(hourPicked<10){
+            displayHour = "0"+hourPicked;
+            dataTimeAttribute+= (parseInt(hourPicked)*60)
           }else{
-            timeString+=hourPicked;
-          }
-        }else if(amPmPicked=="AM"){
-          attributeHour=parseInt(hourPicked);
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
-          }else{
-            timeString+=hourPicked;
+            displayHour = hourPicked;
+            dataTimeAttribute+= (parseInt(hourPicked)*60);
           }
         }else{
-          //is pm
-          attributeHour=(parseInt(hourPicked));
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
+          //pm
+          if(hourPicked == 12){
+            displayHour = "12";
+            dataTimeAttribute += (12*60)
           }else{
-            timeString+=hourPicked;
+            displayHour = (parseInt(hourPicked)+12);
+            dataTimeAttribute+=((parseInt(hourPicked)+12)*60)
           }
         }
-        timeString+=":";
       }
 
       if(!minutePicked){
-        timeString+="00"
+        displayMinute = "00";
       }else{
-        timeString+=minutePicked;
-        attributeHour+=((parseInt(minutePicked)/60));
-      }
-      dataTimeAttribute = attributeHour;
-      if(!amPmPicked){
-        timeString+="AM"
-      }else{
-        timeString+=amPmPicked;
+        if(minutePicked<10){
+          displayMinute = "0";
+        }
+        displayMinute += minutePicked;
+        dataTimeAttribute += (parseInt(minutePicked));
       }
 
-      inputField.value = timeString;
+      inputField.value = displayHour+":"+displayMinute;
       inputField.setAttribute('data-time', dataTimeAttribute);
+
+
+      //check for opposite side input if matches
+      var parentNode = inputField.parentNode;
+      if(inputField.classList.contains("storeScheduleEndTime")){
+        var oppositeInputNode = parentNode.getElementsByClassName("storeScheduleStartTime")[0];
+        var oppositeNodeTimeAttribute = oppositeInputNode.getAttribute("data-time");
+        if(oppositeNodeTimeAttribute == -1){
+          oppositeInputNode.setAttribute('data-time', dataTimeAttribute);
+          oppositeInputNode.value = displayHour+":"+displayMinute;
+        }else if(dataTimeAttribute<oppositeNodeTimeAttribute){
+          oppositeInputNode.setAttribute('data-time', dataTimeAttribute);
+          oppositeInputNode.value = displayHour+":"+displayMinute;
+        }
+      }else{
+        var oppositeInputNode = parentNode.getElementsByClassName("storeScheduleEndTime")[0];
+        var oppositeNodeTimeAttribute = oppositeInputNode.getAttribute("data-time");
+        if(oppositeNodeTimeAttribute == -1){
+          oppositeInputNode.setAttribute('data-time', dataTimeAttribute);
+          oppositeInputNode.value = displayHour+":"+displayMinute;
+        }else if(dataTimeAttribute>oppositeNodeTimeAttribute){
+          oppositeInputNode.setAttribute('data-time', dataTimeAttribute);
+          oppositeInputNode.value = displayHour+":"+displayMinute;
+        }
+      }
+
+
     }
 
 
@@ -311,10 +313,7 @@
       closePageOverlay();
     }
 
-
         divToPutPickerInto.appendChild(timePickerPopup);
-
-
   }
 
 
@@ -353,6 +352,7 @@
     var hourPicked = null
     var minutePicked = null;
     var amPmPicked = null;
+
     var dayPicked = null;
     var monthPicked = null;
     var yearPicked = null;
@@ -362,52 +362,29 @@
     var placeholderTimeString = "";
     var placeholderDateString = "";
 
+    var finishHour = 12;
+    var startHour = 1;
+
     if(dataDate != -1){
       var splittedDateString = dataDate.split('/');
       yearPicked = splittedDateString[0];
       monthPicked = parseInt(splittedDateString[1]);
       dayPicked = splittedDateString[2];
-
       placeholderDateString = monthsName[monthPicked-1]+" "+ dayPicked+", "+yearPicked;
     }else{
-
       placeholderDateString = monthsName[todayDate.getMonth()] +" "+ todayDate.getDate()+", "+todayDate.getFullYear();
     }
+
     if(dataTime != -1){
-
-        hourPicked = parseInt(Number(dataTime));
-        minutePicked = Math.round((Number(dataTime)-hourPicked)*60);
-        var hourDisplay = hourPicked;
-        var minunteDisplay = minutePicked;
-        if(minunteDisplay < 10){
-            minunteDisplay = "0"+minunteDisplay;
-        }
-        if(hourPicked<10){
-          hourDisplay = "0"+hourDisplay;
-        }
-        if(hourPicked<12){
-          placeholderTimeString+="AM";
-          amPmPicked = "AM";
-          placeholderTimeString = (hourDisplay)+":"+minunteDisplay+amPmPicked;
-        }else{
-          placeholderTimeString+="PM";
-          amPmPicked="PM";
-          placeholderTimeString = (hourDisplay-12)+":"+minunteDisplay+amPmPicked;
-        }
-
+      var timeArray = minutesTo12HourArray(dataTime);
+      //hour, minute, ampm, timestring
+      hourPicked = timeArray[0];
+      minutePicked = timeArray[1];
+      amPmPicked = timeArray[2];
+      placeholderTimeString = (timeArray[3]+amPmPicked);
     }else{
       placeholderTimeString = "00:00AM";
     }
-
-
-    var finishHour = 11;
-    var startingHour = 0;
-
-
-
-
-
-
 
 
     var timePickerPopup = document.createElement("div");
@@ -501,7 +478,7 @@
           var hoursRow = document.createElement("tr");
           var hoursCell = null;
 
-          for(var i = startingHour, counter = 1;i<finishHour+1;i++, counter++){
+          for(var i = startHour, counter = 1;i<finishHour+1;i++, counter++){
             hoursCell = document.createElement('td');
             hoursCell.setAttribute("time", i);
             if(i<10){
@@ -576,19 +553,12 @@
 
     amContainer.onclick = function(){
       setAmPm("AM");
-      if(hourPicked>11){
-        hourPicked = parseInt(hourPicked)-12;
-      }
     }
     pmContainer.onclick = function(){
       setAmPm("PM");
-      if(hourPicked<12){
-        hourPicked = parseInt(hourPicked)+12;
-      }
     }
     timeMainContainer.appendChild(amPmContainer);
-
-      }
+  }
 
 
 
@@ -805,6 +775,7 @@ timePickerPopup.appendChild(timeMainContainer);
       timePickerPopup.appendChild(doneMainDiv);
       doneTextInsideDiv.onclick = function(){
         setInputValue();
+
         timePickerPopup.remove();
         closePageOverlay();
       }
@@ -817,7 +788,7 @@ timePickerPopup.appendChild(timeMainContainer);
       setPlaceholderHeaderTime();
     }
     function setHours(hourVar){
-      hourPicked = hourVar
+      hourPicked = hourVar;
       setPlaceholderHeaderTime();
     }
     function setAmPm(choicePicked){
@@ -836,22 +807,26 @@ timePickerPopup.appendChild(timeMainContainer);
       yearPicked = choicePicked;
       setPlaceholderHeaderTime();
     }
-
+    var timeString = "";
+    var dateString = "";
     function setPlaceholderHeaderTime(){
-      var timeString = "";
-      var dateString = "";
+      timeString = "";
+      dateString = "";
       if(!hourPicked){
         timeString+="00:";
       }else{
-        if(hourPicked>11){
-          timeString+=(parseInt(hourPicked)-12)+":";
+        if(hourPicked<10){
+          timeString+="0"+hourPicked+":";
         }else{
-          timeString+=hourPicked+":";
+          timeString+=hourPicked+":"
         }
       }
       if(!minutePicked){
         timeString+="00";
       }else{
+        if(minutePicked<10){
+        timeString+="0";
+        }
         timeString+=minutePicked;
       }
       if(!amPmPicked){
@@ -898,10 +873,14 @@ timePickerPopup.appendChild(timeMainContainer);
 
 
     function setInputValue(){
-      var timeString = "";
+
+      var displayHour = "";
+      var displayMinute = "";
+      var dataTimeAttribute=0;
       var dataDateAttribute="";
-      var dataTimeAttribute="";
-      var attributeHour=0;
+
+
+
       if(!yearPicked){
         timeString+="2019/";
         dataDateAttribute+="2019/";
@@ -925,48 +904,41 @@ timePickerPopup.appendChild(timeMainContainer);
       }
 
       if(!hourPicked){
-        timeString+="00:";
+        displayHour = "00";
       }else{
-        if(!amPmPicked){
-          attributeHour=parseInt(hourPicked);
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
+        if(!amPmPicked || amPmPicked == "AM"){
+          //am
+          if(hourPicked == 12){
+            displayHour = "00";
+          }else if(hourPicked<10){
+            displayHour = "0"+hourPicked;
+            dataTimeAttribute+= (parseInt(hourPicked)*60)
           }else{
-            timeString+=hourPicked;
-          }
-        }else if(amPmPicked=="AM"){
-          attributeHour=parseInt(hourPicked);
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
-          }else{
-            timeString+=hourPicked;
+            displayHour = hourPicked;
+            dataTimeAttribute+= (parseInt(hourPicked)*60);
           }
         }else{
-          //is pm
-          attributeHour=(parseInt(hourPicked));
-          if(parseInt(hourPicked)>11){
-            timeString+=(parseInt(hourPicked)-12);
+          //pm
+          if(hourPicked == 12){
+            displayHour = "12";
+            dataTimeAttribute += (12*60)
           }else{
-            timeString+=hourPicked;
+            displayHour = (parseInt(hourPicked)+12);
+            dataTimeAttribute+=((parseInt(hourPicked)+12)*60)
           }
         }
-        timeString+=":";
       }
       if(!minutePicked){
-        timeString+="00";
+        displayMinute = "00";
       }else{
-        timeString+=minutePicked;
-        attributeHour+=((parseInt(minutePicked)/60));
-      }
-      dataTimeAttribute = attributeHour;
-      if(!amPmPicked){
-        timeString+="AM";
-      }else{
-        timeString+=amPmPicked;
+        if(minutePicked<10){
+          displayMinute = "0";
+        }
+        displayMinute += minutePicked;
+        dataTimeAttribute += (parseInt(minutePicked));
       }
 
-      console.log(timeString);
-      inputField.value = timeString;
+      inputField.value = dataDateAttribute+" "+displayHour+":"+displayMinute;
       inputField.setAttribute('data-date', dataDateAttribute);
       inputField.setAttribute('data-time', dataTimeAttribute);
 
@@ -986,47 +958,46 @@ timePickerPopup.appendChild(timeMainContainer);
 
 
   function checkValidityInput(inputElement){
-
+    var parentNode = inputElement.parentNode;
     if(inputElement.classList.contains('existingStoreAbsenceStart')){
-      var existingEndInput = inputElement.parentNode.getElementsByClassName('existingStoreAbsenceEnd')[0];
-      if(existingEndInput.getAttribute('data-date') == -1){
-        setInputValuesFromInput(inputElement, existingEndInput);
+      var oppositeInputNode = parentNode.getElementsByClassName('existingStoreAbsenceEnd')[0];
+
+      if(oppositeInputNode.getAttribute('data-date') == -1){
+        setInputValuesFromInput(inputElement, oppositeInputNode);
       }else{
-        var startRelativeToEnd = compareStartToEnd(inputElement, existingEndInput);
+        var startRelativeToEnd = compareStartToEnd(inputElement, oppositeInputNode);
         if(startRelativeToEnd==1){
-          setInputValuesFromInput(inputElement, existingEndInput);
+          setInputValuesFromInput(inputElement, oppositeInputNode);
         }
       }
     }else if(inputElement.classList.contains('existingStoreAbsenceEnd')){
-      console.log('yooo');
-      var existingStartInput = inputElement.parentNode.getElementsByClassName('existingStoreAbsenceStart')[0];
-      if(existingStartInput.getAttribute('data-date') == -1){
-        setInputValuesFromInput(inputElement, existingStartInput);
+      var oppositeInputNode = parentNode.getElementsByClassName('existingStoreAbsenceStart')[0];
+      if(oppositeInputNode.getAttribute('data-date') == -1){
+        setInputValuesFromInput(inputElement, oppositeInputNode);
       }else{
-        var startRelativeToEnd = compareStartToEnd(existingStartInput, inputElement);
+        var startRelativeToEnd = compareStartToEnd(oppositeInputNode, inputElement);
         if(startRelativeToEnd==1){
-          setInputValuesFromInput(inputElement, existingStartInput);
-          console.log('nope');
+          setInputValuesFromInput(inputElement, oppositeInputNode);
         }
       }
     }else if(inputElement.classList.contains('newStoreAbsenceEnd')){
-      var newStartInput = inputElement.parentNode.getElementsByClassName('newStoreAbsenceStart')[0];
-      if(newStartInput.getAttribute('data-date') == -1){
-        setInputValuesFromInput(inputElement, newStartInput);
+      var oppositeInputNode = parentNode.getElementsByClassName('newStoreAbsenceStart')[0];
+      if(oppositeInputNode.getAttribute('data-date') == -1){
+        setInputValuesFromInput(inputElement, oppositeInputNode);
       }else{
-        var startRelativeToEnd = compareStartToEnd(newStartInput, inputElement);
+        var startRelativeToEnd = compareStartToEnd(oppositeInputNode, inputElement);
         if(startRelativeToEnd==1){
-          setInputValuesFromInput(inputElement, newStartInput);
+          setInputValuesFromInput(inputElement, oppositeInputNode);
         }
       }
     }else if(inputElement.classList.contains('newStoreAbsenceStart')){
-      var newEndInput = inputElement.parentNode.getElementsByClassName('newStoreAbsenceEnd')[0];
-      if(newEndInput.getAttribute('data-date') == -1){
-        setInputValuesFromInput(inputElement, newEndInput);
+      var oppositeInputNode = parentNode.getElementsByClassName('newStoreAbsenceEnd')[0];
+      if(oppositeInputNode.getAttribute('data-date') == -1){
+        setInputValuesFromInput(inputElement, oppositeInputNode);
       }else{
-        var startRelativeToEnd = compareStartToEnd(inputElement, newEndInput);
+        var startRelativeToEnd = compareStartToEnd(inputElement, oppositeInputNode);
         if(startRelativeToEnd==1){
-          setInputValuesFromInput(inputElement, newEndInput);
+          setInputValuesFromInput(inputElement, oppositeInputNode);
         }
       }
     }
@@ -1296,9 +1267,9 @@ return false;
 
   function compareStartToEnd(startInput, endInput){
     var startDate = new Date(startInput.getAttribute('data-date'));
-    var startTime = parseFloat(startInput.getAttribute('data-time'));
+    var startTime = parseInt(startInput.getAttribute('data-time'));
     var endDate = new Date(endInput.getAttribute('data-date'));
-    var endTime = parseFloat(endInput.getAttribute('data-time'));
+    var endTime = parseInt(endInput.getAttribute('data-time'));
     var datesCompared = compareStartDateToEndDate(startDate, endDate);
     if(datesCompared==1){
 
@@ -1364,4 +1335,109 @@ function dateToClientString(dateX){
   }
 
 return fullMonthsName[month]+" "+day+", "+year+" @ "+hour+":"+minutes;
+}
+
+
+
+
+
+
+function minutesToHourInt(minutes){
+  return minutes/60;
+}
+
+function minutestoFloorHourInMinutes(minutes){
+  return Math.floor(minutes/60)*60;
+}
+function minutesToCeilingHourInMinutes(minutes){
+  return Math.ceil(minutes/60)*60;
+}
+
+
+function minutesToHourString(minutes){
+  minutes = parseInt(minutes);
+  var nbHours = Math.floor(minutes/60);
+  var nbMinutes = minutes - (nbHours*60);
+  var hourString = "";
+  if(nbHours<10){
+    hourString+= "0"+nbHours+":";
+  }else{
+    hourString+= nbHours+":";
+  }
+  if(nbMinutes == 0){
+    hourString+="00";
+  }else if(nbMinutes < 10){
+    hourString+="0"+nbMinutes;
+  }else{
+    hourString+=nbMinutes;
+  }
+  return hourString;
+}
+
+
+
+function minutesTo12HourString(minutes){
+  minutes = parseInt(minutes);
+  //hour, minute, ampm, timestring
+  var nbHours = Math.floor(minutes/60);
+  var nbMinutes = minutes - (nbHours*60);
+  var hourString = "";
+  var amPmString = "";
+  if(nbHours<10){
+    hourString+= "0"+nbHours+":";
+    amPmString = "AM";
+  }else if(nbHours<12){
+    hourString+= nbHours+":";
+    amPmString = "AM";
+  }else if(nbHours == 12){
+    hourString+= nbHours+":";
+    amPmString = "PM";
+  }else{
+    hourString+= (nbHours - 12)+":";
+    amPmString = "PM";
+  }
+  if(nbMinutes == 0){
+    hourString+="00";
+  }else if(nbMinutes < 10){
+    hourString+="0"+nbMinutes;
+  }else{
+    hourString+=nbMinutes;
+  }
+  return hourString+amPmString;
+}
+
+
+
+function minutesTo12HourArray(minutes){
+  //hour, minute, ampm, timestring
+  var nbHours = Math.floor(minutes/60);
+  var nbMinutes = minutes - (nbHours*60);
+  var nbHours12format = 0;
+  var hourString = "";
+  var amPmString = "";
+  if(nbHours<10){
+    hourString+= "0"+nbHours+":";
+    amPmString = "AM";
+    nbHours12format = nbHours;
+  }else if(nbHours<12){
+    hourString+= nbHours+":";
+    amPmString = "AM";
+    nbHours12format = nbHours;
+  }else if(nbHours == 12){
+    hourString+= nbHours+":";
+    amPmString = "PM";
+    nbHours12format = nbHours;
+  }else{
+    hourString+= (nbHours - 12)+":";
+    amPmString = "PM";
+    nbHours12format = (nbHours - 12);
+  }
+  if(nbMinutes == 0){
+    hourString+="00";
+  }else if(nbMinutes < 10){
+    hourString+="0"+nbMinutes;
+  }else{
+    hourString+=nbMinutes;
+  }
+  return [nbHours12format, nbMinutes, amPmString, hourString];
 }

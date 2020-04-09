@@ -7,7 +7,7 @@ app.use(cookieParser());
 require('dotenv').config();
 
 
-exports.loggedInCheckForNonProtectedRoutes = function(req, res, next){
+module.exports.loggedInCheckForNonProtectedRoutes = function(req, res, next){
   if(!req.cookies.appointmentApp){
     //if user not logged in
     next();
@@ -22,16 +22,32 @@ exports.loggedInCheckForNonProtectedRoutes = function(req, res, next){
 
         res.redirect('/home');
       }
-
     });
-
   }
-
 };
 
 
+module.exports.denyIfLoggedIn = function(req, res, next){
+  if(!req.cookies.appointmentApp){
+    //if user not logged in
+    next();
+  }else{
+    var theCookie = req.cookies.appointmentApp;
+    jwt.verify(theCookie, process.env.JWT_SECRET_KEY, function(err,decryptedToken){
+      if(err){
+        res.redirect('/error');
+      }else{
+        res.locals.userId = decryptedToken.id;
+        res.locals.userType = decryptedToken.type;
 
-exports.loggedInCheck = function(req, res, next){
+        res.redirect('/home');
+      }
+    });
+  }
+}
+
+
+module.exports.loggedInCheck = function(req, res, next){
 
 if(!req.cookies.appointmentApp){
   //if user not logged in

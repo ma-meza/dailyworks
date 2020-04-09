@@ -5,12 +5,15 @@ var Schema = mongoose.Schema;
 var storeSchema = new Schema({
   //0 is store brand settings && 1 is scheduling settings
   registrationTasks:{type:[Number], default:[0,1]},
-  stripeSubscriptionId:{type:String, default:"0"},
+  stripeSubscriptionId:{type:String, required:false},
   dateCreated:{type:Date, default:Date.now},
   storeName: {type: String, required: true},
   storeDescription:{type:String, required:false},
   email:{type:String, required:true},
-  password:{type:String, required:true},
+  claimed:{type:Boolean, default:true},
+  weeklyPageClicksUnclaimed:{type:Number, default:0},
+  monthlyPageClicksUnclaimed:{type:Number, default:0},
+  password:{type:String, required:false},
   phoneNumber:{type:String, required:false},
   location:{type:String, required:false},
   type:{type:Number, required:false}, //maybe change this to true
@@ -38,9 +41,10 @@ var storeSchema = new Schema({
     text:{type:String, required:false}
   }],
   services:[{
-    _id:{type:mongoose.Schema.Types.ObjectId,required:true},
+      _id:{type:mongoose.Schema.Types.ObjectId,required:true},
       serviceName:{type:String, required:true},
       description:{type:String, required:false},
+      duration:{type:Number, default:20},
       price:{type:Number, required:false},
       employees:[{
         employeeId:{type:mongoose.Schema.Types.ObjectId, required:true},
@@ -58,8 +62,8 @@ var storeSchema = new Schema({
       absences:[{
         _id:{type:mongoose.Schema.Types.ObjectId, required:true},
         reason:{type:String, required:true},
-        startTime:{type:Date, required:true},
-        endTime:{type:Date, required:true}
+        startDate:{type:Date, required:true},
+        endDate:{type:Date, required:true}
       }]
     }],
   profilePictureLink:{type:String, required:false},

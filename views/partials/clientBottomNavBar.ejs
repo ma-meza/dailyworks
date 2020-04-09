@@ -4,101 +4,118 @@
 var pageUrl = (window.location.href).split("/");
 
 
-
-var dateNumberArray = ["01","02","03","04","05","06","07","08","09","10","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"];
-var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
   var todayDateNUmber = new Date().getDate();
   var todayMonthName = new Date().getMonth();
 </script>
 
 
 <div id="bottomNavMainDiv" class="">
-  <div id="innerDiv1" onclick="location.href='/home' " class="innerDivs">
-    <img id="homeImgIcon" src="assets/icons/homeIcon.png" class="navIcons" alt="">
-    <!-- <p class="innerDivPBottomNavBar">Home</p> -->
+  <% if(!locals.loggedIn || loggedIn == false){ %>
+  <div class="oneThirdNavInnerDiv">
+    <a href="/"><img id="houseIcon" src="/assets/icons/octiconsSvg/home-inactive.svg" alt="" class="navIcons"></a>
   </div>
-  <div id="innerDiv2" onclick="location.href='/agenda' " class="innerDivs">
-    <p id="monthAgendaIcon"><script>
-      document.write(monthName[todayMonthName]);
-    </script></p>
+  <div class="oneThirdNavInnerDiv">
+    <img src="/assets/icons/octiconsSvg/search.svg" alt="" class="searchIcons navIcons">
+  </div>
+  <div class="oneThirdNavInnerDiv">
+    <a href="/login"><img src="/assets/icons/octiconsSvg/person.svg" alt="" class="navIcons"></a>
+  </div>
 
-    <p id="dateAgendaIcon"><script>
-      document.write(dateNumberArray[todayDateNUmber-1]);
-    </script></p>
-    <img id="agendaImgIcon" src="assets/icons/agendaIcon.png" class="navIcons" alt="">
-    <!-- <p class="innerDivPBottomNavBar">Agenda</p> -->
-  </div>
-  <div id="innerDiv3" onclick="location.href='/messages' " class="innerDivs">
-    <img id="messagesImgIcon" src="assets/icons/messagesIcon.png" class="navIcons" alt="">
-    <!-- <p class="innerDivPBottomNavBar">Messages</p> -->
-  </div>
-  <div id="innerDiv4" onclick="location.href='/profile' " class="innerDivs">
-    <img id="notificationsImgIcon" src="assets/icons/notificationIcon.png" class="navIcons" alt="">
-    <!-- <p class="innerDivPBottomNavBar">Notifications</p> -->
-  </div>
+
+  <% }else{ %>
+
+    <div class="oneFourthNavInnerDiv" onclick="location.href='/home' ">
+      <img id="homeImgIcon" src="/assets/icons/octiconsSvg/home-inactive.svg" class="navIcons" alt="">
+      <!-- <p class="innerDivPBottomNavBar">Home</p> -->
+    </div>
+    <div class="oneFourthNavInnerDiv">
+      <p id="monthAgendaIcon"><script>
+        document.write(monthsName[todayMonthName]);
+      </script></p>
+
+      <p id="dateAgendaIcon"><script>
+        document.write(dateNumberArray[todayDateNUmber-1]);
+      </script></p>
+      <img id="agendaImgIcon" src="/assets/icons/agendaIcon.png" class="navIcons" alt="">
+      <!-- <p class="innerDivPBottomNavBar">Agenda</p> -->
+    </div>
+    <div class="oneFourthNavInnerDiv">
+      <img class="navIcons searchIcons" src="/assets/icons/octiconsSvg/search.svg" alt="">
+    </div>
+    <div class="oneFourthNavInnerDiv">
+      <a href="/profile"><img class="navIcons" src="/assets/icons/octiconsSvg/person.svg" alt=""></a>
+    </div>
+
+  <% } %>
 </div>
 
 
 <style>
-@media screen and (min-width:768px){
+@media screen and (min-width:780px){
   #bottomNavMainDiv{
-    z-index:5;
-    width:80px;
+    display:none;
+  }
+  #searchFullHeightContainer{
     position:fixed;
-    bottom:0px;
-    left:0px;
+    width:450px;
+    height:calc(100% - 5px);
+    background-color:transparent;
+    border:none;
+    top:5px;
+    right:20px;
+    z-index:20;
+  }
+  #searchParentContainer{
+  position:relative;
+  width:100%;
+  top:0;
+  left:0;
+  height:auto;
+  min-height:10px;
+  background-color:#fff;
+  border:none;
+  border-radius:8px;
+  padding-top:20px;
+  -webkit-box-shadow: var(--box-shadow-card);
+  -moz-box-shadow: var(--box-shadow-card);
+  box-shadow: var(--box-shadow-card);
+  }
+  .searchPopupHeader{
+    display:none;
+  }
+  #searchResultsParentContainer{
+    position:relative;
+    width:calc(100% - 40px);
+    left:20px;
+    margin:0 0 20px 0;
+    min-height:0;
+    border:none;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  #searchTransparentOverlay{
     height:100%;
-    border-top:0.3px solid rgba(66, 66, 66, 0.76);
-    background-color:var(--color-page-background);
+    left:0;
+    top:0;
+    width:100%;
+    position:fixed;
+    border:none;
+    background-color:rgba(0,0,0,0.6);
+    z-index:300;
   }
 }
-@media screen and (max-width:768px){
+@media screen and (max-width:780px){
   #bottomNavMainDiv{
+    font-size:0;
     z-index:5;
     width:100%;
     position:fixed;
     bottom:0px;
     left:0px;
-    height:65px;
+    height:50px;
     border-top:0.3px solid rgba(66, 66, 66, 0.76);
-    background-color:var(--color-page-background);
-  }
-}
-
-
-  .innerDivs{
-    position:absolute;
-    width:25%;
-    height:100%;
-    top:0px;
-  }
-  #innerDiv1{
-    left:0px;
-  }
-  #innerDiv2{
-    left:25%;
-  }
-  #innerDiv3{
-    left:50%;
-  }
-  #innerDiv4{
-    left:75%;
-  }
-  .navIcons{
-    height:calc(100% - 22px);
-    position:absolute;
-    top:11px;
-    transform:translateX(-50%);
-    left:50%;
-  }
-  .innerDivPBottomNavBar{
-    line-height:22px;
-    text-align:center;
-    width:100%;
-    position:absolute;
-    bottom:0;
-    margin:0;
+    background-color:#fff;
+    white-space:nowrap;
   }
   #monthAgendaIcon{
     text-align:center;
@@ -120,6 +137,132 @@ var monthName = ["Jan", "Feb","Mar", "Apr", "May", "June", "July", "Aug", "Sept"
     font-size:16px;
     font-weight:900;
   }
+  #searchFullHeightContainer{
+    position:fixed;
+    width:100%;
+    height:calc(100% - 50px);
+    background-color:transparent;
+    border:none;
+    top:0;
+    left:0;
+    z-index:20;
+  }
+  #searchParentContainer{
+  position:relative;
+  width:100%;
+  top:0;
+  left:0;
+  height:100%;
+  background-color:#fff;
+  border:none;
+  }
+  .searchPopupHeader{
+    position:relative;
+    width:100%;
+    height:auto;
+    min-height:5px;
+    padding:20px 0px 20px 0px;
+    left:0;
+    display:flex;
+    background-color:#fff;
+  }
+  #searchResultsParentContainer{
+    position:relative;
+    width:calc(100% - 40px);
+    left:20px;
+    margin:0 0 20px 0;
+    border:none;
+    height: calc(100% - 200px);
+    overflow-y: auto;
+  }
+  #searchTransparentOverlay{
+    height:calc(100% - 50px);
+    left:0;
+    top:0;
+    width:100%;
+    position:fixed;
+    border:none;
+    background-color:transparent;
+    z-index:300;
+  }
+}
+
+
+.oneThirdNavInnerDiv{
+  position:relative;
+  width:calc(100% / 3);
+  margin:0;
+  height:100%;
+  top:0;
+  left:0;
+  display:inline-block;
+  border:none;
+}
+.oneFourthNavInnerDiv{
+  position:relative;
+  width:25%;
+  margin:0;
+  height:100%;
+  top:0;
+  left:0;
+  display:inline-block;
+  border:none;
+}
+  .navIcons{
+    height:calc(100% - 22px);
+    position:absolute;
+    top:11px;
+    transform:translateX(-50%);
+    left:50%;
+    cursor:pointer;
+  }
+  .innerDivPBottomNavBar{
+    line-height:22px;
+    text-align:center;
+    width:100%;
+    position:absolute;
+    bottom:0;
+    margin:0;
+  }
+
+
+
+
+  #searchDivInput{
+    position:relative;
+    width:calc(100% - 40px);
+    left:20px;
+    margin:0;
+    padding: 0 20px 0 20px;
+    border-radius:4px;
+    height:35px;
+    border:1px solid #000;
+    font-weight:var(--mobile-font-weight-regular);
+    font-size:var(--desktop-font-size-regular);
+    margin-bottom:20px;
+  }
+
+  .searchResultChildContainer{
+    position:relative;
+    width:100%;
+    left:0;
+    top:0;
+    border:none;
+    padding:20px 0 20px 0;
+  }
+  .searchResultP{
+    position:relative;
+    top:0;
+    left:0;
+    width:100%;
+    padding:0 20px 0 20px;
+    text-decoration:none;
+    color:#000;
+    margin:0;
+  }
+
+
+
 </style>
 
 
@@ -135,4 +278,127 @@ if(pageUrl.indexOf('home') != -1){
 
   }
 
+</script>
+
+
+
+
+<script>
+  //search box script
+
+
+
+
+  var searchIcons = document.getElementsByClassName("searchIcons");
+  for(var i=0;i<searchIcons.length;i++){
+    searchIcons[i].onclick = function(){
+      if(!document.getElementById("searchTransparentOverlay")){
+        //there is not already an existing search div
+        var searchTransparentOverlay = document.createElement('div');
+        searchTransparentOverlay.id = "searchTransparentOverlay";
+        document.body.appendChild(searchTransparentOverlay);
+
+
+        var mainSearchContainerDiv = document.createElement("div");
+        mainSearchContainerDiv.id = "searchFullHeightContainer";
+        searchTransparentOverlay.appendChild(mainSearchContainerDiv);
+
+
+        var searchPopupHeader = document.createElement("div");
+        searchPopupHeader.classList.add("searchPopupHeader");
+
+        var searchPopupTitle = document.createElement("p");
+        searchPopupTitle.classList.add("modalMainTitle");
+        searchPopupTitle.innerText = "Search";
+
+        var searchPopupX = document.createElement("p");
+        searchPopupX.classList.add("popupX");
+        searchPopupX.innerText = "x";
+        searchPopupX.onclick = function(){
+          searchTransparentOverlay.remove();
+        }
+        searchPopupHeader.appendChild(searchPopupTitle);
+        searchPopupHeader.appendChild(searchPopupX);
+
+
+        var searchParentContainer = document.createElement("div");
+        searchParentContainer.id = "searchParentContainer";
+        mainSearchContainerDiv.appendChild(searchParentContainer);
+
+        searchParentContainer.appendChild(searchPopupHeader);
+
+        var searchInput = document.createElement('input');
+        searchInput.type = "text";
+        searchInput.id = "searchDivInput";
+        searchParentContainer.appendChild(searchInput);
+        searchInput.placeholder = "Search...";
+        searchInput.focus();
+
+
+        var searchResultsParentContainer = document.createElement("div");
+        searchResultsParentContainer.id = "searchResultsParentContainer";
+        searchParentContainer.appendChild(searchResultsParentContainer);
+
+        searchTransparentOverlay.onclick = function(e){
+          if(e.target == this || e.target == mainSearchContainerDiv){
+            searchTransparentOverlay.remove();
+          }
+        }
+
+        searchInput.oninput = function(e){
+          if(searchInput.value.length >= 1){
+            $.ajax({
+               url : '/clientGeneralSearch',
+               type : 'GET',
+               data:{searchQuery:searchInput.value},
+               success : function(data, textStatut){
+                 if(data =="error"){
+                    console.log('errorSearch');
+                 }else{
+                    searchResultsParentContainer.innerHTML = "";
+                    if(data.length>0){
+                      for(var t =0; t<data.length;t++){
+                        var hrefDivAround = document.createElement("a");
+                        hrefDivAround.href = "/store/"+data[t]._id;
+                        hrefDivAround.style.textDecoration = "none";
+
+
+                        var searchResultChildContainer = document.createElement("div");
+                        searchResultChildContainer.className = "searchResultChildContainer";
+                        hrefDivAround.appendChild(searchResultChildContainer);
+
+                        var searchResultP = document.createElement("p");
+                        searchResultP.className = "searchResultP";
+                        searchResultP.innerText = data[t].storeName;
+                        searchResultChildContainer.appendChild(searchResultP);
+
+                        searchResultsParentContainer.appendChild(hrefDivAround);
+                      }
+                    }else{
+                      var searchResultChildContainer = document.createElement("div");
+                      searchResultChildContainer.className = "searchResultChildContainer";
+                      searchResultsParentContainer.appendChild(searchResultChildContainer);
+
+                      var searchResultP = document.createElement("p");
+                      searchResultP.className = "searchResultP";
+                      searchResultP.innerText = "No results:("
+                      searchResultChildContainer.appendChild(searchResultP);
+
+                      searchResultsParentContainer.appendChild(hrefDivAround);
+                    }
+
+                 }
+               },
+               error : function(textStatut, errorThrown){
+
+               }
+            });
+          }else{
+            searchResultsParentContainer.innerHTML = "";
+          }
+        }
+      }
+      }
+  }
+  
 </script>

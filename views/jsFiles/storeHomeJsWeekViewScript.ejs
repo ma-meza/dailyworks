@@ -219,6 +219,7 @@ cursor:pointer;
 </style>
 
 <script>
+
   function createWeekViewCalendar(employeeValue){
 
     hideMonthWeekDateRangeContainer();
@@ -236,7 +237,7 @@ cursor:pointer;
 
 
 
-    var earliestStartTime = 24;
+    var earliestStartTime = 1440; //24h in minutes
     var latestEndTime = 0;
     var openedDays = [];
 
@@ -244,24 +245,23 @@ var storeScheduleFromStoreObjLength = serverStoreObj.storeSchedule.length;
 for(var x=0;x<storeScheduleFromStoreObjLength;x++){
   if(serverStoreObj.storeSchedule[x].startTime != 0 && serverStoreObj.storeSchedule[x].endTime != 0){
     if(earliestStartTime > serverStoreObj.storeSchedule[x].startTime){
-      earliestStartTime = Math.floor(serverStoreObj.storeSchedule[x].startTime);
+      earliestStartTime = minutestoFloorHourInMinutes(serverStoreObj.storeSchedule[x].startTime);
     }
     if(latestEndTime < serverStoreObj.storeSchedule[x].endTime){
-      latestEndTime = Math.ceil(serverStoreObj.storeSchedule[x].endTime);
+      latestEndTime = minutesToCeilingHourInMinutes(serverStoreObj.storeSchedule[x].endTime);
     }
     openedDays.push(serverStoreObj.storeSchedule[x].weekDay);
   }
 }
-
-var oneHourBlockHeight = 0;
+var oneMinuteBlockHeight = 0;
 
 var windowWidth = window.innerWidth;
 //tablet size and mobile in px
 if(windowWidth<900){
-oneHourBlockHeight = 90;
+oneMinuteBlockHeight = 1.5;
 }else{
   //computer and tv size
-oneHourBlockHeight = 110;
+oneMinuteBlockHeight = 1.9;
 }
 
 
@@ -287,7 +287,7 @@ oneHourBlockHeight = 110;
 //in percent
     var hourLeftBarDivWidth = 10;
 
-      var nbHoursToDisplay = latestEndTime - earliestStartTime;
+      var nbMinutesToDisplay = latestEndTime - earliestStartTime;
       var nbWorkDays = openedDays.length;
 
 //in percent
@@ -461,17 +461,17 @@ return -1;
 
 
 
-      for(d=0;d<nbHoursToDisplay;d++){
+      for(d=0;d<nbMinutesToDisplay;d+=60){
 
 
-        var hourToDisplay = earliestStartTime + d;
+        var hourToDisplay = minutesToHourInt(earliestStartTime + d);
         if(hourToDisplay>=12){
           hourToDisplay += ":00 PM";
         }else{
           hourToDisplay += ":00 AM";
         }
         var individualHourContainer =  document.createElement('div');
-        individualHourContainer.style.height = oneHourBlockHeight+"px";
+        individualHourContainer.style.height = (oneMinuteBlockHeight*60)+"px";
         individualHourContainer.classList.add('individualHourContainerInsideWrapperWeekView');
         var hourPWeekView = document.createElement('p');
         hourPWeekView.classList.add('individualHourPWeekView');
@@ -485,7 +485,7 @@ return -1;
 
         var tablePlaceholderForOneHour = document.createElement('table');
         tablePlaceholderForOneHour.classList.add("tablePlaceholderForOneHour");
-        tablePlaceholderForOneHour.style.height = oneHourBlockHeight+"px";
+        tablePlaceholderForOneHour.style.height = (oneMinuteBlockHeight*60)+"px";
         for(var f=0;f<4;f++){
           var rowInTable = document.createElement('tr');
           rowInTable.classList.add('rowInTablePlaceholder');
@@ -548,18 +548,18 @@ return -1;
 
                                           //set values of height and top depending on start and end
                                           if(theAbsenceDayObj.startTime == -1 && theAbsenceDayObj.endTime == -1){
-                                            divTotalHeight = nbHoursToDisplay * oneHourBlockHeight;
+                                            divTotalHeight = nbMinutesToDisplay * oneMinuteBlockHeight;
                                             divTopValue = 0;
                                           }else if(theAbsenceDayObj.startTime != -1 && theAbsenceDayObj.endTime != -1){
-                                            divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneHourBlockHeight;
-                                            divTotalHeight = (theAbsenceDayObj.endTime - theAbsenceDayObj.startTime)*oneHourBlockHeight;
+                                            divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneMinuteBlockHeight;
+                                            divTotalHeight = (theAbsenceDayObj.endTime - theAbsenceDayObj.startTime)*oneMinuteBlockHeight;
                                           }else if(theAbsenceDayObj.startTime != -1){
-                                            divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneHourBlockHeight;
-                                            divTotalHeight = (latestEndTime - theAbsenceDayObj.startTime)*oneHourBlockHeight;
+                                            divTopValue = (theAbsenceDayObj.startTime - earliestStartTime)*oneMinuteBlockHeight;
+                                            divTotalHeight = (latestEndTime - theAbsenceDayObj.startTime)*oneMinuteBlockHeight;
 
                                           }else{
                                             divTopValue = 0;
-                                            divTotalHeight = (theAbsenceDayObj.endTime - earliestStartTime)*oneHourBlockHeight;
+                                            divTotalHeight = (theAbsenceDayObj.endTime - earliestStartTime)*oneMinuteBlockHeight;
 
                                           }
                                           //the store is closed on that day
@@ -587,7 +587,7 @@ return -1;
                           var dashedZoneDiv = document.createElement('div');
                           dashedZoneDiv.classList.add('dashedZoneDiv');
                           dashedZoneDiv.style.width = (100/nbWorkDays)+"%";
-                          dashedZoneDiv.style.height = oneHourBlockHeight * heightUnknownDashedZone;
+                          dashedZoneDiv.style.height = oneMinuteBlockHeight * heightUnknownDashedZone;
 
                           dashedZoneDiv.style.left = finalLeftPositionOfDivs+"%";
                           dashedZoneDiv.style.top = 0;
@@ -598,7 +598,7 @@ return -1;
                           var dashedZoneDiv = document.createElement('div');
                           dashedZoneDiv.classList.add('dashedZoneDiv');
                           dashedZoneDiv.style.width = (100/nbWorkDays)+"%";
-                          dashedZoneDiv.style.height = oneHourBlockHeight * heightUnknownDashedZone;
+                          dashedZoneDiv.style.height = oneMinuteBlockHeight * heightUnknownDashedZone;
                           dashedZoneDiv.style.left = finalLeftPositionOfDivs+"%";
                           dashedZoneDiv.style.bottom = 0;
                           scheduleTableContainerDivInsideWrapper.appendChild(dashedZoneDiv);
@@ -802,8 +802,8 @@ return -1;
                   var eventStartTimeInDecimal = timeToDecimal(new Date(allEventsObj[eventsArrayCollisions[numOfLeftWeekDay][xo][se]].backendDateObjStart));
                   var eventEndTimeInDecimal = timeToDecimal(new Date(allEventsObj[eventsArrayCollisions[numOfLeftWeekDay][xo][se]].backendDateObjEnd));
 
-                  var eventTopPos = (eventStartTimeInDecimal - earliestStartTime)*oneHourBlockHeight;
-                  var eventHeightValue =(eventEndTimeInDecimal - eventStartTimeInDecimal)*oneHourBlockHeight;
+                  var eventTopPos = (eventStartTimeInDecimal - earliestStartTime)*oneMinuteBlockHeight;
+                  var eventHeightValue =(eventEndTimeInDecimal - eventStartTimeInDecimal)*oneMinuteBlockHeight;
 
                   eventBlockTimeDiv.classList.add('partDayEventBlockDivContainer');
                   eventBlockTimeDiv.style.backgroundColor = "hsla("+Math.floor(Math.random() * (360 + 1))+",75%,75%,1)";

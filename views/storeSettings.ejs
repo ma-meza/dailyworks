@@ -1,8 +1,8 @@
+<% storeObj = JSON.parse(storeObj)%>
 <%- include partials/regularEmptyHead.ejs %>
 <%- include partials/storeBottomNavBar.ejs %>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgRl2MKw024PModYPvSktDkFbsOird77o&libraries=places"></script>
 <script type="text/javascript" src="/jsFiles/miscFunctions.js"></script>
-<% storeObj = JSON.parse(storeObj)%>
 <% if(!storeObj || storeObj.length == 0){ %>
 sorry no store
   <% }else{ %>
@@ -14,11 +14,11 @@ sorry no store
         </div>
         <div class="sideModalContentScrolling">
           <div id="newAbsencesDivInnerContainer">
-            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Description"));</script></label>
+            <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Description"));</script></label>
             <input type="text" name="" value="" id="newAbsenceReason" class="textInputSetting" placeholder="Reason">
-            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
+            <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
             <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceStart" class="absenceInputDateTime textInputSetting newStoreAbsenceStart" placeholder="Start date">
-            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("End date"));</script></label>
+            <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("End date"));</script></label>
             <input type="text" name="" value="" data-date="-1" data-time="-1" readonly id="newStoreAbsenceEnd" class="absenceInputDateTime textInputSetting newStoreAbsenceEnd" placeholder="End date">
           </div>
         </div>
@@ -39,10 +39,10 @@ sorry no store
         </div>
         <div class="sideModalContentScrolling">
           <div id="newServicesDivInnerContainer">
-            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Name"));</script></label>
+            <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Name"));</script></label>
             <input type="text" name="" value="" id="newServiceName" class="textInputSetting" placeholder="Service name">
-            <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Price"));</script></label>
-            <input type="number" name="" value="" data-date="-1" data-time="-1" id="newServicePrice" class="textInputSetting" placeholder="Service price">
+            <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Price"));</script></label>
+            <input type="number" min="0" step="0.01" id="newServicePrice" class="textInputSetting" placeholder="Service price">
           </div>
         </div>
         <div class="saveButtonDiv">
@@ -62,13 +62,13 @@ sorry no store
         <div class="dataEntriesInnerDiv" id="currentServicesDiv">
 
             <% for(var y=0;y<storeObj.services.length;y++){ %>
-              <div class="dataEntryInputContainer" data-id="<%= storeObj.services[y]._id %>">
+              <div class="dataEntryInputContainer storeServicesChildContainer" data-id="<%= storeObj.services[y]._id %>">
                 <img src="assets/icons/octiconsSvg/trashcan.svg" class="dataEntryRemoveButton storeServicesRemoveX" alt="">
                 <p class="inputSettingLabel">Name:</p>
-                <input class="textInputSetting" type="text" name="" placeholder="<%= storeObj.services[y].serviceName %>">
+                <input class="textInputSetting existingServiceName" type="text" name="" placeholder="<%= storeObj.services[y].serviceName %>">
                 <p class="inputSettingLabel">Price:</p>
-                <input class="textInputSetting" type="number" placeholder="<%= storeObj.services[y].price %>">
-</div>
+                <input class="textInputSetting existingServicePrice" min="0" step="0.01" type="number" placeholder="<%= storeObj.services[y].price %>">
+              </div>
             <% } %>
 
         </div>
@@ -159,6 +159,8 @@ sorry no store
         <% } %>
         <p class="labelUnderInputGeneralSettings" id="ownerNameInputUnderLabel"></p>
 
+        <a class="inputSettingLabel" href="/logout">Want to logout?</a>
+
       </div>
     </div>
     <div class="saveButtonDiv">
@@ -173,29 +175,86 @@ sorry no store
     <div class="settingsContentScrolling">
       <img class="backArrowSettings" src="assets/icons/octiconsSvg/chevron-left.svg" alt="">
       <p class="settingsPageTitleSecondLevel" id=""><script type="text/javascript">document.write(translateWord("Store schedule"));</script></p>
-      <div class="mainInputContainer">
-        <div id="storeScheduleMonday" class="storeScheduleDayLineContainer">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Monday"));</script> :</p><input readonly class="storeScheduleTimeInput storeScheduleStartTime storeScheduleMondayInput" placeholder = "tbd" type="text" name="" value=""><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleMondayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleMondayCheckbox" placeholder = "tbd"class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleMondayInput"><label for="storeScheduleMondayCheckbox" class="storeScheduleDayText"><script>document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer" id="storeScheduleTuesday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Tuesday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleTuesdayInput" type="text" name="" value=""  readonly><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input class="storeScheduleTuesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""  readonly ><input id="storeScheduleTuesdayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleTuesdayInput"><label for="storeScheduleTuesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer" id="storeScheduleWednesday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Wednesday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleWednesdayInput" type="text" name="" value=""  readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleWednesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleWednesdayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleWednesdayInput"><label for="storeScheduleWednesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer" id="storeScheduleThursday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Thursday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleThursdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleThursdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleThursdayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleThursdayInput"><label for="storeScheduleThursdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer" id="storeScheduleFriday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Friday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleFridayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleFridayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleFridayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleFridayInput"><label for="storeScheduleFridayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer" id="storeScheduleSaturday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Saturday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSaturdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSaturdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSaturdayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSaturdayInput"><label for="storeScheduleSaturdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-        <div class="storeScheduleDayLineContainer storeScheduleSunday" id="storeScheduleSunday">
-          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Sunday"));</script> :</p><input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSundayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSundayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""><input id="storeScheduleSundayCheckbox" placeholder = "tbd" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSundayInput"><label for="storeScheduleSundayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
-        </div>
-      </div>
+      <table class="mainInputTableContainer">
+        <tr id="storeScheduleMonday" class="storeScheduleDayLineContainer">
+
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Monday"));</script> :</p>
+          </td>
+          <td>
+          <input readonly class="storeScheduleTimeInput storeScheduleStartTime storeScheduleMondayInput" placeholder = "tbd" type="text" name="" value=""><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleMondayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleMondayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleMondayInput"><label for="storeScheduleMondayCheckbox" class="storeScheduleDayText"><script>document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer" id="storeScheduleTuesday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Tuesday"));</script> :</p>
+          </td>
+          <td>
+          <input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleTuesdayInput" type="text" name="" value=""  readonly><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input class="storeScheduleTuesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value=""  readonly>
+          </td>
+          <td>
+          <input id="storeScheduleTuesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleTuesdayInput"><label for="storeScheduleTuesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer" id="storeScheduleWednesday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Wednesday"));</script> :</p>
+          </td>
+          <td>
+          <input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleWednesdayInput" type="text" name="" value=""  readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleWednesdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleWednesdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleWednesdayInput"><label for="storeScheduleWednesdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer" id="storeScheduleThursday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Thursday"));</script> :</p>
+          </td>
+          <td>
+          <input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleThursdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input  readonly class="storeScheduleThursdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleThursdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleThursdayInput"><label for="storeScheduleThursdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer" id="storeScheduleFriday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Friday"));</script> :</p>
+          </td>
+          <td>
+          <input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleFridayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleFridayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleFridayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleFridayInput"><label for="storeScheduleFridayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer" id="storeScheduleSaturday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Saturday"));</script> :</p>
+          </td>
+          <td>
+          <input placeholder = "tbd" class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSaturdayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSaturdayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleSaturdayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSaturdayInput"><label for="storeScheduleSaturdayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+        <tr class="storeScheduleDayLineContainer storeScheduleSunday" id="storeScheduleSunday">
+          <td>
+          <p class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Sunday"));</script> :</p>
+          </td>
+          <td>
+          <input class="storeScheduleTimeInput storeScheduleStartTime storeScheduleSundayInput" type="text" name="" value="" readonly ><p class="storeScheduleDayText"><script>document.write(translateWord("to"));</script></p><input readonly class="storeScheduleSundayInput storeScheduleEndTime storeScheduleTimeInput" type="text" name="" value="">
+          </td>
+          <td>
+          <input id="storeScheduleSundayCheckbox" class="storeScheduleRadioButton" type="checkbox" data-relevantinputclass="storeScheduleSundayInput"><label for="storeScheduleSundayCheckbox" class="storeScheduleDayText"><script type="text/javascript">document.write(translateWord("Closed"));</script></label>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="saveButtonDiv">
       <button class="quasiFullWidthCtaButton" id="storeScheduleSettingsSaveButton" type="button" name="button" value="Save"><script type="text/javascript">document.write(translateWord("Save"));</script></button>
@@ -212,25 +271,25 @@ sorry no store
           <div class="dataEntriesMainContainer">
               <div id="currentAbsencesDiv" class="dataEntriesInnerDiv">
                 <% for(var y=0; y<storeObj.storeAbsences.length;y++){ %>
-                  <div class="dataEntryInputContainer" data-id="<%=storeObj.storeAbsences[y]._id %>">
-                    <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Description"));</script></label>
+                  <div class="dataEntryInputContainer storeAbsencesChildContainer" data-id="<%=storeObj.storeAbsences[y]._id %>">
+                    <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Description"));</script></label>
                       <input type="text" name="" value="" class="existingStoreAbsenceReason textInputSetting" placeholder="<%=storeObj.storeAbsences[y].reason %>">
-                      <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
+                      <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("Start date"));</script></label>
                         <% if(storeObj.storeAbsences[y].startTime == -1){ %>
                         <input type="text" class="absenceInputDateTime existingStoreAbsenceStart textInputSetting" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="-1" readonly name="" placeholder="<%=storeObj.storeAbsences[y].startDate %> (full day)">
                         <% }else{ %>
-                        <input type="text" class="absenceInputDateTime existingStoreAbsenceStart textInputSetting" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="<%=storeObj.storeAbsences[y].startTime %>" readonly name="" value="" placeholder="<%=storeObj.storeAbsences[y].startDate %> <%=decimalToHour12FormatEJS(storeObj.storeAbsences[y].startTime) %>">
+                        <input type="text" class="absenceInputDateTime existingStoreAbsenceStart textInputSetting" data-date="<%=storeObj.storeAbsences[y].startDate %>" data-time="<%=storeObj.storeAbsences[y].startTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].startDate %> <%=minutesToHourStringEJS(storeObj.storeAbsences[y].startTime) %>">
                         <% } %>
 
-                        <label class="inputSettingLabel" for=""><script type="text/javascript">document.write(translateWord("End date"));</script></label>
+                        <label class="inputSettingLabel"><script type="text/javascript">document.write(translateWord("End date"));</script></label>
                       <% if(storeObj.storeAbsences[y].endDate == -1){ %>
-                      <input type="text" name="" class="absenceInputDateTime" data-date="-1" data-time="-1" readonly placeholder="same day">
+                      <input type="text" class="absenceInputDateTime" data-date="-1" data-time="-1" readonly placeholder="same day">
                       <% }else{ %>
 
                         <% if(storeObj.storeAbsences[y].endTime == -1){ %>
-                        <input type="text" name="" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="-1" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> (full day)">
+                        <input type="text" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="-1" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> (full day)">
                         <% }else{ %>
-                        <input type="text" name="" value="" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="<%=storeObj.storeAbsences[y].endTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> <%= decimalToHour12FormatEJS(storeObj.storeAbsences[y].endTime) %>">
+                        <input type="text" class="absenceInputDateTime existingStoreAbsenceEnd textInputSetting" data-date="<%=storeObj.storeAbsences[y].endDate %>" data-time="<%=storeObj.storeAbsences[y].endTime %>" readonly placeholder="<%=storeObj.storeAbsences[y].endDate %> <%= minutesToHourStringEJS(storeObj.storeAbsences[y].endTime) %>">
                         <% } %>
                       <% } %>
 
@@ -314,6 +373,27 @@ sorry no store
     hourString +="PM";
   }else{
     hourString+="AM";
+  }
+  return hourString;
+} %>
+
+
+
+<% function minutesToHourStringEJS(minutes){
+  var nbHours = Math.floor(minutes/60);
+  var nbMinutes = minutes - (nbHours*60);
+  var hourString = "";
+  if(nbHours<10){
+    hourString+= "0"+nbHours+":";
+  }else{
+    hourString+= nbHours+":";
+  }
+  if(nbMinutes == 0){
+    hourString+="00";
+  }else if(nbMinutes < 10){
+    hourString+="0"+nbMinutes;
+  }else{
+    hourString+=nbMinutes;
   }
   return hourString;
 } %>
@@ -415,8 +495,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
       sundayStart.setAttribute('data-time', <%- storeObj.storeSchedule[0].startTime %>);
       sundayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[0].endTime %>);
 
-      sundayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].startTime %>);
-      sundayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[0].endTime %>);
+      sundayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[0].startTime %>);
+      sundayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[0].endTime %>);
       sundayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
     <% } %>
   <% } %>
@@ -439,8 +519,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     mondayStart.setAttribute('data-time', <%- storeObj.storeSchedule[1].startTime %>);
     mondayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[1].endTime %>);
 
-    mondayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].startTime %>);
-    mondayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[1].endTime %>);
+    mondayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[1].startTime %>);
+    mondayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[1].endTime %>);
     mondayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
   <% } %>
@@ -463,8 +543,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     tuesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[2].startTime %>);
     tuesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[2].endTime %>);
 
-    tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].startTime %>);
-    tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[2].endTime %>);
+    tuesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[2].startTime %>);
+    tuesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[2].endTime %>);
     tuesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
   <% } %>
@@ -487,8 +567,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     wednesdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[3].startTime %>);
     wednesdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[3].endTime %>);
 
-    wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].startTime %>);
-    wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[3].endTime %>);
+    wednesdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[3].startTime %>);
+    wednesdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[3].endTime %>);
     wednesdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
   <% } %>
@@ -511,8 +591,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     thursdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[4].startTime %>);
     thursdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[4].endTime %>);
 
-    thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].startTime %>);
-    thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[4].endTime %>);
+    thursdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[4].startTime %>);
+    thursdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[4].endTime %>);
     thursdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
   <% } %>
@@ -535,8 +615,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     fridayStart.setAttribute('data-time', <%- storeObj.storeSchedule[5].startTime %>);
     fridayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[5].endTime %>);
 
-    fridayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].startTime %>);
-    fridayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[5].endTime %>);
+    fridayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[5].startTime %>);
+    fridayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[5].endTime %>);
     fridayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
   <% } %>
@@ -560,8 +640,8 @@ var sundayDiv = document.getElementById("storeScheduleSunday");
     saturdayStart.setAttribute('data-time', <%- storeObj.storeSchedule[6].startTime %>);
     saturdayEnd.setAttribute('data-time', <%- storeObj.storeSchedule[6].endTime %>);
 
-    saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].startTime %>);
-    saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = decimalToHour12Format(<%- storeObj.storeSchedule[6].endTime %>);
+    saturdayDiv.getElementsByClassName('storeScheduleStartTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[6].startTime %>);
+    saturdayDiv.getElementsByClassName('storeScheduleEndTime')[0].placeholder = minutesToHourString(<%- storeObj.storeSchedule[6].endTime %>);
     saturdayDiv.getElementsByClassName('storeScheduleRadioButton')[0].checked = false;
   <% } %>
 <% } %>
@@ -819,9 +899,8 @@ if(dailyScheduleUpdateArray.length!=0){
 document.getElementById('storeAbsencesSettingsSaveButton').onclick = function(){
 var existingAbsencesUpdateArray = [];
 
-
 //scan for changes in store absences that already exist
-var existingStoreAbsences = document.getElementsByClassName('dataEntryInputContainer');
+var existingStoreAbsences = document.getElementsByClassName('storeAbsencesChildContainer');
 for(var t=0;t<existingStoreAbsences.length;t++){
   var startTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceStart')[0];
   var endTime = existingStoreAbsences[t].getElementsByClassName('existingStoreAbsenceEnd')[0];
@@ -885,6 +964,77 @@ if(existingAbsencesUpdateArray.length!=0){
 
 
 
+
+
+document.getElementById("servicesSettingsSaveButton").onclick = function(){
+  var serviceDivs = document.getElementsByClassName('storeServicesChildContainer');
+  var servicesModified = [];
+  for(var i=0;i<serviceDivs.length;i++){
+    var nameInput = serviceDivs[i].getElementsByClassName('existingServiceName')[0];
+    var priceInput = serviceDivs[i].getElementsByClassName('existingServicePrice')[0];
+    if(nameInput.value != "" || priceInput.value != ""){
+      var serviceObj = {};
+      if(nameInput.value != ""){
+        serviceObj.name = nameInput.value;
+      }else{
+        serviceObj.name = nameInput.placeholder;
+      }
+
+      if(priceInput.value != ""){
+        serviceObj.price = priceInput.value;
+      }else{
+        serviceObj.price = priceInput.placeholder;
+      }
+      serviceObj.id = serviceDivs[i].getAttribute("data-id");
+
+
+      servicesModified.push(serviceObj);
+    }
+
+    if(servicesModified.length!=0){
+      displayLoader();
+      $.ajax({
+
+         url : 'updateStoreServicesSettings',
+         type : 'POST',
+         data:{services:servicesModified},
+         success : function(data, textStatut){
+            if(data == "ok"){
+
+
+              for(var t=0;t<serviceDivs.length;t++){
+                var nameInputModified = serviceDivs[t].getElementsByClassName('existingServiceName')[0];
+                var priceInputModified = serviceDivs[t].getElementsByClassName('existingServicePrice')[0];
+
+                if(nameInputModified.value!=""){
+                  nameInputModified.placeholder = nameInputModified.value;
+                  nameInputModified.value="";
+                }
+                if(priceInputModified.value!=""){
+                  priceInputModified.placeholder = priceInputModified.value;
+                  priceInputModified.value="";
+                }
+              }
+             deleteLoader();
+
+          displaySnackbar('services successfully updated', document.getElementById('settingsPageMainBody'));
+        }else if(data="error"){
+          deleteLoader();
+          displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+        }
+         },
+         error : function(textStatut, errorThrown){
+           deleteLoader();
+           displaySnackbar('There has been a server error, please try again', document.getElementById('settingsPageMainBody'));
+         }
+
+      });
+    }else{
+      displaySnackbar('Oups, looks like you have not modified anything.', document.getElementById('settingsPageMainBody'));
+    }
+
+  }
+}
 
 
 
@@ -1102,7 +1252,7 @@ document.getElementById('addAbsenceButton').onclick = function(){
            startInput.readOnly = true;
            startInput.setAttribute('data-date', absenceObj['startDate']);
            startInput.setAttribute('data-time', absenceObj['startTime']);
-           startInput.placeholder = absenceObj['startDate']+" "+decimalToHour12Format(absenceObj['startTime']);
+           startInput.placeholder = absenceObj['startDate']+" "+minutesToHourString(absenceObj['startTime']);
            startInput.onclick = function(){
              createDivForDateTimePicker(this);
            }
@@ -1117,7 +1267,7 @@ document.getElementById('addAbsenceButton').onclick = function(){
            endInput.readOnly = true;
            endInput.setAttribute('data-date', absenceObj['endDate']);
            endInput.setAttribute('data-time', absenceObj['endTime']);
-           endInput.placeholder = absenceObj['endDate']+" "+decimalToHour12Format(absenceObj['endTime']);
+           endInput.placeholder = absenceObj['endDate']+" "+minutesToHourString(absenceObj['endTime']);
            endInput.onclick = function(){
              createDivForDateTimePicker(this);
            }
@@ -1357,6 +1507,14 @@ if(e.target!=this){
   this.classList.remove("activeThirdLevel");
 }
 }
+
+
+
+
+
+
+
+
 </script>
 
 
@@ -1373,6 +1531,15 @@ if(e.target!=this){
     height:25px;
   }
 
+.mainInputTableContainer td:last-child{
+  text-align:right;
+}
+.mainInputTableContainer td:nth-child(2n){
+  text-align:center;
+}
+.mainInputTableContainer td:first-child{
+  text-align:left;
+}
   @media screen and (min-width:780px){
     #newAbsencesDivInnerContainer{
       width:calc(100% - 40px);
@@ -1512,13 +1679,23 @@ if(e.target!=this){
       background-color:var(--cool-blue);
     }
     .storeScheduleDayLineContainer{
-      margin:0px 20px 0px 20px;
-      text-align:left;
+    }
+    .mainInputTableContainer{
+      position:relative;
+      width:100%;
+      left:0;
+      min-height:70px;
+    }
+    .mainInputTableContainer td{
+      padding-top:30px;
     }
   }
 
 
   @media screen and (max-width:780px){
+    .mainInputTableContainer td{
+      padding-top:30px;
+    }
     #newServicesDiv{
       height:100%;
       position:relative;
@@ -1635,8 +1812,12 @@ if(e.target!=this){
       margin:0;
     }
     .storeScheduleDayLineContainer{
-      margin:0px 20px 0px 20px;
-      text-align:right;
+    }
+    .mainInputTableContainer{
+      position:relative;
+      width:calc(100% - 40px);
+      left:20px;
+      min-height:70px;
     }
   }
 
@@ -1651,6 +1832,7 @@ if(e.target!=this){
     left:50%;
     z-index:5;
     cursor:pointer;
+    margin-bottom:40px;
     transform:translateX(-50%);
   }
   .newButtonWhitePlus{
@@ -1679,12 +1861,12 @@ margin-bottom:10px;
   }
 
   .storeScheduleTimeInput{
-    width:60px;
+    width:55px;
     border-top:none;
     border-left:none;
     border-right:none;
     border-bottom:var(--official-light-grey-border);
-    margin:0px 10px 0px 10px;
+    margin:0;
     font-size:var(--mobile-font-size-regular);
     font-weight:var(--mobile-font-weight-regular);
     color:var(--font-color-grey);
@@ -1695,6 +1877,7 @@ margin-bottom:10px;
     color:var(--font-color-grey);
     position:relative;
     display:inline-block;
+    margin:0 5px 0 5px;
       }
   .textInsideSnackbar{
     font-size:var(--mobile-font-size-regular);
@@ -1803,12 +1986,18 @@ margin-bottom:10px;
     width:20px;
     display:inline-block;
     vertical-align:sub;
+    cursor:pointer;
   }
   .mainInputContainer{
     position:relative;
     width:100%;
     left:0;
-    margin:20px 0 50px 0;
+    min-height:70px;
+  }
+  .mainInputTableContainer{
+    position:relative;
+    width:calc(100% - 40px);
+    left:20px;
     min-height:70px;
   }
   .dataEntriesMainContainer{

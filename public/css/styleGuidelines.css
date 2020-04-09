@@ -4,7 +4,7 @@
 --main-color:#393a4b;
 --cool-blue:#2176ae;
 
-
+--gradient-cta-background:linear-gradient(to right, rgb(6, 189,140) 0%, #2a9d8f 100%);
 --box-shadow-card:0px 0px 2px rgba(0, 0, 0, 0.25);
 
 
@@ -51,7 +51,7 @@
 
 --input-border:1px solid #d1d5da;
 
---mobile-font-size-extra-big:3.125rem;
+--mobile-font-size-extra-big:22px;
 --mobile-font-size-page-title:30px;
 
 --mobile-font-size-regular:16px;
@@ -59,7 +59,7 @@
 --mobile-font-size-extra-small:12px;
 --mobile-font-size-big:18px;
 
---desktop-font-size-extra-big:3.125rem;
+--desktop-font-size-extra-big:28px;
 --desktop-font-size-page-title:32px;
 --desktop-font-size-regular:16px;
 --desktop-font-size-small:14px;

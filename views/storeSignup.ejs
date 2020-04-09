@@ -69,10 +69,11 @@
           border-radius:var(--official-border-radius);
           border:none;
           height:50px;
-          background-color:var(--icon-color-active);
+          background-color:var(--cta-accent-color);
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--desktop-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -165,10 +166,11 @@
           border-radius:var(--official-border-radius);
           border:none;
           height:50px;
-          background-color:var(--icon-color-active);
+          background-color:var(--cta-accent-color);
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--mobile-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -218,7 +220,23 @@
 
 
 <script>
+  $("#emailInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
 
+  $("#passwordInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
+
+  $("#businessNameInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitSignupForm();
+    }
+  });
 
   document.getElementById("inputSubmit").onclick = function(){
     submitSignupForm();

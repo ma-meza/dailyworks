@@ -72,6 +72,7 @@
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--desktop-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -155,6 +156,7 @@
           color:#fff;
           font-weight:var(--mobile-font-weight-bold);
           font-size:var(--mobile-font-size-regular);
+          cursor:pointer;
         }
         #messageP{
           margin:0 0 20px 0;
@@ -190,6 +192,18 @@
 
 
 <script>
+
+  $("#emailInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitLoginForm();
+    }
+  });
+
+  $("#passwordInput").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        submitLoginForm();
+    }
+  });
 
 
   document.getElementById("inputSubmit").onclick = function(){
