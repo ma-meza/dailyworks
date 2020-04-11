@@ -1,0 +1,185 @@
+<div id="mainAroundNavDiv" class="">
+  <div id="navbarElementsContainer">
+    <a href="/"><img id="logoImg" src="/assets/logos/dwFullLogoBlack.svg" alt=""></a>
+    <div id="iconsContainer">
+      <% if(!locals.loggedIn || loggedIn == false){ %>
+      <a href="/"><img class="regularNavIconImg" id="houseIcon" src="/assets/icons/octiconsSvg/home-inactive.svg"
+          alt=""></a>
+      <img class="regularNavIconImg searchIcons" src="/assets/icons/octiconsSvg/search.svg" alt="">
+      <a href="/login"><img class="regularNavIconImg" src="/assets/icons/octiconsSvg/person.svg" alt=""></a>
+      <% }else{ %>
+      <a href="/home"><img class="regularNavIconImg" id="houseIcon" src="/assets/icons/octiconsSvg/home-inactive.svg"
+          alt=""></a>
+      <img class="regularNavIconImg searchIcons" src="/assets/icons/octiconsSvg/search.svg" alt="">
+      <a href="/profile"><img class="regularNavIconImg" src="/assets/icons/octiconsSvg/person.svg" alt=""></a>
+      <img id="notificationIconImg" src="/assets/icons/notificationIcon.png" alt="">
+      <div id="scheduleIconContainer">
+        <p id="monthAgendaIcon">
+          <script>
+            document.write(monthsName[todayMonthName]);
+          </script>
+        </p>
+
+        <p id="dateAgendaIcon">
+          <script>
+            document.write(dateNumberArray[todayDateNUmber - 1]);
+          </script>
+        </p>
+        <img id="scheduleIconImg" src="/assets/icons/agendaIcon.png" alt="">
+        <!-- <p class="innerDivPBottomNavBar">Agenda</p> -->
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+  @media screen and (min-width:780px) {
+    #navbarElementsContainer {
+      position: relative;
+      top: 0;
+      height: 100%;
+      left: 0;
+      width: 70%;
+      left: 15%;
+      margin: 0;
+    }
+
+    .regularNavIconImg {
+      height: 45%;
+      margin-left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      position: relative;
+      cursor: pointer;
+    }
+
+    #notificationIconImg {
+      height: 45%;
+      margin-left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      position: relative;
+      cursor: pointer;
+    }
+
+    #scheduleIconContainer {
+      height: 100%;
+      border: none;
+      margin-left: 40px;
+      width: max-content;
+      top: 0;
+      position: relative;
+      cursor: pointer;
+    }
+
+    #houseIcon {
+      margin-left: 0 !important;
+    }
+
+    #logoImg {
+      position: relative;
+      height: 60%;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+    }
+
+    #monthAgendaIcon {
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 20px;
+      margin: 0;
+      font-size: 6px;
+      font-weight: 900;
+      z-index: 2;
+    }
+
+    #dateAgendaIcon {
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 26px;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+
+  }
+
+  @media screen and (max-width:780px) {
+    #navbarElementsContainer {
+      position: relative;
+      top: 0;
+      height: 100%;
+      left: 0;
+      width: 100%;
+      left: 0;
+      margin: 0;
+    }
+
+    #scheduleIconContainer {
+      display: none;
+    }
+
+    .regularNavIconImg {
+      display: none;
+    }
+
+    #notificationIconImg {
+      height: 45%;
+      margin: 0 20px 0 0;
+      top: 50%;
+      transform: translateY(-50%);
+      position: relative;
+      cursor: pointer;
+    }
+
+    #logoImg {
+      position: relative;
+      height: 45%;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 20px;
+    }
+
+    #mainAroundNavDiv {
+      display: none;
+    }
+  }
+
+  #iconsContainer {
+    list-style: none;
+    display: block;
+    float: right;
+    margin: 0;
+    height: 100%;
+  }
+
+  #scheduleIconImg {
+    height: 45%;
+    margin: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+    cursor: pointer;
+  }
+
+  #mainAroundNavDiv {
+    z-index: 5;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 60px;
+    background-color: #fff;
+    border-bottom: var(--nav-bar-border);
+    /* -webkit-box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75);
+box-shadow: 0px -30px 21px 18px rgba(0,0,0,0.75); */
+  }
+</style>
